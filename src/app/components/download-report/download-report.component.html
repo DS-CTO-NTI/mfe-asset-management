@@ -1,0 +1,26 @@
+<div class="">
+    <div class="modal-content">
+      <div class="modal-header text-center bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-static-name" class="modal-title text-center" translate>
+          Download Report
+        </h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelDownload('cancel')">
+          <span aria-hidden="true" class="text-white">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center">
+          <div class="text-center">
+            <div class="mb-2 mt-2">
+              <i class="fa fa-check text-success" aria-hidden="true"></i> Report
+              Generated Successfully.
+            </div>
+            <button class="btn btn-sm btn-primary mb-2 mt-2" (click)="downloadReport('yes')">
+              <em class="fa fa-download mr-1"></em>Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

@@ -1,20 +1,35 @@
+import { NgModule, importProvidersFrom } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AssetManagementComponent } from './asset-management/asset-management.component';
+import { RemoteMfeModule } from './remote-mfe/remote-mfe.module';
+import { HttpConfigInterceptor } from './interceptor/http-config-interceptor.interceptor';
+import { ToastrModule } from 'ngx-toastr';
+import { ButtonComponent } from './components/ag-grid-custom-components/button/button.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AssetManagementComponent
+    ButtonComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    RemoteMfeModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      maxOpened: 1,
+      timeOut: 5000
+    }),
   ],
-  providers: [],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpConfigInterceptor,
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

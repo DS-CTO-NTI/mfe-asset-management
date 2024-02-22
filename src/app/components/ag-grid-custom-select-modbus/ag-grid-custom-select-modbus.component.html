@@ -1,0 +1,10 @@
+<select *ngIf="optionsArrayType!='json'" class="w-auto" [id]="'select'+rowId" [name]="'select'+rowId" (change)="onChange()" [(ngModel)]="params.value" [disabled]="disabled || disabledSelectorValue">
+    <option *ngFor="let option of options" value={{option}}>{{option}}</option>
+</select>
+
+<select *ngIf="optionsArrayType=='json'" class="w-auto" [id]="'select'+rowId" [name]="'select'+rowId" (change)="onChange()" [(ngModel)]="params.value" [disabled]="disabled || disabledSelectorValue || disable">
+    <option *ngFor="let option of options" value={{option[valueField]}} [disabled]="option.disabled">{{option[displayTextField]}}</option>
+</select>
+
+
+

@@ -1,0 +1,23 @@
+export const DeviceTypeMeasurementValidationError= {
+    "Null value for Asset Type Name": "Asset Type Name value is missing in file data", 
+    "null value for IsVirtual" : "Is Virtual value is missing in file data",
+    "Null value for Vendor Name": "Vendor Name value is missing in file data",
+    "Null value for Measurement Name": "Measurement Name value is missing in file data",
+    "Null value for Display Measurement Name": "Display Measurement Name value is missing in file data",
+    "Null value for Asset Tag Name": " Asset Tag Name value is missing in file data",
+    "Null value for UOM":"UOM value is missing in file data",
+    "Null value for Measurement Type":"Measurement Type value is missing in file data",
+    "Invalid Vendor Name": "The file contains Vendor Name other than the selected Asset Type's Vendor Name",
+    "Invalid Asset Type Name": "The file contains Asset Type Name other than the selected Asset Type Name",
+    "Saving List is Empty": "File contains no data",
+    "Invalid File": "One or more fields are missing in file data",
+    "Exception reading file": "Unable to read the file data",
+    "Measurement Name Can Not Contain Mathematical Operator": "Measurement Name cannot contain Mathematical Operator",
+    "Measurement Name cannot contain special characters & spaces.": "Measurement Name cannot contain special characters & spaces.",
+    "Display Measurement Name cannot contain special characters.": "Display Measurement Name cannot contain special characters.",
+    "Invalid value for UOM":"Invalid value for UOM",
+    "Invalid value for Measurement Type":"Invalid value for Measurement Type",
+    "Invalid Device Type Name":"Invalid Asset Type Name",
+    "Null value for Device Type Name":"Asset Type value is missing in file data",
+    "Null value for Device Tag Name":"Asset Tag Name value is missing in file data"
+}
