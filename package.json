@@ -12,6 +12,8 @@
   "private": true,
   "dependencies": {
     "@angular-architects/module-federation": "^14.3.10",
+    "@agm/core": "^3.0.0-beta.0",
+    "@agm/snazzy-info-window": "^3.0.0-beta.0",
     "@angular/animations": "^14.2.0",
     "@angular/common": "^14.2.0",
     "@angular/compiler": "^14.2.0",
@@ -26,9 +28,11 @@
     "moment": "^2.30.1",
     "ngx-bootstrap": "^6.1.0",
     "ngx-toastr": "^13.0.1",
+    "ng-event-source": "^1.0.14",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4",
+    "core-js": "^3.6.5",
     "@circlon/angular-tree-component": "^11.0.4"
   },
   "devDependencies": {

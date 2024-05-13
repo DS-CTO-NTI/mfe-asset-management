@@ -34,9 +34,10 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AgGridFilterComponent } from "../components/ag-grid-filter-section/ag-grid-filter.component";
-import { AgGridPaginationSectionComponent } from "../components/ag-grid-pagination-section/ag-grid-pagination-section.component";
+import { MatDialogModule } from "@angular/material/dialog";
+
 @NgModule({
-	declarations: [AgGridFilterComponent, AgGridPaginationSectionComponent],
+	declarations: [AgGridFilterComponent],
 	imports: [
 		MatExpansionModule,
 		TranslateModule,
@@ -72,6 +73,7 @@ import { AgGridPaginationSectionComponent } from "../components/ag-grid-paginati
 		MatSelectModule,
 		MatButtonModule,
 		MatCheckboxModule,
+		MatDialogModule,
 		MatRadioModule,
 		OwlDateTimeModule,
 		OwlNativeDateTimeModule,
@@ -80,7 +82,6 @@ import { AgGridPaginationSectionComponent } from "../components/ag-grid-paginati
 	],
 	exports: [
 		AgGridFilterComponent,
-		AgGridPaginationSectionComponent,
 		TranslateModule,
 		FormsModule,
 		ReactiveFormsModule,
@@ -112,6 +113,7 @@ import { AgGridPaginationSectionComponent } from "../components/ag-grid-paginati
 		MatSelectModule,
 		MatButtonModule,
 		MatCheckboxModule,
+		MatDialogModule,
 		MatRadioModule,
 		OwlDateTimeModule,
 		OwlNativeDateTimeModule,

@@ -1,0 +1,2312 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<div class="row mx-0 mt-2" >
+  <div class="col-12 px-1">
+    <div class="card">
+      <div class="card-header bg-purple text-white">
+        <div class="col-12 text-center">
+          <h6 class="ml-auto mb-0">{{assetConfiguration}}</h6>
+        </div>
+      </div>
+
+      <div class="row mx-0" style="background-color: #172a46;">
+        <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 px-1 mr-0 mb-2 mt-1" style="min-height: 100%;">
+          <div class="card">
+            <div class="card-header bg-purple text-white">
+              <div class="col-12 text-center">
+                <h6 class="ml-auto mb-0">{{assetList}}</h6>
+              </div>
+            </div>
+            <div class="card-body p-0" [collapse]="isCollapsed2">
+              <div class="col-12 p-0 border-right border-secondary">
+                <div class="card-body bg-gray p-1">
+                  <div class="row m-0">
+                    <div class="col-12 px-1">
+                      <div class="d-flex flex-row m-0 mt-1">
+                        <div class="form-group col">
+                          <select class="form-control form-control-sm" id="devicetype" name="devicetype"
+                            [(ngModel)]="selectedDevices" (change)="changeDevicesTypes(selectedDevices)">
+                            <option [value]="0">{{all}}</option>
+                            <option [value]="allDevices.assetTypeSeq" *ngFor="let allDevices of deviceTypeAllList">
+                              {{ allDevices.assetTypeName }}
+                            </option>
+                          </select>
+                        </div>
+                        <div class="form-group col">
+                          <input matInput class="form-control form-control-sm"  id="search" name="search" type="text" autocomplete="off" 
+                            placeholder='Search Asset'  #searchInput
+                            (keyup)="searchDeviceTree(searchInput.value)" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group mt-2 text-white ">
+                  <span *ngIf="deviceList == null || deviceList.length == 0">{{noAssetsConfigured}}</span>
+                  <tree-root #tree [nodes]="deviceHierarchyList" class="reverse"
+                    (activate)="showSelectedDevice($event.node.data.id, 'tree')" [options]="options">
+                    <ng-template #treeNodeTemplate let-node let-index="index"><span
+                        (contextmenu)="cellrightClick($event,node)" [contextMenu]="deviceTreeContextmenu">{{
+                        node.data.displayField }}</span></ng-template>
+                  </tree-root>
+                  <context-menu #deviceTreeContextmenu *ngIf="deviceList != null">
+                    <ng-template contextMenuItem (execute)="openEditModal()">{{edit}}</ng-template>
+                    <ng-template contextMenuItem (execute)="openModal(true);">{{createChildAsset}}</ng-template>
+                    <ng-template contextMenuItem
+                      (execute)="openCloneDevice(deviceCloneForm)">{{cloneAsset}}</ng-template>
+                    <ng-template contextMenuItem (execute)="confirmDeleteDevice()">{{deleteAsset}}</ng-template>
+                  </context-menu>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10 px-1 mb-2 mt-1">
+          <div class="row m-0">
+            <div id="mainDiv" class="col-sm-12 col-xs-12 col-lg-12 col-md-12 p-0 mb-2">
+              <div class="card" id="card2">
+
+                <div class="card-header bg-purple text-white">
+                  <div class="row" [ngClass]="!isFullScreen == false ? 'mar-200' : ''">
+                    <div class="text-center col-12">
+
+                      <h6 class="mb-0 ">{{assetMap}}
+                        <span class="pull-right">
+                          <em class="fa fa-download mr-3 cursor-pointer" *ngIf="isFullScreen" style="font-size: 24px;"
+                            title={{downloadTemplate1}} (click)="downloadTemplate()" aria-hidden="true"></em>
+                          <em class="fa fa-cloud-download cursor-pointer mr-3" *ngIf="isFullScreen"
+                            style="font-size: 24px;" title={{downloadAsset}} (click)="getAllDeviceConfiguration()"
+                            aria-hidden="true"></em>
+                          <em class="fa fa-upload mr-3 cursor-pointer" *ngIf="isFullScreen" style="font-size: 24px;"
+                            title={{uploadAsset}} (click)="importDeviceConfigurationModal.show()"></em>
+                          <em class="fa fa-plus-circle mr-3 cursor-pointer" style="font-size: 24px;"
+                            title={{createAsset}} *ngIf="isFullScreen"
+                            (click)="openModal(false);resetCreateAsset(form);"></em>
+                          <img class="cursor-pointer img-h " [ngClass]="{'transform-img': !isFullScreen}"
+                            src="./assets/images/expand-arrows2 white.svg" alt="asset" (click)="expandDeviceMap()"
+                            style="margin-bottom:3px" [title]="!isFullScreen?'Collapse Map':'Expand Map'">
+                        </span>
+                      </h6>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card-body p-0" [collapse]="isCollapsed">
+                  <div class="container-fluid" style="margin: 10px;">
+                    <div class="row">
+                      <div class="col-12 p-0 mt-1">
+                        <div class="row mt-0 mx-0">
+                          <div class="row mx-0">
+                            <div class="form-row text-white">
+                              <div class="form-group">
+                                <label for="statusGroupDD" class="form-label required"><strong
+                                    translate>{{statusGroup}}</strong>
+                                </label>
+
+                                <select class="form-control form-control-sm" name="statusGroupDD" id="statusGroupDD"
+                                  [(ngModel)]="selectedMemsDeviceStatusGroup" (change)="changeStatusGroup()">
+                                  <option *ngFor="let status of memsDeviceStatusGroupList"
+                                    [value]="status.statusCodeGroup">
+                                    {{ status.statusCodeGroup }}
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="form-group text-white">
+
+                              <mat-checkbox class="example-margin" [checked]="isAutoRefresh"
+                                (change)="toggleAutoRefresh()">{{autoRefresh}}</mat-checkbox>
+                            </div>
+                            <div class="form-group text-white">
+                              <label for="refreshFrequency" class="mr-2"><strong>{{refreshFrequency1}}</strong></label>
+                           
+                                <select class="form-control form-control-sm" name="refreshFrequency"
+                                  id="refreshFrequency" [disabled]="!isAutoRefresh" [(ngModel)]="refreshFrequency"
+                                  (change)="changeRefreshFrequency()">
+                                  <option *ngFor="let f of assetRefreshFrequency" [value]="f.codeValue">
+                                    {{ f.codeDisplayTxt }}
+                                  </option>
+
+                                </select>
+                            </div>
+                          </div>
+                          <div id="mapDiv1" class="col-12 px-0 " [ngClass]="!isFullScreen?'mapfullscreen':'map'" style="background-color: white;">
+                            <agm-map #gm class="agmmapheight" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
+                               (mapReady)="mapReady($event)" [scrollwheel]="false">
+                              <agm-marker [class.highlight]="selectedDevice.assetId == marker.deviceid"
+                                *ngFor="let marker of markers" [latitude]="marker.lat" [longitude]="marker.lng"
+                                [iconUrl]="markerUrl(marker.deviceid)" [openInfoWindow]="false"
+                                (mouseOver)="mouseOver(gm, infoWindow, marker.deviceid)"
+                                (mouseOut)="mouseOut(gm, marker.deviceid)"
+                                (markerClick)="showSelectedDevice(marker.deviceid, 'marker')">
+                                <agm-info-window #infoWindow [isOpen]="isSelectedDevice(marker.deviceid)">
+                                  {{assetId}}: {{ marker.deviceid }}<br />
+                                  {{parentAssetId}}: {{ marker.parentAssetid }}<br />
+                                  {{description}}: {{ marker.description }}<br />
+                                </agm-info-window>
+                              </agm-marker>
+                            </agm-map>
+                            <div *ngIf="selectedMemsDeviceStatusGroup != 'None'" class="row ml-0 legend">
+                              <div class="col-12 row mx-0 mb-2" *ngFor="let item of legendItems">
+                                <img class="mr-1" alt="" [src]="'assets/images/markers/' + item.statusColor + '.png'"
+                                  width="20" height="20" />
+                                <div>{{ item.statusCode }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected Device -->
+            <div id="selectedDeviceContainer" class="col-12 p-0">
+              <div class="card bg-sblue">
+                <div class="card-header border-0">
+                  <div class="row">
+                    <div class="col-11 text-center">
+                      <h6 class="mb-0 ml-auto">{{selectedAsset}}{{ selectedDeviceShow.assetId }}</h6>
+                    </div>
+                    <div class="col-1 float-right">
+                      <em class="fa fa-pencil-square-o float-right cursor-pointer mr-2" title={{editAsset}}
+                        style="font-size: 24px;" (click)="openEditModal()"
+                        *ngIf="deviceListData!=null && deviceListData.length>0"></em>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body" [collapse]="isCollapsed1">
+                  <div class="container-fluid p-0">
+                    <div class="row">
+                      <div class="container-fluid" style="margin: 10px;">
+                        <mat-tab-group #selectedTabs id="selectedTabs" [selectedIndex]="selectedTabIndex"
+                          (selectedTabChange)="onViewTabChanged($event);">
+                          <mat-tab label={{assetInformation}} (selectTab)="setHeightDeviceInfo($event)">
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="ven_seq" class="form-label">{{vendor}}</label>
+                                <mat-select id="ven_seq" name="ven_seq" [(ngModel)]="selectedDeviceShow.vendorSeq"
+                                  class="form-control form-control-sm" disabled>
+                                  <mat-option [value]="vendor1.vendorSeq" *ngFor="let vendor1 of vendorsList">{{
+                                    vendor1.vendorName }}</mat-option>
+                                </mat-select>
+                              </div>
+                              <div class="form-group col">
+                                <label for="inputStateselected" class="form-label">{{assetType}}</label>
+                                <mat-select id="inputStateselected" name="inputStateselected"
+                                  [(ngModel)]="selectedDeviceShow.assetTypeSeq" class="form-control form-control-sm"
+                                  disabled>
+                                  <mat-option [value]="type.assetTypeSeq" *ngFor="let type of deviceTypeList">
+                                    {{ type.assetTypeName }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                              <div class="form-group col">
+                                <label for="devid" class="form-label">{{assetId}}</label>
+                                <input matInput type="text" name="moid" id="devid" [readonly]="isEdit"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetId"
+                                  [readonly]="false" disabled required />
+                              </div>
+                              <div class="form-group col">
+                                <label for="p_devidShow" class="form-label">{{assetClass}}</label>
+                                <mat-select id="p_devidShow" name="p_devidShow" class="form-control form-control-sm"
+                                  (selectionChange)='onAssetClassSelected(selectedDeviceShow.assetClass)'
+                                  [(ngModel)]="selectedDeviceShow.assetClass" required disabled>
+                                  <mat-option value="null" [disabled]="false">{{choose}}</mat-option>
+                                  <mat-option *ngFor="let device of assetClass1" [value]="device.codeDisplayTxt"
+                                    [hidden]="isSelected(device.assetClass)">
+                                    {{ device.codeDisplayTxt }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="p_devid" class="form-label">{{parentAssetId}}</label>
+                                <mat-select id="p_devid" name="p_devid" [(ngModel)]="selectedDeviceShow.parentAssetid"
+                                  class="form-control form-control-sm" disabled>
+                                  <mat-option value="null" [disabled]="false">{{choose}}</mat-option>
+                                  <mat-option *ngFor="let device of deviceListByClass" [value]="device.assetId"
+                                    [hidden]="isSelected(device.assetId)">
+                                    {{ device.assetId }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+
+                              <div class="form-group col">
+                                <label for="latitude" class="form-label">{{latitude}}</label>
+                                <input matInput type="number" name="latitude" id="latitude" [readonly]="isEdit"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.latitude"
+                                  disabled required />
+                              </div>
+                              <div class="form-group col">
+                                <label for="longitude" class="form-label">{{longitude}}</label>
+                                <input matInput type="number" name="longitude" id="longitude" [readonly]="isEdit"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.longitude"
+                                  disabled required />
+                              </div>
+                              <div class="form-group col">
+                                <label for="location" class="form-label">{{location}}</label>
+                                <input matInput type="text" name="location" id="location" [readonly]="isEdit"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.location"
+                                  disabled />
+                              </div>
+                            </div>
+                            <div class="form-row">  
+                              <div class="form-group col-3">
+                                <label for="timezone" class="form-label">{{assetTimezone}}</label>
+                                <mat-select id="timezone" name="timezone" [(ngModel)]="selectedDeviceShow.assetTz"
+                                  class="form-control form-control-sm" disabled>
+                                  <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                                  <mat-option *ngFor="let timezone of timezoneList" [value]="timezone.codeDisplayTxt">
+                                    {{ timezone.codeDisplayTxt }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+
+                              <div class="form-group col" style="margin: auto;">
+                                <label class="form-label">{{isVirtualAsset}} </label>
+                                <mat-slide-toggle [checked]="checkDeviceTypeEdit() == true" class="toggle-switch"
+                                  color="primary" translate disabled>
+                                  {{isVirtualAsset}}
+                                </mat-slide-toggle>
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label={{assetDetails}} (selectTab)="setHeightDeviceDetails($event)">
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="dev_ip_address" class="form-label">{{assetIpAddress}}</label>
+                                <input matInput type="text" name="dev_ip_address" #devipaddress="ngModel"
+                                  class="form-control form-control-sm" id="dev_ip_address" [readonly]="isEdit"
+                                  [(ngModel)]="selectedDeviceShow.assetIpaddr"
+                                  pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+                                  disabled />
+                                <div *ngIf="devipaddress.invalid && devipaddress.errors.pattern"
+                                  class="alert alert-danger">
+                                  {{ipAddressNotValid}}
+                                </div>
+                              </div>
+                              <div class="form-group col">
+                                <label for="dev_name" class="form-label">{{assetName}}</label>
+                                <input matInput type="text" name="dev_name" id="dev_name"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetName"
+                                  disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="dev_userid" class="form-label">{{assetUserId}}</label>
+                                <input matInput type="text" name="dev_userid" id="dev_userid"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetUserid"
+                                  disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="dev_pass" class="form-label">{{assetPassword}}</label>
+                                <input type="text" matInput name="dev_pass" id="dev_pass"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetPassword"
+                                  disabled />
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="dev_access" class="form-label">{{assetAccessPort}}</label>
+                                <input type="number" matInput name="dev_access" id="dev_access"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetAccessPort"
+                                  disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="dev_access_type" class="form-label">{{assetAccessType}}</label>
+                                <input type="text" matInput name="dev_access_type" id="dev_access_type"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetAccessType"
+                                  disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="dev_alias" class="form-label">{{assetAlias}}</label>
+                                <input matInput type="text" name="dev_alias" id="dev_alias"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetAlias"
+                                  disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="deviceRecordVer" class="form-label">{{assetRecordVersion}}</label>
+                                <input matInput type="text" name="deviceRecordVer" [maxLength]="4" id="deviceRecordVer"  class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.assetRecordVer" disabled />
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="description" class="form-label"> {{description}}</label>
+                                <input matInput type="text" name="description" [readonly]="isEdit" id="description" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.description" disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="geox" class="form-label">{{geoX}}</label>
+                                <input matInput type="number" name="sgeox" id="geox"  class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.geoX" disabled />
+                              </div>
+                              <div class="form-group col">
+                                <label for="geoy" class="form-label">{{geoY}}</label>
+                                <input type="number" matInput name="geoy" id="geoy"  class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.geoY" disabled />
+                              </div>
+
+                              <div class="form-group col">
+                                <label for="grp_seq" class="form-label">{{group}}</label>
+                                <mat-select id="grp_seq" name="grp_seq" [(ngModel)]="selectedDeviceShow.groupSeq" class="form-control form-control-sm"
+                                  disabled required>
+                                  <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                                  <mat-option [value]="group.groupSeq" *ngFor="let group of deviceGroupsList">
+                                    {{ group.groupName }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label for="installationDate" class="form-label">{{installationDate}}</label>
+                                <div class="d-flex justify-content-end">
+
+                                  <input matInput type="datetime-local" name="installationDate" placeholder="MM/DD/YYYY hh:mm:ss" 
+                                    id="installationDate" class="form-control form-control-sm caldate mr-2 inputWidth"
+                                    [(ngModel)]="selectedDeviceShow.installationDate" [owlDateTime]="dp1"
+                                    [max]="maxFromAndTo()" required disabled />
+                                  <span [owlDateTimeTrigger]="dp1"><em
+                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                  <owl-date-time [hour12Timer]="true" #dp1></owl-date-time>
+
+                                </div>
+                              </div>
+                              <div class="form-group col">
+                                <label for="registrationTs" class="form-label">{{registrationTime}}</label>
+                                <div class="d-flex justify-content-end">
+
+                                  <input matInput type="datetime-local" name="startdate" placeholder="MM/DD/YYYY hh:mm:ss" 
+                                     id="startdate" class="form-control form-control-sm caldate mr-2 inputWidth"
+                                    [(ngModel)]="selectedDeviceShow.registrationTs" [owlDateTime]="dp2"
+                                    [max]="maxFromAndTo()" required disabled />
+                                  <span [owlDateTimeTrigger]="dp2"><em
+                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                  <owl-date-time [hour12Timer]="true" #dp2></owl-date-time>
+                                </div>
+                              </div>
+                              <div class="form-group col">
+                                <label for="provisioningTs" class="form-label">{{provisioningTime}}</label>
+                                <div class="d-flex justify-content-end">
+
+                                  <input matInput type="datetime-local" name="provisioningTs" placeholder="MM/DD/YYYY hh:mm:ss" 
+                                    id="provisioningTs" class="form-control form-control-sm caldate mr-2 inputWidth"
+                                    [(ngModel)]="selectedDeviceShow.registrationTs" [owlDateTime]="dp3"
+                                    [max]="maxFromAndTo()" required disabled />
+                                  <span [owlDateTimeTrigger]="dp3"><em
+                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                  <owl-date-time [hour12Timer]="true" #dp3></owl-date-time>
+                                </div>
+                              </div>
+                              <div class="form-group col">
+                                <label for="altitude" class="form-label">{{altitude}}</label>
+                                <input matInput type="text" name="altitude" id="altitude" [readonly]="isEdit" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.altitude" disabled />
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Measurements" *ngIf="checkDeviceTypeEdit() == true"
+                            (selectTab)="sizeColumnsMeasurementShow($event)">
+                            <div class="row p-0">
+                              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3 px-3">
+                                <p class="my-2 text-white" style="font-size: 15px">{{outputMeasurements}}</p>
+                                <div class="" style="border: 1px solid deepskyblue">
+                                  <div class="row justify-content-between mx-0">
+                                    <div class="m-2 ml-3" style="padding-top: 2px">
+                                      <strong style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}
+                                      </strong>
+                                      <strong
+                                        *ngIf="measurementNameShowTableFilter==null || measurementNameShowTableFilter.length==0"
+                                        style="color: #536c79">
+                                        {{noFilterSelected}}</strong>
+                                      <span class="filter-tabs" *ngFor="let filter of measurementNameShowTableFilter">
+                                        {{ filter }}
+                                        <a (click)="clearFilterMeasurementNameShowTable(filter)"
+                                          class="pl-2 cursor-pointer">&times;</a>
+                                      </span>
+                                    </div>
+
+                                    <ag-grid-angular id="measurementNameShowGrid" name="measurementNameShowGrid"
+                                      #measurementNameShowGrid style="width: 19.5vw;"
+                                      class="ag-theme-balham ag-grid-angular"
+                                      (filterChanged)="filterModifiedMeasurementNameShowTable()"
+                                      (sortChanged)="measurementNameShowTableSortChange($event)"
+                                      [rowClassRules]="rowClassRuleMeasurementNameShowTable"
+                                      (rowClicked)="selectMeasurementShow($event)"
+                                      [gridOptions]="measurementNameShowGridOptions"
+                                      [rowData]="measurementNameShowRowData"
+                                      [columnDefs]="measurementNameShowColumnDefs">
+                                    </ag-grid-angular>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-12 col-md-12 col-lg-12 col-xl-9 px-3">
+                                <form #form="ngForm">
+                                  <div class="row justify-content-between mx-0">
+                                    <p class="my-2" style="font-size: 15px">{{equation}}</p>
+                                  </div>
+                                  <div 
+                                    style="border: 1px solid deepskyblue; margin: auto;">
+                                    <div class="form-row">
+                                      
+                                        <div class="form-group col">
+                                          <label for= "measurementName1" class="form-label">{{outputMeasurementName}}</label>
+                                          <input type="text" matInput name="measurementName1" id="measurementName1" class="form-control form-control-sm"
+                                            [(ngModel)]="measurementShow.assetMeasurementName" required disabled />
+                                        </div>
+                                    
+                                  
+                                        <div class="form-group col">
+                                          <label class="form-label">{{UOM1}}</label>
+                                          <select id="uom" name="uom" [(ngModel)]="measurementShow.uom" required class="form-control form-control-sm"
+                                            disabled>
+                                            <option value="null" [disabled]="true">{{choose}}</option>
+                                            <option [value]="codetype.codeDisplayTxt"
+                                              *ngFor="let codetype of codeTypeList">
+                                              {{ codetype.codeDisplayTxt }}
+                                            </option>
+                                          </select>
+                                        </div>
+                                   
+                                    </div>
+                                    <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 p-0">
+                                      <div class="row justify-content-between mx-0">
+                                        <div class="mb-2 ml-3" style="padding-top: 2px">
+                                          <strong
+                                            style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}
+                                          </strong>
+                                          <strong
+                                            *ngIf="measurementInputShowTableFilter==null || measurementInputShowTableFilter.length==0"
+                                            style="color: #536c79">
+                                            {{noFilterSelected}}</strong>
+                                          <span class="filter-tabs"
+                                            *ngFor="let filter of measurementInputShowTableFilter">
+                                            {{ filter }}
+                                            <a (click)="clearFiltermeasurementInputShowTable(filter)"
+                                              class="pl-2 cursor-pointer">&times;</a>
+                                          </span>
+                                        </div>
+                                      </div>
+                                      <ag-grid-angular id="measurementInputShowGrid" name="measurementInputShowGrid"
+                                        #measurementInputShowGrid 
+                                        class="ag-theme-balham ag-grid-angular"
+                                        [rowClassRules]="rowClassRuleMeasurementInputTable"
+                                        [gridOptions]="measurementInputGridOptions"
+                                        (filterChanged)="filterModifiedMeasurementInputShowTable()"
+                                        (sortChanged)="measurementInputShowGridSortChange($event)"
+                                        (rowDoubleClicked)="rowDoubleClickMeasurementInput($event)"
+                                        [rowData]="measurementInputRowData" (gridReady)="sizeToFitForShowSelectedMeas()"
+                                        [columnDefs]="measurementInputColumnDefs">
+                                      </ag-grid-angular>
+                                      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                        <div class="row">
+                                          <div class="form-inline col-6 p-2">
+                                            <div class="row mx-0 equbtn" style="margin-top: 31px;">
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="1" (click)="setValue(1)" disabled>
+                                                +
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="2" (click)="setValue(2)" disabled>
+                                                -
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="3" (click)="setValue(3)" disabled>
+                                                /
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.8rem" [value]="4" (click)="setValue(4)" disabled>
+                                                %
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.95rem" [value]="5" (click)="setValue(5)" disabled>
+                                                *
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="6" (click)="setValue(6)" disabled>
+                                                =
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="7" (click)="setValue(7)" disabled>
+                                                &#60;
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                                [value]="8" (click)="setValue(8)" disabled>
+                                                >
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.85rem" [value]="9" (click)="setValue(9)" disabled>
+                                                &
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.7rem" [value]="10" (click)="setValue(10)" disabled>
+                                                &#60;&#61;
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.65rem" [value]="11" (click)="setValue(11)" disabled>
+                                                >=
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.85rem" [value]="12" (click)="setValue(12)" disabled>
+                                                !=
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.97rem" [value]="13" (click)="setValue(13)" disabled>
+                                                |
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.7rem" [value]="14" (click)="setValue(14)" disabled>
+                                                ==
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.99rem" [value]="17" (click)="setValue(17)" disabled>
+                                                &#40;
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.99rem" [value]="18" (click)="setValue(18)" disabled>
+                                                &#41;
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.99rem" [value]="19" (click)="setValue(19)" disabled>
+                                                &#91;
+                                              </button>
+                                              <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                                style="padding: 0.99rem" [value]="20" (click)="setValue(20)" disabled>
+                                                &#93;
+                                              </button>
+                                            </div>
+                                          </div>
+                                          <div class="form-inline col-6 p-2">
+                                            <label class="">{{equation}}</label>
+                                            <textarea cols="100" rows="4" name="equationExpressionInput"
+                                              id="equationExpressionInput"
+                                              [(ngModel)]="measurementShow.calculationEquation" disabled></textarea>
+                                          </div>
+                                        </div>
+                                        <div class="text-center mb-2">
+                                          <button type="button" class="btn btn-success btn-sm mr-2" disabled>
+                                            <em class="fa fa-save mr-1"></em>{{saveMeasurement1}}
+                                          </button>
+                                          <button type="button" class="btn btn-primary btn-sm mr-2" disabled>
+                                            <em class="fa fa-check mr-1"></em>{{validate}}
+                                          </button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Measurements" *ngIf="checkDeviceTypeEdit() == false"
+                            (selectTab)="sizeColumnsMeasurementNewShow($event)">
+                            <div class="form-row" style="width: 100%;">
+                              <div class="form-group col">
+                                <label for="sysinterface" class="form-label">{{systemInterface1}}</label>
+                                <mat-select id="sysinterface" name="sysinterface" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceShow.systemInterface" disabled>
+                                  <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                                  <mat-option [value]="s.codeDisplayTxt" *ngFor="let s of systemInterface">
+                                    {{ s.codeDisplayTxt }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                              <div class="form-group col">
+                                <label for="protocol" class="form-label">{{protocol1}}</label>
+                                <mat-select id="protocol" name="protocol" [(ngModel)]="selectedDeviceShow.protocol" class="form-control form-control-sm"
+                                  disabled>
+                                  <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                                  <mat-option [value]="p.codeDisplayTxt" *ngFor="let p of protocol">
+                                    {{ p.codeDisplayTxt }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                              <div class="form-group col">
+                                <label for="adapter" class="form-label">{{adapter1}}</label>
+                                <mat-select id="adapter" name="adapter" [(ngModel)]="selectedDeviceShow.adapter" class="form-control form-control-sm"
+                                  disabled>
+                                  <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                                  <mat-option [value]="a.codeDisplayTxt" *ngFor="let a of adapter">
+                                    {{ a.codeDisplayTxt }}
+                                  </mat-option>
+                                </mat-select>
+                              </div>
+                            </div>
+                            <div class="row mx-0">
+                              <div class="row justify-content-between mx-0 p-0 col-12">
+                                <div class="ml-3 m-2">
+                                  <strong
+                                    style="font-size: 16px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                                  <strong
+                                    *ngIf="deviceMeasurementNewSelectedFilter==null || deviceMeasurementNewSelectedFilter.length==0"
+                                    style="color: #536c79">{{noFilterSelected}}</strong>
+                                  <span class="filter-tabs" *ngFor="let filter of deviceMeasurementNewSelectedFilter">
+                                    {{ filter }}
+                                    <a (click)="clearFilterDeviceMeasurementNewSelectedTable(filter)"
+                                      class="pl-2 cursor-pointer">&times;</a>
+                                  </span>
+                                </div>
+                              </div>
+                              <ag-grid-angular id="deviceMeasurementNewSelectedGrid"
+                                name="deviceMeasurementNewSelectedGrid" #deviceMeasurementNewSelectedGrid
+                                class="ag-theme-balham ag-grid-angular"
+                                (filterChanged)="filterModifiedDeviceMeasurementNewSelectedTable()"
+                                (sortChanged)="deviceMeasurementNewSelectedSortChange($event)"
+                                [rowClassRules]="rowClassRuleDeviceMeasurementNewSelectedTable"
+                                [gridOptions]="deviceMeasurementNewSelectedGridOptions"
+                                [rowData]="deviceMeasurementNewEditRowData"
+                                [columnDefs]="deviceMeasurementNewSelectedColumnDefs"></ag-grid-angular>
+
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label="Attribute">
+                            <div class="container-fluid"
+                              style="border-top: 1px solid #e2dede;">
+                              <div class="form-row">
+                                <div class="form-row mt-3 ml-0" style="width: 100%" *ngIf="attributesList.length > 0">
+                                  <mat-form-field class="example-full-width col-12 col-sm-6 col-md-6 col-lg-3 col-xl-3"
+                                    *ngFor="let item of attributesList">
+                                    <label class="form-label">{{ item.name }}</label>
+                                    <input matInput type="text" name="{{ item.name }}" id="{{ item.name }}" class="form-control form-control-sm"
+                                      [(ngModel)]="item.value" disabled readonly />
+                                  </mat-form-field>
+                                </div>
+                                <div class="form-row ml-0" style="width: 100%" *ngIf="!(attributesList.length > 0)">
+                                  <div class="form-group col-12 mt-4 mb-0 text-white">
+                                    <h6>No Attribute Selected</h6>
+                                  </div>
+                                </div>
+                                <div class="form-row ml-0" style="width: 100%">
+                                  <div class="form-group col-12 mt-4 mb-0">
+                                    <h6></h6>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label={{picture}}>
+                            <div class="col-md-12 ml-0 text-center"
+                              style="padding: 125px 1px; height: 323px; width: 100vw;"
+                              *ngIf="selectedDeviceShow.assetPicture?.length == 0" disabled>
+                              <div class="form-group col-12 mb-0 text-white">
+                                <h6>{{noPictureSelected}}</h6>
+                              </div>
+                            </div>
+                            <div class="col-12 py-2" style="height: 310px; width: 100%"
+                              *ngIf="selectedDeviceShow.assetPicture?.length != 0" disabled>
+                              <div class="row">
+                                <div *ngFor="let picture of selectedDeviceShow.assetPicture"
+                                  class="col-md-2 text-center mx-3" style="width: 230px; padding: 15px 1px">
+                                  <div class="col-md-2">
+                                    <div class="row">
+                                      <img class="selectedDevicePicture" alt="" style="width: 230px; height: 230px"
+                                        [src]="'data:image/png;base64,' + picture.pictureFile"
+                                        (click)="showFullScreen(picture)" />
+                                      <div style="font-size: 16px; margin-left: 90px;" class="text-center text-white">{{
+                                        picture.pictureTitle }}</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+
+                          <mat-tab label={{notes}}>
+                            <div class="row mt-3" style="margin-left: 5px;">
+                              <div class="row">
+                                <div class="ml-4 mb-2">
+                                  <strong
+                                    style="font-size: 16px; letter-spacing: 1px; color: #8c2121;margin-left: 5px;">{{filters}}
+                                  </strong>
+                                  <strong
+                                    *ngIf="deviceNotesViewTableFilter==null || deviceNotesViewTableFilter.length==0 "
+                                    style="color: #536c79">{{noFilterSelected}}</strong>
+                                  <span class="filter-tabs" *ngFor="let filter of deviceNotesViewTableFilter">
+                                    {{ filter }}
+                                    <a (click)="clearFilterDeviceNotesView(filter)"
+                                      class="pl-2 cursor-pointer">&times;</a>
+                                  </span>
+                                </div>
+                              </div>
+                              <ag-grid-angular id="deviceNotesView" name="deviceNotesView" #deviceNotesView
+                                style="height: 278px; font-size: 14.2px; width: 100%"
+                                class="ag-theme-balham ag-grid-angular"
+                                (filterChanged)="filterModifieddeviceNotesView()"
+                                (sortChanged)="deviceNotesViewSortChange($event)"
+                                (cellDoubleClicked)="openAddNote(false, false, true, $event)"
+                                [rowClassRules]="rowClassRulesdeviceNotesView"
+                                [gridOptions]="gridOptionsdeviceNotesView" [rowData]="selectedDevice.assetNotes"
+                                [columnDefs]="columnDefsdeviceNotesView">
+                              </ag-grid-angular>
+                            </div>
+                          </mat-tab>
+                        </mat-tab-group>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Modal -->
+<div bsModal #createModal="bs-modal" [config]="{ ignoreBackdropClick: true, keyboard: false }" class="modal fade fadeIn"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name21">
+  <div class="modal-dialog modal-2x">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 class="ml-auto mb-0" *ngIf="!titleForCreateAsset">{{createAsset}}</h6>
+        <h6 class="ml-auto mb-0" *ngIf=titleForCreateAsset>{{createChildAsset}}</h6>
+        <button type="button" class="close pull-right text-white" aria-label="Close" (click)="closeModal()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-0">
+          <form #form="ngForm">
+            <mat-tab-group #createTabs id="createTabs" [(selectedIndex)]="selectedCreateTabIndex"
+              (selectedTabChange)="onCreateTabChanged($event);">
+              <mat-tab label="Asset Information">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="ven_seqCreate">Vendor</label>
+                      <select id="ven_seqCreate" name="ven_seqCreate" class="form-control form-control-sm"
+                        (change)="getDeviceTypesByVendor(newDevice.vendorSeq)"
+                        [(ngModel)]="newDevice.vendorSeq" required>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let vendor of vendorsList" [value]="vendor.vendorSeq">
+                          {{ vendor.vendorName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="inputStateCreate">{{assetType}}</label>
+                      <select id="inputStateCreate" name="inputStateCreate" class="form-control form-control-sm"
+                        (change)="showCreateAttributes(newDevice.assetTypeSeq)"
+                        [(ngModel)]="newDevice.assetTypeSeq" required>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let type of deviceTypeList" [value]="type.assetTypeSeq">
+                          {{ type.assetTypeName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label  class="form-label" for="devidCreate">{{assetId}}</label>
+                      <input matInput type="text" name="moid" id="devidCreate" [(ngModel)]="newDevice.assetId" class="form-control form-control-sm"
+                        required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="p_devid">{{assetClass}}</label>
+                      <select id="p_devidCreate1" name="p_devidCreate1"
+                        (change)='onAssetClassSelected(newDevice.assetClass)' class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetClass" [disabled]="AssetClassDisabled" required>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let device of assetClass1" value="{{ device.codeDisplayTxt }}">
+                          {{ device.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label"  for="p_devidCreate">{{parentAssetId}}</label>
+                      <select id="p_devidCreate" name="p_devidCreate" [(ngModel)]="newDevice.parentAssetid" class="form-control form-control-sm"
+                        [disabled]="parentAssetIdDisabled">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let device of deviceListByClass" value="{{ device.assetId }}">
+                          {{ device.assetId }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="latitudeCreate">{{latitude}}</label>
+                      <input matInput type="number" name="latitudeCreate" id="latitudeCreate"  class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.latitude" required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="longitudeCreate">{{longitude}}</label>
+                      <input matInput type="number" name="longitudeCreate" id="longitudeCreate" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.longitude" required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="locationCreate">{{location}}</label>
+                      <input matInput type="text" name="locationCreate" id="locationCreate" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.location" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-3">
+                      <label class="form-label" for="timezoneCreate">{{assetTimezone}}</label>
+                      <select id="timezoneCreate" name="timezoneCreate" [(ngModel)]="newDevice.assetTz" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let timezone of timezoneList" value="{{ timezone.codeDisplayTxt }}">
+                          {{ timezone.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group col" style="margin: auto;">
+                      <label class="form-label">{{isVirtualAsset}} </label>
+                      <mat-slide-toggle [checked]="checkDeviceTypeEdit() == true" class="toggle-switch"
+                        color="primary" translate>
+                        {{isVirtualAsset}}
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Asset Details">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="ipAddresscreate">{{assetIpAddress}}</label>
+                      <input matInput type="text" #ipAddresscreate="ngModel" name="ipAddresscreate" id="ipAddresscreate" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetIpaddr"
+                        pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" />
+                      <div *ngIf="ipAddresscreate.invalid && ipAddresscreate.errors.pattern" class="alert alert-danger">
+                        {{ipAddressNotValid}}
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_nameCreateDetails">{{assetName}}</label>
+                      <input matInput type="text" name="dev_nameCreateDetails" id="dev_nameCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetName" required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_useridCreateDetails">{{assetUserId}}</label>
+                      <input matInput type="text" name="dev_useridCreateDetails" id="dev_useridCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetUserid" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_passCreateDetails">{{assetPassword}}</label>
+                      <input matInput type="text" name="dev_passCreateDetails" id="dev_passCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetPassword" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_accessCreateDetails">{{assetAccessPort}}</label>
+                      <input matInput type="number" name="dev_accessCreateDetails" id="dev_accessCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetAccessPort" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_access_typeCreateDetails">{{assetAccessType}}</label>
+                      <input matInput type="text" name="dev_access_typeCreateDetails" id="dev_access_typeCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetAccessType" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_aliasCreateDetails">{{assetAlias}}</label>
+                      <input matInput type="text" name="dev_aliasCreateDetails" id="dev_aliasCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.assetAlias" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="pow_parent_devID">{{assetRecordVersion}}</label>
+                      <input matInput type="text" name="deviceRecordVerCreateDetails" [maxLength]="4" class="form-control form-control-sm"
+                        id="deviceRecordVerCreateDetails" [(ngModel)]="newDevice.assetRecordVer" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="descriptionCreateDetails"> {{description}}</label>
+                      <input matInput type="text" name="descriptionCreateDetails" id="descriptionCreateDetails" class="form-control form-control-sm"
+                        [(ngModel)]="newDevice.description" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="geoxCreateDetails">{{geoX}}</label>
+                      <input matInput type="number" name="sgeox" id="geoxCreateDetails" [(ngModel)]="newDevice.geoX" class="form-control form-control-sm" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="geoyCreateDetails">{{geoY}}</label>
+                      <input matInput type="number" name="geoyCreateDetails" id="geoyCreateDetails" class="form-control form-control-sm" 
+                        [(ngModel)]="newDevice.geoY" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="grp_seqCreateDetails">{{group}}</label>
+                      <select id="grp_seqCreateDetails" name="grp_seqCreateDetails" [(ngModel)]="newDevice.groupSeq" class="form-control form-control-sm" 
+                        required>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let group of deviceGroupsList" value="{{ group.groupSeq }}">
+                          {{ group.groupName }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="snmp_comm">{{installationDate}}</label>
+                      <div class="d-flex justify-content-end">
+
+                        <input matInput type="datetime-local" name="installationDate" placeholder="MM/DD/YYYY hh:mm:ss" 
+                          class="caldate mr-2 inputWidth form-control form-control-sm" id="installationDate" [(ngModel)]="newDevice.installationDate"
+                          [owlDateTime]="dp4" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp4"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp4></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="snmp_port">{{registrationTime}}</label>
+                      <div class="d-flex justify-content-end">
+
+                        <input type="datetime-local" matInput name="registrationTsCreateDetails" placeholder="MM/DD/YYYY hh:mm:ss"
+                          class="caldate mr-2 inputWidth form-control form-control-sm" id="registrationTsCreateDetails"
+                          [(ngModel)]="newDevice.registrationTs" [owlDateTime]="dp5" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp5"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp5></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="snmp_version ">{{provisioningTime}}</label>
+                      <div class="d-flex justify-content-end">
+                        <input matInput type="datetime-local" name="provisioningTsCreateDetails" placeholder="MM/DD/YYYY hh:mm:ss"
+                          class="caldate mr-2 inputWidth form-control form-control-sm" id="provisioningTsCreateDetails" 
+                          [(ngModel)]="newDevice.provisioningTs" [owlDateTime]="dp6" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp6"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp6></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label"  for="altitudeCreateDetails">{{altitude}}</label>
+                      <input matInput type="text" name="altitudeCreateDetails" id="altitudeCreateDetails" class="form-control form-control-sm" 
+                        [(ngModel)]="newDevice.altitude" />
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Measurements" *ngIf="checkDeviceType() == true"
+                (selectTab)="sizeColumnsMeasurement($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="row p-0 mt-3">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4 pl-3 pr-2">
+                      <p class="my-2 text-white" style="font-size: 15px">{{outputMeasurements}}</p>
+                      <div style="border: 1px solid deepskyblue">
+                        <div class="row justify-content-between mx-0">
+                          <div class="m-2 ml-3" style="padding-top: 2px">
+                            <strong style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}
+                            </strong>
+                            <strong
+                              *ngIf="createMeasurementNameTableFilter==null || createMeasurementNameTableFilter.length==0 "
+                              style="color: #536c79">
+                              {{noFilterSelected}}</strong>
+                            <span class="filter-tabs" *ngFor="let filter of createMeasurementNameTableFilter">
+                              {{ filter }}
+                              <a (click)="clearFilterCreateMeasurementNameTable(filter)"
+                                class="pl-2 cursor-pointer">&times;</a>
+                            </span>
+                          </div>
+                          <div class="row d-flex mr-1 justify-content-end" style="flex-wrap: wrap">
+                            <em class="fa fa-plus-circle mtt mr-2" style="font-size: 20px; cursor: pointer;"
+                              title="Add Measurement" (click)="addMeasurement()"></em>
+                            <em class="fa fa-trash-o mtt mr-3" title="Delete Measurement" *ngIf="list.length!=0"
+                              (click)="deleteMeasurementModal.show()"> </em>
+                          </div>
+                        </div>
+                        <ag-grid-angular id="measurementNameGrid" name="measurementNameGrid" #measurementNameGrid
+                          style="width: 100%; " class="ag-theme-balham ag-grid-angular"
+                          (filterChanged)="filterModifiedCreateMeasurementNameTable()"
+                          [rowClassRules]="rowClassRuleMeasurementNameTable" (gridReady)="sizeToFitMeasurementTable()"
+                          (cellContextMenu)="cellRightClickMeasurementName($event)"
+                          (rowClicked)="selectMeasurement($event)" [gridOptions]="measurementNameGridOptions"
+                          [rowData]="measurementNameAddRowData" [columnDefs]="measurementNameColumnDefs">
+                        </ag-grid-angular>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8 pl-3 pr-2">
+                      <div class="row justify-content-between mx-0">
+                        <p class="my-2" style="font-size: 15px">{{equation}}</p>
+                      </div>
+                      <form #addMeasForm="ngForm">
+                        <div 
+                          style="border: 1px solid deepskyblue">
+                          <div class="form-row">
+                  
+                              <div class="form-group col">
+                                <label for="measurementNameCreate" class="form-label">{{outputMeasurementName}}</label>
+                                <input matInput type="text" name="measurementNameCreate" id="measurementNameCreate" class = "form-control form-control-sm"
+                                  [(ngModel)]="measurement.assetMeasurementName" required />
+                              </div>
+                           
+                           
+                              <div class="form-group col">
+                                <label class="form-label">{{UOM1}}</label>
+                                <select id="uomCreate" name="uomCreate" class = "form-control form-control-sm" [(ngModel)]="measurement.uom" required>
+                                  <option value="null" [disabled]="true">{{choose}}</option>
+                                  <option *ngFor="let codetype of codeTypeList" [value]="codetype.codeDisplayTxt">{{
+                                    codetype.codeDisplayTxt }}
+                                  </option>
+                                </select>
+                              </div>
+                           
+                          </div>
+                          <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 p-0 mb-2">
+                            <div class="col-12 p-0 row mx-0">
+                              <strong class="pl-2 mb-2 text-white">{{selectInputMeasurement}}</strong>
+                            </div>
+                            <div class="row justify-content-between mx-0">
+                              <div class="mb-2 ml-3" style="padding-top: 2px">
+                                <strong style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}
+                                </strong>
+                                <strong
+                                  *ngIf="createMeasurementInputTableFilter==null || createMeasurementInputTableFilter.length==0"
+                                  style="color: #536c79">
+                                  {{noFilterSelected}}</strong>
+                                <span class="filter-tabs" *ngFor="let filter of createMeasurementInputTableFilter">
+                                  {{ filter }}
+                                  <a (click)="clearFilterCreateMeasurementInputTable(filter)"
+                                    class="pl-2 cursor-pointer">&times;</a>
+                                </span>
+                              </div>
+                            </div>
+                            <ag-grid-angular id="measurementInputGrid" name="measurementInputGrid" #measurementInputGrid
+                              style="width: 100%; height: 160px" class="ag-theme-balham ag-grid-angular"
+                              [rowClassRules]="rowClassRuleMeasurementInputTable"
+                              (rowDoubleClicked)="rowDoubleClickMeasurementInput($event)"
+                              (filterChanged)="filterModifiedCreateMeasurementInputTable()"
+                              [gridOptions]="measurementInputGridOptions" [rowData]="measurementInputRowData"
+                              [columnDefs]="measurementInputColumnDefs"></ag-grid-angular>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div class="row">
+                                <div class="form-inline col-7 p-2">
+                                  <div class="row mx-0 equbtn" style="margin-top: 31px;">
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="1"
+                                      (click)="setValue(1)">
+                                      +
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="2"
+                                      (click)="setValue(2)">
+                                      -
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="3"
+                                      (click)="setValue(3)">
+                                      /
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.8rem" [value]="4" (click)="setValue(4)">
+                                      %
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.95rem" [value]="5" (click)="setValue(5)">
+                                      *
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="6"
+                                      (click)="setValue(6)">
+                                      =
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="7"
+                                      (click)="setValue(7)">
+                                      &#60;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="8"
+                                      (click)="setValue(8)">
+                                      >
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.85rem" [value]="9" (click)="setValue(9)">
+                                      &
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.7rem" [value]="10" (click)="setValue(10)">
+                                      &#60;&#61;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.65rem" [value]="11" (click)="setValue(11)">
+                                      >=
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.85rem" [value]="12" (click)="setValue(12)">
+                                      !=
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.97rem" [value]="13" (click)="setValue(13)">
+                                      |
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3  oper"
+                                      style="padding: 0.7rem" [value]="14" (click)="setValue(14)">
+                                      ==
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.99rem" [value]="17" (click)="setValue(17)">
+                                      &#40;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.99rem" [value]="18" (click)="setValue(18)">
+                                      &#41;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.99rem" [value]="19" (click)="setValue(19)">
+                                      &#91;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper"
+                                      style="padding: 0.99rem" [value]="20" (click)="setValue(20)">
+                                      &#93;
+                                    </button>
+                                  </div>
+                                </div>
+                                <div class="form-inline col-5 p-2">
+                                  <label class="my-1">{{equation}}</label>
+                                  <textarea cols="100" rows="4" name="calculationEquationCreateDetails"
+                                    id="calculationEquationCreateDetails" (keyup)="toggleValidation()"
+                                    [(ngModel)]="measurement.calculationEquation"></textarea>
+                                </div>
+                              </div>
+                              <div class="text-center">
+                                <button type="button" class="btn btn-success btn-sm mr-2"
+                                  [disabled]="!isValidExpression || addMeasForm.invalid || measurement.calculationEquation == null || measurement.calculationEquation == ''"
+                                  (click)="saveMeasurementAdd()">
+                                  <em class="fa fa-save mr-1"></em>{{saveMeasurement1}}
+                                </button>
+                                <button type="button" class="btn btn-primary btn-sm mr-2" [disabled]="
+                                    measurement.calculationEquation == null || measurement.calculationEquation == ''
+                                  " (click)="validateExpressionAdd()">
+                                  <em class="fa fa-check mr-1"></em>{{validate}}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Measurements" *ngIf="checkDeviceType() == false"
+                (selectTab)="sizeColumnsMeasurementNew($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label for="sysinterface1" class="form-label">{{systemInterface1}}</label>
+                      <select id="sysinterface1" name="sysinterface1" [(ngModel)]="newDevice.systemInterface" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="s.codeDisplayTxt" *ngFor="let s of systemInterface">
+                          {{ s.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group col">
+                      <label for="protocol1" class="form-label">{{protocol1}}</label>
+                      <select id="protocol1" name="protocol1" [(ngModel)]="newDevice.protocol" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="p.codeDisplayTxt" *ngFor="let p of protocol">
+                          {{ p.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group col">
+                      <label for="adapter1" class="form-label">{{adapter1}}</label>
+                      <select id="adapter1" name="adapter1" [(ngModel)]="newDevice.adapter"  class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="a.codeDisplayTxt" *ngFor="let a of adapter">
+                          {{ a.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mx-0">
+                    <div class="row justify-content-between mx-0 p-0 col-12">
+                      <div class="ml-3 m-2">
+                        <strong style="font-size: 16px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                        <strong *ngIf="deviceMeasurementNewFilter==null || deviceMeasurementNewFilter.length==0"
+                          style="color: #536c79">
+                          {{noFilterSelected}}</strong>
+                        <span class="filter-tabs" *ngFor="let filter of deviceMeasurementNewFilter">
+                          {{ filter }}
+                          <a (click)="clearFilterDeviceMeasurementNewTable(filter)"
+                            class="pl-2 cursor-pointer">&times;</a>
+                        </span>
+                      </div>
+                    </div>
+                    <ag-grid-angular id="deviceMeasurementNewGrid" name="deviceMeasurementNewGrid"
+                      #deviceMeasurementNewGrid style="width: 100%; height: calc(60vh - 95px); min-height: 100px"
+                      class="ag-theme-balham ag-grid-angular"
+                      (filterChanged)="filterModifiedDeviceMeasurementNewTable()"
+                      [rowClassRules]="rowClassRuleDeviceMeasurementNewTable"
+                      [gridOptions]="deviceMeasurementNewGridOptions" [rowData]="deviceMeasurementNewRowData"
+                      [columnDefs]="deviceMeasurementNewColumnDefs"></ag-grid-angular>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Attribute">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede;">
+                  <div class="form-row" id="attList">
+                    <div class="form-row mt-3 ml-0" *ngIf="createAttributesList.length > 0">
+                      <div class="form-group"
+                        *ngFor="let item of createAttributesList">
+                        <label class="form-label">{{ item.name }}</label>
+                        <input matInput type="text" name="{{ item.name }}" id="{{ item.name }}" class="form-control form-control-sm"
+                          [(ngModel)]="item.value" />
+                    </div>
+                    </div>
+                    <div class="form-row ml-0" *ngIf="!(createAttributesList.length > 0)">
+                      <div class="form-group col-12 mt-4 mb-0 text-white">
+                        <h6 class="ml-auto">No Attribute Selected</h6>
+                      </div>
+                    </div>
+                    <div class="form-row ml-0">
+                      <div class="form-group col-12 mt-4 mb-0">
+                        <h6></h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Picture">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede;">
+                  <div class="form-row mt-3 float-right">
+                    <button type="button" class="btn btn-primary btn-sm mr-4 mt-1"
+                      (click)="openUplaod(true);resetupload(uploadPictureForm);">
+                      <em class="fa fa-upload mr-1"></em>{{upload}}
+                    </button>
+                  </div>
+                  <div class="form-row ml-0 text-center" style="padding: 43px 1px">
+                    <div class="form-group col-12 mb-0 text-white" *ngIf="(newDevice.assetPicture?.length==0)">
+                      <h6>{{noPictureSelected}}</h6>
+                    </div>
+                  </div>
+                  <div class="row col-12 py-2" style="overflow: auto; flex-wrap: nowrap"
+                    *ngIf="newDevice.assetPicture?.length > 0">
+                    <div *ngFor="let picture of newDevice.assetPicture" class="text-center mx-3 imageHover"
+                      style="width: 160px; position: relative">
+                      <img style="width: 160px; height: 160px" alt=""
+                        [src]="'data:image/png;base64,' + picture.pictureFile" />
+                      <div (click)="showFullScreen(picture)" class="deleteButtonPicture" style="
+                          width: 160px;
+                          height: 160px;
+                          top: 0px;
+                          left: 0px;
+                          position: absolute;
+                          background: #ffffff40;
+                        "></div>
+                      <span class="deleteButtonPicture" (click)="removeNewPicture(picture.pictureTitle)"
+                        style="top: -3px; right: 5px; position: absolute; font-size: 20px; font-weight: bold">&times;</span>
+                      <span>{{ picture.pictureTitle }}</span>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Notes" (selectTab)="sizeColumnsDeviceNotes($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="">
+                    <div class="row justify-content-between mx-0">
+                      <div class="m-2 ml-3" style="padding-top: 2px;">
+                        <strong style="font-size: 16px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                        <strong *ngIf="deviceNotesTableFilter==null || deviceNotesTableFilter.length==0"
+                          style="color: #536c79">{{noFilterSelected}}</strong>
+                        <span class="filter-tabs" *ngFor="let filter of deviceNotesTableFilter">
+                          {{ filter }}
+                          <a (click)="clearFilterDeviceNotes(filter)" class="pl-2 cursor-pointer">&times;</a>
+                        </span>
+                      </div>
+                      <div class="d-flex justify-content-end" style="flex-wrap: wrap;">
+                        <em class="fa fa-plus-circle mtt mr-3" title="Add Notes"
+                          (click)="openAddNote(true, true, false, null)"> </em>
+                      </div>
+                    </div>
+                    <ag-grid-angular id="deviceNotes" name="deviceNotes" #deviceNotes
+                      style="width: 100%; height: 200px; font-size: 14.2px" class="ag-theme-balham ag-grid-angular"
+                      (filterChanged)="filterModifieddeviceNotes()"
+                      (cellDoubleClicked)="openAddNote(true, false, false, $event)" [columnDefs]="columnDefsdeviceNotes"
+                      [rowClassRules]="rowClassRulesdeviceNotes" [gridOptions]="gridOptionsdeviceNotes"
+                      [rowData]="rowDataDeviceNotes" (cellContextMenu)="cellRightClickAddNote($event)">
+                    </ag-grid-angular>
+                    <context-menu #addNoteContextmenu>
+                      <ng-template contextMenuItem (execute)="deleteNote(true, $event)">{{delete}}</ng-template>
+                    </context-menu>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </form>
+
+
+
+          <div class="text-center mt-2">
+            <button type="button" class="btn btn-sm btn-secondary mr-2" (click)="closeModal()">
+              <em class="fa fa-times mr-1"></em>{{close}}
+            </button>
+            <button type="button" class="btn btn-sm btn-primary mr-2" *ngIf="!titleForCreateAsset"
+              (click)="resetCreateAsset(form);">
+              <em class="fa fa-refresh mr-1"></em>{{reset1}}
+            </button>
+            <button type="button" class="btn btn-sm btn-primary mr-2" *ngIf="titleForCreateAsset"
+              (click)=" resetChildAsset();">
+              <em class="fa fa-refresh mr-1"></em>{{reset1}}
+            </button>
+            <button type="button" class="btn btn-sm btn-success mr-2" (click)="createDevice(true, false)"
+              [disabled]="form.invalid">
+              <em class="fa fa-save mr-1"></em>{{save}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Modal -->
+<div bsModal #editModal="bs-modal" [config]="{ ignoreBackdropClick: true, keyboard: false }" class="modal fade fadeIn"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name21">
+  <div class="modal-dialog modal-2x">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 class="ml-auto mb-0">{{editAsset}}</h6>
+        <button type="button" class="close pull-right text-white" aria-label="Close" (click)="cancelDevice()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-0">
+          <form #editForm="ngForm">
+            <mat-tab-group #editTabs id="editTabs" [(selectedIndex)]="selectedEditTabIndex"
+              (selectedTabChange)="onMainTabChanged($event);">
+              <mat-tab label="Asset Information">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="ven_seqEdit">Vendor</label>
+                      <select id="ven_seqEdit" name="ven_seqEdit" class="form-control form-control-sm"
+                        (change)="getDeviceTypesByVendor(selectedDevice.vendorSeq)"
+                        [(ngModel)]="selectedDevice.vendorSeq" required disabled>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let vendor of vendorsList" [value]="vendor.vendorSeq">
+                          {{ vendor.vendorName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label  class="form-label" for="inputStateEdit">{{assetType}}</label>
+                      <select id="inputStateEdit" name="inputStateEdit" (change)="getAttributes()" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetTypeSeq" required disabled>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let type of deviceTypeList" [value]="type.assetTypeSeq">
+                          {{ type.assetTypeName }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label  class="form-label" for="devidEdit">{{assetId}}</label>
+                      <input matInput type="text" name="moid" id="devidEdit" disabled [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetId" [readonly]="true" required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="p_devid">{{assetClass}}</label>
+                      <select id="p_devidEdit1" name="p_devidEdit1"
+                        (change)='onAssetClassSelected(selectedDevice.assetClass)' class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetClass" required disabled>
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option *ngFor="let device of assetClass1" [value]="device.codeDisplayTxt"
+                          [hidden]="isSelected(device.assetClass)">
+                          {{ device.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="p_devidEdit3">{{parentAssetId}}</label>
+                      <mat-select id="p_devidEdit3" name="p_devidEdit3" [disabled]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.parentAssetid">
+                        <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                        <mat-option *ngFor="let device of deviceListByClass" [value]="device.assetId"
+                          [hidden]="isSelected(device.assetId)">
+                          {{ device.assetId }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="latitudeEdit">{{latitude}}</label>
+                      <input matInput type="number" name="latitudeEdit" id="latitudeEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.latitude" required />
+                      </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="longitudeEdit">{{longitude}}</label>
+                      <input type="number" matInput name="longitudeEdit" id="longitudeEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.longitude" required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="locationEdit">{{location}}</label>
+                      <input matInput type="text" name="locationEdit" id="locationEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.location" />
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-3">
+                      <label class="form-label" for="timezoneEdit">{{assetTimezone}}</label>
+                      <mat-select id="timezoneEdit" name="timezoneEdit" [disabled]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetTz">
+                        <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                        <mat-option *ngFor="let timezone of timezoneList" [value]="timezone.codeDisplayTxt">
+                          {{ timezone.codeDisplayTxt }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+
+                    <div class="form-group col" style="margin: auto;">
+                      <label class="form-label">{{isVirtualAsset}} </label>
+                      <mat-slide-toggle [checked]="checkDeviceTypeEdit() == true" class="toggle-switch"
+                        color="primary" translate>
+                        {{isVirtualAsset}}
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Asset Details">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="ipaddressEdit">{{assetIpAddress}}</label>
+                      <input matInput type="text" #ipaddressEdit="ngModel" name="ipaddressEdit" id="ipaddressEdit"
+                        [readonly]="isEdit" [(ngModel)]="selectedDevice.assetIpaddr" class="form-control form-control-sm"
+                        pattern="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)" />
+                      <div *ngIf="ipaddressEdit.invalid && ipaddressEdit.errors.pattern" class="alert alert-danger">
+                        {{ipAddressNotValid}}
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_nameEdit">{{assetName}}</label>
+                      <input matInput type="text" name="dev_nameEdit" id="dev_nameEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetName" [readonly]="isEdit" disabled required />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_useridEdit">{{assetUserId}}</label>
+                      <input matInput type="text" name="dev_useridEdit" id="dev_useridEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetUserid" disabled [readonly]="isEdit" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_passEdit">{{assetPassword}}</label>
+                      <input matInput type="text" name="dev_passEdit" id="dev_passEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetPassword" />
+                    </div>    
+                  </div>
+                  <div class="form-row"> 
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_accessEdit">{{assetAccessPort}}</label>
+                      <input matInput type="number" name="dev_accessEdit" id="dev_accessEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetAccessPort" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" matInput for="dev_access_typeEdit">{{assetAccessType}}</label>
+                      <input matInput type="text" name="dev_access_typeEdit" id="dev_access_typeEdit" class="form-control form-control-sm"
+                        [readonly]="isEdit" [(ngModel)]="selectedDevice.assetAccessType" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="dev_aliasEdit">{{assetAlias}}</label>
+                      <input matInput type="text" name="dev_aliasEdit" id="dev_aliasEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.assetAlias" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="deviceRecordVerEdit">{{assetRecordVersion}}</label>
+                      <input matInput type="text" name="deviceRecordVerEdit" [maxLength]="4" id="deviceRecordVerEdit" class="form-control form-control-sm"
+                        [readonly]="isEdit" [(ngModel)]="selectedDevice.assetRecordVer" />
+                    </div>
+                  </div>
+                  <div class="form-row"> 
+                    <div class="form-group col">
+                      <label  class="form-label" for="descriptionEdit"> {{description}}</label>
+                      <input matInput type="text" name="descriptionEdit" id="descriptionEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.description" />
+                    </div>
+                    <div class="form-group col">
+                      <label  class="form-label" for="geoxEdit">{{geoX}}</label>
+                      <input matInput type="number" name="sgeox" id="geoxEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.geoX" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="geoyEdit">{{geoY}}</label>
+                      <input matInput type="number" name="geoyEdit" id="geoyEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.geoY" />
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="grp_seqEdit">{{group}}</label>
+                      <mat-select id="grp_seqEdit" name="grp_seqEdit" [disabled]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.groupSeq" required>
+                        <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
+                        <mat-option *ngFor="let group of deviceGroupsList" [value]="group.groupSeq">
+                          {{ group.groupName }}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div class="form-row">   
+                    <div class="form-group col">
+                      <label  class="form-label" for="installationDateEdit">{{installationDate}}</label>
+                      <div class="d-flex justify-content-end">
+                        <input matInput type="datetime-local" name="installationDateEdit" placeholder="MM/DD/YYYY hh:mm:ss" 
+                          class="caldate mr-2 inputWidth form-control form-control-sm" id="installationDateEdit"
+                          [(ngModel)]="selectedDevice.installationDate" [owlDateTime]="dp7" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp7"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp7></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="registrationTsEdit">{{registrationTime}}</label>
+                      <div class="d-flex justify-content-end">
+                        <input matInput type="datetime-local" name="registrationTsEdit" placeholder="MM/DD/YYYY hh:mm:ss"
+                          class="caldate mr-2 inputWidth form-control form-control-sm" id="registrationTsEdit"
+                          [(ngModel)]="selectedDevice.registrationTs" [owlDateTime]="dp8" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp8"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp8></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="provisioningTsEdit">{{provisioningTime}}</label>
+                      <div class="d-flex justify-content-end">
+                        <input matInput type="datetime-local" name="provisioningTsEdit" placeholder="MM/DD/YYYY hh:mm:ss"
+                        class="caldate mr-2 inputWidth form-control form-control-sm" id="provisioningTsEdit"
+                          [(ngModel)]="selectedDevice.provisioningTs" [owlDateTime]="dp9" [max]="maxFromAndTo()" />
+                        <span [owlDateTimeTrigger]="dp9"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <owl-date-time [hour12Timer]="true" #dp9></owl-date-time>
+                      </div>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="altitudeEdit">{{altitude}}</label>
+                      <input matInput type="text" name="altitudeEdit" id="altitudeEdit" [readonly]="isEdit" class="form-control form-control-sm"
+                        [(ngModel)]="selectedDevice.altitude" />
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Measurements" *ngIf="checkDeviceTypeEdit()"
+                (selectTab)="sizeColumnsMeasurementEdit($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede;">
+                  <div class="row p-0 mt-3">
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4 px-3">
+                      <p class="my-2 text-white" style="font-size: 15px">{{outputMeasurements}}</p>
+                      <div  style="border: 1px solid deepskyblue">
+                        <div class="row justify-content-between mx-0">
+                          <div class="m-2 ml-3" style="padding-top: 2px">
+                            <strong style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                            <strong *ngIf="measurementNameTableFilter==null || measurementNameTableFilter.length==0 "
+                              style="color: #536c79">No Filter
+                              Selected</strong>
+                            <span class="filter-tabs" *ngFor="let filter of measurementNameTableFilter">
+                              {{ filter }}
+                              <a (click)="clearFilterMeasurementNameTable(filter)"
+                                class="pl-2 cursor-pointer">&times;</a>
+                            </span>
+                          </div>
+                          <div class="row d-flex mr-1 justify-content-end" style="flex-wrap: wrap">
+                            <em class="fa fa-plus-circle mtt mr-2" style="font-size: 20px; cursor: pointer;"
+                              title="Edit Measurement" (click)="addMeasurement()"></em>
+                            <em class="fa fa-trash-o mtt mr-3" title="Delete Measurement"
+                              *ngIf="measurementNameRowData.length!=0" (click)="deleteMeasurementEditModal.show()">
+                            </em>
+                          </div>
+                        </div>
+                        <ag-grid-angular id="measurementNameGrid" name="measurementNameGrid" #measurementNameGrid
+                          style="width: 100%; height: 450px" class="ag-theme-balham ag-grid-angular"
+                          (filterChanged)="filterModifiedMeasurementNameTable()"
+                          (sortChanged)="measurementNameGridSortChanged($event)"
+                          [rowClassRules]="rowClassRuleMeasurementNameTable" (rowClicked)="selectMeasurement($event)"
+                          [gridOptions]="measurementNameGridOptions" [rowData]="measurementNameRowData"
+                          [columnDefs]="measurementNameColumnDefs" (gridReady)="sizeToFitmeasurementGrid()">
+                        </ag-grid-angular>
+
+
+                      </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-8 px-3">
+                      <form #editMeasForm="ngForm">
+                        <div class="row justify-content-between mx-0">
+                          <p class="my-2" style="font-size: 15px">{{equation}}</p>
+
+                        </div>
+                        <div 
+                          style="border: 1px solid deepskyblue">
+                          <div class="form-row">
+                              <div class="form-group col">
+                                <label for = "measurementName" class="form-label">{{outputMeasurementName}}</label>
+                                <input matInput type="text" name="measurementName" id="measurementName" class = "form-control form-control-sm"
+                                  [(ngModel)]="measurement.assetMeasurementName" required />
+                              </div>                          
+                              <div class="form-group col">
+                                <label  for = "uomEdit" class="form-label">{{UOM1}}</label>
+                                <select id="uomEdit" name="uomEdit" [(ngModel)]="measurement.uom" class="form-control form-control-sm" required>
+                                  <option value="null" [disabled]="true">{{choose}}</option>
+                                  <option *ngFor="let codetype of codeTypeList" [value]="codetype.codeDisplayTxt">{{
+                                    codetype.codeDisplayTxt }}
+                                  </option>
+                                </select>
+                              </div>
+                          </div>
+                          <div class="col-sm-8 col-md-12 col-lg-12 col-xl-12 p-0 mb-2">
+                            <div class="col-12 p-0 row mx-0">
+                              <strong class="pl-2 mb-2 text-white">{{selectInputMeasurement}}</strong>
+                            </div>
+                            <div class="row justify-content-between mx-0">
+                              <div class="mb-2 ml-3" style="padding-top: 2px">
+                                <strong style="font-size: 14px; letter-spacing: 1px; color: #8c2121">{{filters}}
+                                </strong>
+                                <strong
+                                  *ngIf="measurementInputEditTableFilter==null || measurementInputEditTableFilter.length==0"
+                                  style="color: #536c79">
+                                  {{noFilterSelected}}</strong>
+                                <span class="filter-tabs" *ngFor="let filter of measurementInputEditTableFilter">
+                                  {{ filter }}
+                                  <a (click)="clearFilterMeasurementInputEditTable(filter)"
+                                    class="pl-2 cursor-pointer">&times;</a>
+                                </span>
+                              </div>
+                            </div>
+                            <ag-grid-angular id="measurementInputEditGrid" name="measurementInputEditGrid"
+                              #measurementInputEditGrid style="width: 100%; height: 160px"
+                              class="ag-theme-balham ag-grid-angular"
+                              [rowClassRules]="rowClassRuleMeasurementInputTable"
+                              [gridOptions]="measurementInputGridOptions"
+                              (filterChanged)="filterModifiedmeasurementInputEditTable()"
+                              (sortChanged)="measurementInputEditGridSortChanged($event)"
+                              (rowDoubleClicked)="rowDoubleClickMeasurementInput($event)"
+                              [rowData]="measurementInputRowData" (gridReady)="sizeToFitMeasurementEdit()"
+                              [columnDefs]="measurementInputColumnDefs">
+                            </ag-grid-angular>
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div class="row">
+                                <div class="form-inline col-7 p-2">
+                                  <div class="row mx-0 equbtn" style="margin-top: 31px;">
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="1"
+                                      (click)="setValue(1)">
+                                      +
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="2"
+                                      (click)="setValue(2)">
+                                      -
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="3"
+                                      (click)="setValue(3)">
+                                      /
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.8rem" [value]="4" (click)="setValue(4)">
+                                      %
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.95rem" [value]="5" (click)="setValue(5)">
+                                      *
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="6"
+                                      (click)="setValue(6)">
+                                      =
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="7"
+                                      (click)="setValue(7)">
+                                      &#60;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 p-3 oper" [value]="8"
+                                      (click)="setValue(8)">
+                                      >
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.85rem" [value]="9" (click)="setValue(9)">
+                                      &
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.7rem" [value]="10" (click)="setValue(10)">
+                                      &#60;&#61;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.65rem" [value]="11" (click)="setValue(11)">
+                                      >=
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.85rem" [value]="12" (click)="setValue(12)">
+                                      !=
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.97rem" [value]="13" (click)="setValue(13)">
+                                      |
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.7rem" [value]="14" (click)="setValue(14)">
+                                      ==
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.99rem" [value]="17" (click)="setValue(17)">
+                                      &#40;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.99rem" [value]="18" (click)="setValue(18)">
+                                      &#41;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.99rem" [value]="19" (click)="setValue(19)">
+                                      &#91;
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-primary m-1 oper"
+                                      style="padding: 0.99rem" [value]="20" (click)="setValue(20)">
+                                      &#93;
+                                    </button>
+                                  </div>
+                                </div>
+                                <div class="form-inline col-5 p-2">
+                                  <label class="my-1">{{equation}}</label>
+                                  <textarea cols="100" rows="4" name="equationExpressionInput1"
+                                    id="equationExpressionInput1" (keyup)="toggleValidation()"
+                                    [(ngModel)]="measurement.calculationEquation"></textarea>
+                                </div>
+                              </div>
+                              <div class="text-center">
+                                <button type="button" class="btn btn-success btn-sm mr-2"
+                                  [disabled]="!isValidExpression || editMeasForm.invalid ||  measurement.calculationEquation == null || measurement.calculationEquation == ''"
+                                  (click)="saveMeasurement()">
+                                  <em class="fa fa-save mr-1"></em>{{saveMeasurement1}}
+                                </button>
+                                <button type="button" class="btn btn-primary btn-sm mr-2"
+                                  (click)="validateExpressionAdd()" [disabled]="
+                                    measurement.calculationEquation == null || measurement.calculationEquation == ''
+                                  ">
+                                  <em class="fa fa-check mr-1"></em>{{validate}}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Measurements" *ngIf="!checkDeviceTypeEdit()"
+                (selectTab)="sizeColumnsMeasurementNewEdit($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-group col">
+                      <label class="form-label" for="sysinterface2">{{systemInterface1}}</label>
+                      <select id="sysinterface2" name="sysinterface2" [(ngModel)]="selectedDevice.systemInterface" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="s.codeDisplayTxt" *ngFor="let s of systemInterface">
+                          {{ s.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="protocol2">{{protocol1}}</label>
+                      <select id="protocol2" name="protocol2" [(ngModel)]="selectedDevice.protocol" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="p.codeDisplayTxt" *ngFor="let p of protocol">
+                          {{ p.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group col">
+                      <label class="form-label" for="adapter2">{{adapter1}}</label>
+                      <select id="adapter2" name="adapter2" [(ngModel)]="selectedDevice.adapter" class="form-control form-control-sm">
+                        <option value="null" [disabled]="true">{{choose}}</option>
+                        <option [value]="a.codeDisplayTxt" *ngFor="let a of adapter">
+                          {{ a.codeDisplayTxt }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="row mx-0">
+                    <div class="row justify-content-between mx-0 p-0 col-12">
+                      <div class="ml-3 m-2">
+                        <strong style="font-size: 16px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                        <strong
+                          *ngIf="deviceMeasurementNewEditFilter==null || deviceMeasurementNewEditFilter.length==0 "
+                          style="color: #536c79">
+                          {{noFilterSelected}}</strong>
+                        <span class="filter-tabs" *ngFor="let filter of deviceMeasurementNewEditFilter">
+                          {{ filter }}
+                          <a (click)="clearFilterDeviceMeasurementNewEditTable(filter)"
+                            class="pl-2 cursor-pointer">&times;</a>
+                        </span>
+                      </div>
+                      <div class="d-flex justify-content-end" style="flex-wrap: wrap">
+
+                      </div>
+                    </div>
+                    <ag-grid-angular id="deviceMeasurementNewEditGrid" name="deviceMeasurementNewEditGrid"
+                      #deviceMeasurementNewEditGrid style="width: 100%; height: calc(60vh - 95px); min-height: 100px"
+                      class="ag-theme-balham ag-grid-angular"
+                      (filterChanged)="filterModifiedDeviceMeasurementNewEditTable()"
+                      (sortChanged)="deviceMeasurementNewEditGridSortChanged($event)"
+                      [rowClassRules]="rowClassRuleDeviceMeasurementNewEditTable"
+                      [gridOptions]="deviceMeasurementNewEditGridOptions" [rowData]="deviceMeasurementNewEditRowData"
+                      [columnDefs]="deviceMeasurementNewEditColumnDefs">
+                    </ag-grid-angular>
+                  </div>
+                </div>
+              </mat-tab>
+
+
+              <mat-tab label="Attribute">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row">
+                    <div class="form-row mt-3 ml-0" style="width: 100%" *ngIf="attributesList.length > 0">
+                      <div class="form-group"
+                        *ngFor="let item of attributesList">
+                        <label class="form-label">{{ item.name }}</label>
+                        <input matInput type="text" name="{{ item.name }}" id="{{ item.name }}" [readonly]="isEdit" class="form-control form-control-sm"
+                          [(ngModel)]="item.value" />
+                      </div>
+                    </div>
+                    <div class="form-row ml-0" style="width: 100%" *ngIf="!(attributesList.length > 0)">
+                      <div class="form-group col-12 mt-4 mb-0 text-white">
+                        <h6>No Attribute Selected</h6>
+                      </div>
+                    </div>
+                    <div class="form-row ml-0" style="width: 100%">
+                      <div class="form-group col-12 mt-4 mb-0">
+                        <h6></h6>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Picture">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="form-row mt-3 float-right">
+                    <button type="button" class="btn btn-primary btn-sm mr-4 mt-1"
+                      (click)="openUplaod(false);resetupload(uploadPictureForm);">
+                      <em class="fa fa-upload mr-1"></em>{{upload}}
+                    </button>
+                  </div>
+                  <div class="form-row ml-0 text-center" style="width: 100%; padding: 43px 1px">
+
+                    <div class="form-group col-12 mb-0 text-white" *ngIf="(selectedDevice.assetPicture?.length == 0)">
+                      <h6>{{noPictureSelected}}</h6>
+                    </div>
+                  </div>
+                  <div class="row col-12 py-2" style="overflow: auto; flex-wrap: nowrap"
+                    *ngIf="selectedDevice.assetPicture != null">
+
+                    <div *ngFor="let picture of selectedDevice.assetPicture" class="text-center mx-3 imageHover"
+                      style="width: 160px; position: relative">
+                      <img style="width: 160px; height: 160px" alt=""
+                        [src]="'data:image/png;base64,' + picture.pictureFile" />
+                      <div (click)="showFullScreen(picture)" class="deleteButtonPicture" style="
+                          width: 160px;
+                          height: 160px;
+                          top: 0px;
+                          left: 0px;
+                          position: absolute;
+                          background: #ffffff40;
+                        "></div>
+                      <span class="deleteButtonPicture" (click)="removePictureEdit(picture.pictureTitle)"
+                        style="top: -3px; right: 5px; position: absolute; font-size: 20px; font-weight: bold;">&times;</span>
+                      <span>{{ picture.pictureTitle }}</span>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Notes" (selectTab)="sizeColumnsDeviceNotesEdit($event)">
+                <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                  <div class="">
+                    <div class="row justify-content-between mx-0">
+                      <div class="m-2 ml-3" style="padding-top: 2px;">
+                        <strong style="font-size: 16px; letter-spacing: 1px; color: #8c2121">{{filters}}</strong>
+                        <strong *ngIf="deviceNotesEditTableFilter==null || deviceNotesEditTableFilter.length==0 "
+                          style="color: #536c79">{{noFilterSelected}}</strong>
+                        <span class="filter-tabs" *ngFor="let filter of deviceNotesEditTableFilter">
+                          {{ filter }}
+                          <a (click)="clearFilterDeviceNotesEdit(filter)" class="pl-2 cursor-pointer">&times;</a>
+                        </span>
+                      </div>
+                      <div class="d-flex justify-content-end" style="flex-wrap: wrap;">
+                        <em class="fa fa-plus-circle mtt mr-3" title="Add Notes"
+                          (click)="openAddNote(false, true, false, null)"> </em>
+                      </div>
+                    </div>
+                    <ag-grid-angular id="deviceNotesEdit" #deviceNotesEdit name="deviceNotesEdit"
+                      style="width: 100%; height: 200px; font-size: 14.2px" class="ag-theme-balham ag-grid-angular"
+                      (filterChanged)="filterModifieddeviceNotesEdit()"
+                      (sortChanged)="deviceNotesEditSortChanged($event)"
+                      (cellDoubleClicked)="openAddNote(false, false, false, $event)"
+                      [columnDefs]="columnDefsdeviceNotesEdit" [rowClassRules]="rowClassRulesdeviceNotesEdit"
+                      [gridOptions]="gridOptionsdeviceNotesEdit" [rowData]="rowDataDeviceNotesEdit"
+                      (cellContextMenu)="cellRightClickEditNote($event)">
+                    </ag-grid-angular>
+
+                    <context-menu #editNoteContextmenu>
+                      <ng-template contextMenuItem (execute)="deleteNote(false, $event)">{{delete}}</ng-template>
+                    </context-menu>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </form>
+          <div class="col-12 text-center mt-3">
+
+            <button class="btn btn-sm btn-secondary mr-2" (click)="cancelDevice()">
+              <em class="fa fa-times mr-1"></em>Cancel
+            </button>
+
+            <button class="btn btn-sm btn-primary mr-2" (click)="resetChanges()" translate>
+              <em class="fa fa-refresh mr-1"></em>Reset
+            </button>
+
+            <button class="btn btn-sm btn-success mr-2" (click)="updateDevice(false, false)"
+              [disabled]="editForm.invalid" translate>
+              <em class="fa fa-save mr-1"></em>Save
+            </button>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div bsModal #deleteModal="bs-modal" [config]="{ ignoreBackdropClick: true, keyboard: false }" class="modal fade"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-sizes-name2">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 id="dialog-sizes-name2" class="modal-title pull-left">{{deleteDevice1}}</h6>
+        <button type="button" class="close pull-right text-white" aria-label="Close" (click)="deleteModal.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <p>Do you want to confirm?</p>
+
+        <button type="button" class="btn btn-success mr-4" (click)="deleteDevice()" translate>
+          Yes
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="deleteModal.hide()" translate>
+          No
+        </button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete measurement -->
+<div class="modal fade" bsModal #deleteMeasurementModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteBillDeterminantsModalTitle" class="modal-title pull-left">{{delete}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteMeasurementModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label>{{deleteMeasurementMessage}}</label>
+        <div class="text-center my-3">
+
+          <button type="button" class="btn btn-success mr-4" (click)="deleteMeasurement()" translate>
+            Yes
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="deleteMeasurementModal.hide()" translate>
+            No
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Measurement Edit -->
+<div class="modal fade" bsModal #deleteMeasurementEditModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteBillDeterminantsModalTitle" class="modal-title pull-left">{{delete}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteMeasurementEditModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label>{{deleteMeasurementMessage}}</label>
+        <div class="text-center my-3">
+
+          <button type="button" class="btn btn-success mr-4" (click)="deleteMeasurementEdit()" translate>
+            Yes
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="deleteMeasurementEditModal.hide()" translate>
+            No
+          </button>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- cloneDeviceModal-->
+<div class="modal fade" bsModal #cloneDeviceModal="bs-modal" [config]="{ backdrop: 'static' }" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-xs clonedevicemodal">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="acknowledgeTitle" class="modal-title mb-0">{{cloneAsset}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cloneDeviceModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-12">
+            <form #deviceCloneForm="ngForm">
+              <div class="form-row">
+                <mat-form-field class="example-full-width col-sm-4 col-md-4 col-lg-4">
+                  <mat-label for="deviceid">{{assetId}}</mat-label>
+                  <input matInput type="text" id="deviceid" name="deviceid" [(ngModel)]="newDevice.assetId" required />
+                </mat-form-field>
+                <mat-form-field class="example-full-width col-sm-8 col-md-8 col-lg-8">
+                  <mat-label for="assetName">{{assetName}}</mat-label>
+                  <input matInput type="text" id="assetName" name="assetName" [(ngModel)]="newDevice.assetName"
+                    required />
+                </mat-form-field>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="text-center">
+
+            <button class="btn btn-sm btn-secondary mr-2" (click)="cancelClone()">
+              <em class="fa fa-times mr-1"></em>Cancel
+            </button>
+
+            <button class="btn btn-sm btn-primary mr-2" (click)="resetClone(deviceCloneForm)" translate>
+              <em class="fa fa-refresh mr-1"></em>Reset
+            </button>
+
+            <button class="btn btn-sm btn-success mr-2" (click)="createDevice(true, true)"
+              [disabled]="deviceCloneForm.invalid" translate>
+              <em class="fa fa-save mr-1"></em>Save
+            </button>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Importmodal Picture -->
+<div class="modal fade" bsModal #uploadPictureModal="bs-modal" style="background: #00000040"
+  [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-1x">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="uploadPictureModalTitle" class="modal-title pull-left">{{uploadPictures}}</h6>
+        <button type="button" class="close pull-right text-white" aria-label="Close" (click)="cancelUploadNewPicture()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <div class="modal-body">
+        <form #uploadPictureForm="ngForm">
+          <div class="form-row">
+            <div class="form-group col">
+              <label class = "form-label" for="pictureTitle">{{title1}}</label>
+              <input matInput type="text" name="pictureTitle" id="pictureTitle" class="form-control form-control-sm"
+                [(ngModel)]="newMemsDevicePicture.pictureTitle" required />
+            </div>
+            <div class="form-group col">
+              <label class = "form-label" for="file">{{selectPicture}}</label>
+              <input matInput type="text" id="selectfile" name="selectFile" class="form-control form-control-sm" [(ngModel)]="selectedFileName" required />
+            </div>
+            <div class="form-group col" style=" margin-bottom: -50px; padding-bottom: -150px;">
+
+              <input type="file" #importPictureFile id="importPictureFile" name="importPictureFile" class="form-control form-control-sm"
+                style="display: none" (change)="selectFile($event)" accept="image/*" />
+                <label  for="importPictureFile" class="btn btn-sm btn-secondary form-label"><em class="fa fa-folder-open mt-2"></em>
+                  {{browse}}</label>
+            </div>
+          </div>
+        </form>
+        <div *ngIf="uploadPictureValidationErrorMsg != null" class="mb-2 text-center">
+          <span style="color: red">{{ uploadPictureValidationErrorMsg }}</span>
+        </div>
+        <div class="text-center">
+          <button class="btn btn-sm btn-secondary mr-2" (click)="cancelUploadNewPicture()">
+            <em class="fa fa-times mr-1"></em> {{cancel}}
+          </button>
+          <button class="btn btn-sm btn-success" [disabled]="uploadPictureForm.invalid" (click)="uploadNewPicture()">
+            <em class="fa fa-upload mr-1"></em> {{upload}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Show Full Screen Picture -->
+<div class="modal fade mt-0" bsModal #showFullPictureModal="bs-modal" style="background: #00000040"
+  [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <button type="button" class="close pull-right closeFullScreen" aria-label="Close" (click)="closeFullScreen()">
+    <span aria-hidden="true" style="color: #fff">&times;</span>
+  </button>
+  <div class="modal-dialog modal-1x">
+    <div class="modal-content">
+      <div class="modal-body text-center p-0">
+        <img style="width: 498px; height: 498px" alt=""
+          [src]="'data:image/png;base64,' + fullScreenPicture.pictureData" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Notes Popup -->
+<div class="modal fade" bsModal #addNewNotesModal="bs-modal" style="background: #00000040"
+  [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-1x">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 *ngIf="noteIsNew" id="addNewNotesTitle" class="modal-title pull-left">{{addNewNote}}</h6>
+        <h6 *ngIf="!noteIsNew" id="addNewNotesTitle" class="modal-title pull-left">{{editNote}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelAddNote()">
+          <span aria-hidden="true" style="color: #fff">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" style="text-align: end">
+        <div style="margin-top: -8px; margin-bottom: 4px; font-size: 12px">
+          <span class="text-danger">*</span>{{maximumNoteSizeAllowed}}
+        </div>
+        <form #addNewNotesForm="ngForm">
+          <div class="form-row justify-content-center">
+            <button *ngIf="!noteIsNew" class="btn btn-sm btn-primary mt-0 mr-0 ml-auto mb-2" (click)="toggleEditMode()">
+              <em class="fa fa-edit mr-1"></em>{{edit}}
+            </button>
+            <textarea name="note" class="bigtextarea w-100" style="height: 350px" wrap="hard"
+              [(ngModel)]="newNote.assetNote" (keyup)="validateCharCount()" (change)="validateCharCount()" required
+              [disabled]="!noteIsNew && !noteEditMode"></textarea>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+
+          <button class="btn btn-sm btn-secondary mr-2" (click)="cancelAddNote()">
+            <em class="fa fa-times mr-1"></em>Cancel
+          </button>
+
+          <button class="btn btn-sm btn-primary mr-2" (click)="resetNote()" translate>
+            <em class="fa fa-refresh mr-1"></em>Reset
+          </button>
+
+          <button class="btn btn-sm btn-success mr-2"
+            [disabled]="addNewNotesForm.invalid || (!noteEditMode && !noteIsNew)" (click)="saveNote()" translate>
+            <em class="fa fa-save mr-1"></em>Save
+          </button>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View Notes Popup -->
+<div class="modal fade" bsModal #viewNotesModal="bs-modal" style="background: #00000040"
+  [config]="{ backdrop: 'static' }" tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-1x">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="addNewNotesTitle" class="modal-title pull-left">{{viewNote}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="cancelViewNote()">
+          <span aria-hidden="true" style="color: #fff">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #viewNotesForm="ngForm">
+          <div class="form-row justify-content-center">
+            <textarea name="note" class="bigtextarea w-100" style="height: 350px" wrap="hard"
+              [(ngModel)]="newNote.assetNote" disabled></textarea>
+          </div>
+        </form>
+
+
+
+        <div class="text-center mt-3">
+          <button class="btn btn-sm btn-secondary mr-2" (click)="cancelViewNote()">
+            <em class="fa fa-times mr-1"></em> {{close}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Import Device Configuration -->
+<div class="modal fade" bsModal #importDeviceConfigurationModal="bs-modal" [config]="{ backdrop: 'static' }"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-sizes-name2" class="modal-title pull-left mb-0">{{importAssetConfiguration}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="importDeviceConfigurationModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label>{{assetConfigurationMessage}}</label>
+        <div class="text-center my-3">
+          <label for="importDeviceConfigurationCSV" class="btn btn-success me-4 mb-0"
+            (click)="importDeviceConfigurationModal.hide()">{{yes}}</label>
+          <input type="file" #importDeviceConfigurationCSV id="importDeviceConfigurationCSV"
+            name="importDeviceConfigurationCSV" style="display: none"
+            (change)="importDeviceConfigurationCSVFile($event)" />
+          <button type="button" class="btn btn-secondary ml-2" (click)="importDeviceConfigurationModal.hide()">
+            {{no}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Validation Errors -->
+<div class="modal fade" bsModal #importDeviceConfigurationErrorModal="bs-modal" [config]="{ backdrop: 'static' }"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content modal-val">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 class="modal-title pull-left mb-0" id="importDeviceConfigurationErrorModalTitle">{{importFailed}}</h6>
+      </div>
+      <div class="modal-body text-center">
+        <ul class="list-group">
+          <li class="list-group-item list-custom" *ngFor="let error of validationErrors">
+            <em class="fa fa-times"></em> {{ error }}
+          </li>
+        </ul>
+        <div class="text-center my-3">
+          <button type="button" mat-raised-button color="primary"
+            (click)="importDeviceConfigurationErrorModal.hide()">{{ok}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

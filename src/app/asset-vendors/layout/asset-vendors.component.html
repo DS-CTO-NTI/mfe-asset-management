@@ -1,0 +1,1392 @@
+<ngx-loading [show]="loading"></ngx-loading>
+<ngx-loading [show]="loading1"></ngx-loading>
+<div class="container-fluid mt-2">
+  <div class="row">
+    <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-1">
+      <div class="card">
+        <div class="card-body pb-0 px-0 loadfore" [collapse]="isCollapsed">
+          <mat-tab-group #loadTabs id="loadTabs" mat-align-tabs="start" [(selectedIndex)]="assetrTypeTab"
+            (selectedTabChange)="onMainTabChanged($event);">
+            <!-- Device Vendors -->
+            <mat-tab label="Asset Vendors" (selectTab)=sizeColumsToFitDeviceVendor()>
+              <div class="container-fluid mt-1">
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 mt-1">
+                    <div class="card">
+                      <div class="card-body p-0" [collapse]="isCollapsed">
+                        <div class="row justify-content-between mx-0">
+                          <div class="ml-3  m-2" style="padding-top: 2px;">
+                            <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters: </strong>
+                            <strong *ngIf="deviceVendorsTableFilter==null || deviceVendorsTableFilter.length==0 "
+                              style="color:#536c79;">No Filter Selected</strong>
+                            <span class="filter-tabs" *ngFor="let filter of deviceVendorsTableFilter">
+                              {{filter}} <a (click)="clearFilterDeviceVendorsTable(filter)"
+                                class="pl-2 cursor-pointer">&times;</a>
+                            </span>
+                          </div>
+                          <div class="d-flex justify-content-end" style="flex-wrap: wrap;padding-top: 10px;">
+                            <em class="fa fa-plus-circle mtt mr-2 text-white" style="font-size: 20px; cursor: pointer;"
+                              title="Add Asset Vendor" (click)="AddNewDeviceVendor(addDeviceVendorForm)"></em>
+                            <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Asset Vendor" *ngIf="vendorList != null"
+                              (click)="deleteDeviceVendorModal.show()"> </em>
+                          </div>
+                        </div>
+                        <ag-grid-angular id="DeviceVendorsGrid" name="DeviceVendorsGrid" #DeviceVendorsGrid
+                          style="width: 100%; height: calc(50vh - 202px); min-height: 174px;"
+                          class="ag-theme-balham ag-grid-angular" (gridReady)="deviceVendorsGridReady()"
+                          (filterChanged)="filterModifiedDeviceVendorsTable()"
+                          [rowClassRules]="rowClassRuleDeviceVendorsTable" [gridOptions]="deviceVendorsgridOptions"
+                          (rowClicked)="changeSelectedDeviceVendors($event)" [rowData]="vendorList"
+                          (sortChanged)="DeviceVendorsTableSortChange($event)" [columnDefs]="deviceVendorscolumnDefs"
+                          (rowClicked)="rowClicked($event)">
+                        </ag-grid-angular>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--   Device Vendors -->
+
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 pt-2" style="height: calc(48vh - 40px)">
+                    <div class="card">
+                      <div class="card-header bg-purple text-white">
+                        <h6 class="ml-auto mb-0" style="text-align: center;">Asset Vendor -
+                          {{selectedDeviceVendor.vendorName}}</h6>
+                      </div>
+                      <div class="card-body pb-0 px-0 flexible" [collapse]="isCollapsed5">
+                        <div class="m-0" id="ScrollId" style="width: 100%;">
+                          <form #addDeviceVendorForm="ngForm">
+                            <div class="form-row col">
+                              <div class="form-group col">
+                                <label class="form-label" for="vendorName">Vendor Name</label>
+                                <input matInput id="vendorName" name="vendorName" #vendorName1="ngModel"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceVendor.vendorName"
+                                  required>
+                                <div *ngIf="vendorName1.invalid && (vendorName1.dirty || vendorName1.touched) && 
+                                    selectedDeviceVendor.vendorName!=null && selectedDeviceVendor.vendorName!=''">
+                                  <small class="text-danger text-red"> </small>
+                                </div>
+
+                              </div>
+                              <div class="form-group col">
+                                <label class="form-label" for="description">Description</label>
+                                <input matInput id="description" name="description" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceVendor.description">
+                              </div>
+                            </div>
+
+                          </form>
+
+                          <div class="form-group col">
+                            <label class="mb-2 form-label" for="Address">Address</label>
+                            <textarea matInput style="height: calc(50vh - 365px); min-height: 84px; width: 100%;"
+                              class="form-control form-control-sm" cols="100" rows="5" name="equation"
+                              [(ngModel)]="selectedDeviceVendor.vendorAddress" id="equation"></textarea>
+
+                          </div>
+
+                        </div>
+                        <div class="text-center mb-3">
+                          <button class="mr-1" mat-raised-button color="warn" (click)="cancelDeviceVendor()"><em
+                              class="fa fa-times mr-1"></em>Cancel</button>
+                          <button mat-raised-button color="primary" (click)="saveDeviceVendors()"
+                            [disabled]="addDeviceVendorForm.invalid"><em class="fa fa-save mr-1"></em>Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <!-- Device Types -->
+            <mat-tab label="Asset Types" (selectTab)="sizeColumsToFitDeviceType()">
+              <div class="container-fluid mt-2">
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2">
+                    <div class="card">
+                      <div class="card-body p-0" [collapse]="isCollapsed">
+                        <div class="row justify-content-between mx-0">
+                          <div class="ml-3  m-2" style="padding-top: 2px;">
+                            <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters: </strong>
+                            <strong *ngIf="deviceTypeTableFilter==null || deviceTypeTableFilter.length==0 "
+                              style="color:#536c79;">No Filter Selected</strong>
+                            <span class="filter-tabs" *ngFor="let filter of deviceTypeTableFilter">
+                              {{filter}} <a (click)="clearFilterDeviceTypeTable(filter)"
+                                class="pl-2 cursor-pointer">&times;</a>
+                            </span>
+                          </div>
+                          <div class="d-flex justify-content-end tbtn" style="padding-top: 10px;">
+                            <a href="assets/resources/Asset_type_Template.csv" style="color: black;"><i
+                                class="fa fa-download mtt mr-3 text-white" title="Download Template" aria-hidden="true"></i></a>
+                            <em class="fa fa-cloud-download mtt mr-3 text-white" title="Download Asset Type"
+                              (click)="exportTOExcelAssetType()" aria-hidden="true"></em>
+                            <em class="fa fa-upload mtt mr-3 text-white" title="Upload Asset Type"
+                              (click)="importDeviceTypeModal.show()" aria-hidden="true"> </em>
+                            <em class="fa fa-plus-circle mr-3 mtt text-white" title="Add Asset Type"
+                              (click)="showAddDeviceTypeModal(addDeviceTypeForm)" aria-hidden="true"></em>
+                            <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Asset Type"
+                              (click)="deleteDeviceTypeModal.show()" *ngIf="deviceTyperowData.length !=0"> </em>
+                          </div>
+                        </div>
+                        <ag-grid-angular id="DeviceTypeGrid" name="DeviceTypeGrid" #DeviceTypeGrid
+                          style="width: 100%; height: calc(50vh - 190px); min-height: 144px;"
+                          class="ag-theme-balham ag-grid-angular" (cellContextMenu)="cellRightClickDeviceType($event)"
+                          (filterChanged)="filterModifiedDeviceTypeTable()"
+                          [rowClassRules]="rowClassRuleDeviceTypeTable" [gridOptions]="devicegridOptions"
+                          (rowClicked)="changeSelectedDeviceType($event)" [components]="componentsDeviceTypeTable"
+                          (sortChanged)="DeviceTypeTableSortChange($event)" [rowData]="deviceTyperowData"
+                          [columnDefs]="deviceTypecolumnDefs" (rowClicked)="rowClickedDeviceType($event)">
+                        </ag-grid-angular>
+                        <context-menu #deviceTypeContextMenu>
+                          <ng-template contextMenuItem (execute)="enableEditDeviceTypeTable()">Edit</ng-template>
+                          <ng-template contextMenuItem (execute)="goToDeviceManagement()">Go to Assets</ng-template>
+                        </context-menu>
+                        <div *ngIf="editDeviceTypeTable" class="text-center my-2">
+                          <button class="btn btn-sm btn-secondary mr-1" (click)="cancalEditDeviceTypeTable()"><em
+                              class="fa fa-times mr-1"></em>Cancel</button>
+                          <button class="btn btn-sm btn-primary mr-1" (click)="resetEditDeviceTypeTable()"><em
+                              class="fa fa-refresh mr-1"></em>Reset</button>
+                          <button class="btn btn-sm btn-success" (click)="updateDeviceTypes()"><em
+                              class="fa fa-save mr-1"></em>Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 pt-2">
+                    <div class="card">
+                      <div class="card-header bg-purple text-white">
+                        <h6 class="mb-0 ml-auto" style="text-align: center;">Asset Types Attributes for Asset Type
+                          "{{selectedDevice.assetTypeName}}" & Vendor "{{selectedDevice.vendors.vendorName}}"
+                        </h6>
+                      </div>
+                      <div class="card-body pb-0 px-0 flexible" [collapse]="isCollapsed1">
+                        <mat-tab-group #flexibleTabs id="flexibleTabs" *ngIf="assetrTypeTab==1" mat-align-tabs="start"
+                          (selectedTabChange)="onSubTabChanged($event);">
+                          <!-- Flexible Attributes tab -->
+                          <mat-tab label="Flexible Attributes" (selectTab)=sizeColumsToFit()>
+                            <div class="container-fluid mx-0" style="border-top: 1px solid #BDC3C7; width: 100%">
+                              <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 mx-0 row">
+                                  <div class="row justify-content-between mx-0 col-12 p-0">
+                                    <div class="ml-3  m-2" style="padding-top: 2px;">
+                                      <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters:
+                                      </strong>
+                                      <strong
+                                        *ngIf="deviceTypeAttributesTableFilter==null || deviceTypeAttributesTableFilter.length==0"
+                                        style="color:#536c79;">No Filter Selected</strong>
+                                      <span class="filter-tabs" *ngFor="let filter of deviceTypeAttributesTableFilter">
+                                        {{filter}} <a (click)="clearFilterDeviceTypeAttributesTable(filter)"
+                                          class="pl-2 cursor-pointer">&times;</a>
+                                      </span>
+                                    </div>
+                                    <div class="d-flex justify-content-end tbtn"  style="padding-top: 10px;">
+                                      <a href="assets/resources/Asset_type_Flex_Attribute_template.csv"
+                                        style="color: black;"><em class="fa fa-download mtt mr-3 text-white"
+                                          title="Download Template" aria-hidden="true"></em></a>
+                                      <em class="fa fa-cloud-download mtt mr-3 text-white" title="Download Flex Attribute"
+                                        (click)="exportTOExcelFlexAttribute()" aria-hidden="true"></em>
+                                      <em class="fa fa-upload mtt mr-3 text-white" title="Upload Flex Attribute"
+                                        (click)="importDeviceTypeAttrModal.show()"
+                                        *ngIf="deviceTyperowData.length>0"></em>
+                                      <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Flex Attribute"
+                                        (click)="deleteDeviceTypeAttributesModal.show()"
+                                        *ngIf="deviceTypeAttributesList?.length!=0"> </em>
+                                      <em class="fa fa-pencil-square-o mtt mr-3 text-white" title="Edit Flex Attribute"
+                                        (click)="showEditDeviceTypeAttributes()"
+                                        *ngIf="deviceTypeAttributesList?.length!=0 && selectedFlexNodes2 "
+                                        [ngClass]="disabledEditButtonForFlex ? 'disabled-button' : '' "> </em>
+                                      <em class="fa fa-plus-circle mr-3 mtt text-white" title="Add Flex Attribute"
+                                        (click)="showAddDeviceTypeAttributesModal(addDeviceTypeAttributesForm)"
+                                        *ngIf="deviceTyperowData.length>0"></em>
+
+                                    </div>
+                                  </div>
+                                  <ag-grid-angular id="DeviceTypeAttributesGrid" name="DeviceTypeAttributesGrid"
+                                    #DeviceTypeAttributesGrid
+                                    style="width: 100%; height: calc(50vh - 210px); min-height: 159px;"
+                                    class="ag-theme-balham ag-grid-angular"
+                                    (filterChanged)="filterModifiedDeviceTypeAttributesTable()"
+                                    [rowClassRules]="rowClassDeviceTypeAttributesTable"
+                                    [gridOptions]="deviceTypeAttributesgridOptions"
+                                    (rowClicked)="changeSelectedDeviceTypeAttributes($event)"
+                                    [rowData]="deviceTypeAttributesrowData"
+                                    (sortChanged)="DeviceTypeAttributesTableSortChange($event)"
+                                    [columnDefs]="deviceTypeAttributescolumnDefs"
+                                    (rowClicked)="rowClickedFlexiable($event)">
+                                  </ag-grid-angular>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+                          <!-- Measurements tab -->
+                          <mat-tab label="Measurements" (selectTab)="sizeColumsToFitMeasurement()">
+                            <div class="container-fluid mx-0" style="border-top: 1px solid #BDC3C7; width: 100%"
+                              *ngIf="!disabledMeasTab">
+                              <div class="row">
+                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0 mx-0 row">
+                                  <div class="row justify-content-between mx-0 col-12 p-0">
+                                    <div class="ml-3 m-2" style="padding-top: 2px;">
+                                      <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters:
+                                      </strong>
+                                      <strong *ngIf="measurementsTableFilter==null || measurementsTableFilter.length==0"
+                                        style="color:#536c79;">No Filter Selected</strong>
+                                      <span class="filter-tabs" *ngFor="let filter of measurementsTableFilter">
+                                        {{filter}} <a (click)="clearFilterMeasurementsTable(filter)"
+                                          class="pl-2 cursor-pointer">&times;</a>
+                                      </span>
+                                    </div>
+                                    <div class="d-flex justify-content-end tbtn"  style="padding-top: 10px;">
+                                      <a href="assets/resources/Asset_type_Measurement_template.csv"
+                                        style="color: black;"><em class="fa fa-download mtt mr-3 text-white"
+                                          title="Download Template" aria-hidden="true"></em></a>
+                                      <em class="fa fa-cloud-download mtt mr-3 text-white" title="Download Measurement"
+                                        (click)="exportTOExcelMeasurement()" aria-hidden="true"></em>
+                                      <em class="fa fa-upload mtt mr-3 text-white" title="Upload Measurement"
+                                        (click)="importMeasurementsModal.show()"
+                                        *ngIf="deviceTyperowData.length>0"></em>
+                                      <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Measurement"
+                                        (click)="deleteMeasurementModal.show()" *ngIf="measurementDataList.length!=0">
+                                      </em>
+                                      <em class="fa fa-pencil-square-o mtt mr-3 text-white" title="Edit Measurement"
+                                        (click)="openEditMeasurement()"
+                                        *ngIf="measurementDataList.length!=0 && selectedNodes2"
+                                        [ngClass]="disabledEditButtonForMeas == true? 'disabled-button' : '' "> </em>
+                                      <em class="fa fa-plus-circle mr-3 mtt text-white" title="Add Measurement"
+                                        (click)="openCreateMeasurement(addMeasurementForm)"
+                                        *ngIf="deviceTyperowData.length>0"></em>
+
+
+                                    </div>
+                                  </div>
+                                  <ag-grid-angular id="measurementsAttributesGrid" name="measurementsAttributesGrid"
+                                    #measurementsAttributesGrid
+                                    style="width: 100%; height: calc(50vh - 210px); min-height: 159px;"
+                                    class="ag-theme-balham ag-grid-angular"
+                                    (filterChanged)="filterModifiedMeasurementsAttributesTable()"
+                                    [rowClassRules]="rowClassRuleMeasurementsAttributesTable"
+                                    (rowClicked)="changeMeasurementsAttributesRow($event)"
+                                    [gridOptions]="measurementsAttributesgridOptions"
+                                    [rowData]="measurementsAttributesrowData"
+                                    (sortChanged)="measurementsAttributesTableSortChange($event)"
+                                    [columnDefs]="measurementsAttributescolumnDefs">
+                                  </ag-grid-angular>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="text-center" *ngIf="disabledMeasTab">
+                              <div class="text-center" style="border-top: 1px solid #BDC3C7;width: 100%;">
+                                <div class="card card-block justify-content-center"
+                                  style="height: calc(50vh - 145px); min-height: 159px;line-height:120px;">
+                                  <div class="card-body">
+                                    <label class="form-label" for="measurement"><span class="text-danger">*</span><strong>Measurements are
+                                        disabled for Virtual Asset Type.</strong></label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </mat-tab>
+                        </mat-tab-group>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Asset Groups" (selectTab)="sizeColumsToFitDeviceGroup()">
+              <div class="container-fluid mt-1">
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 mt-1">
+                    <div class="card">
+                      <div class="card-body p-0" [collapse]="isCollapsed">
+                        <div class="row justify-content-between mx-0">
+                          <div class="ml-3  m-2" style="padding-top: 2px;">
+                            <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters: </strong>
+                            <strong *ngIf="deviceGroupTableFilter==null || deviceGroupTableFilter.length==0 "
+                              style="color:#536c79;">No Filter Selected</strong>
+                            <span class="filter-tabs" *ngFor="let filter of deviceGroupTableFilter">
+                              {{filter}} <a (click)="clearFilterDeviceGroupTable(filter)"
+                                class="pl-2 cursor-pointer">&times;</a>
+                            </span>
+                          </div>
+                          <div class="d-flex justify-content-end" style="flex-wrap: wrap; padding-top: 10px;" >
+                            <em class="fa fa-plus-circle mtt mr-2 text-white" style="font-size: 20px; cursor: pointer;"
+                              title="Add Asset Group" (click)="AddNewGroupVendor(addDeviceGroupForm)"></em>
+                            <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Asset Group" *ngIf="groupList.length!=0"
+                              (click)="deleteDeviceGroupModal.show()"> </em>
+                          </div>
+                        </div>
+                        <ag-grid-angular id="DeviceGroupGrid" name="DeviceGroupGrid" #DeviceGroupGrid
+                          style="width: 100%; height: calc(66vh - 316px); min-height: 174px;"
+                          class="ag-theme-balham ag-grid-angular" (gridReady)="deviceGroupGridReady()"
+                          (filterChanged)="filterModifiedDeviceGroupTable()"
+                          [rowClassRules]="rowClassRuleDeviceGroupTable" [gridOptions]="deviceVendorsgridOptions"
+                          (rowClicked)="changeSelectedDeviceGroup($event)" [rowData]="groupList"
+                          (sortChanged)="DeviceGroupTableSortChange($event)" [columnDefs]="deviceGroupcolumnDefs">
+                        </ag-grid-angular>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--   Device Group -->
+
+                <div class="row">
+                  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 pt-2" style="height: calc(48vh - 78px)">
+                    <div class="card">
+                      <div class="card-header bg-purple text-white text-center">
+                        <h6 class="ml-auto mb-0">Asset Group - {{selectedDeviceGroup.groupName}}</h6>
+                      </div>
+                      <div class="card-body flexible" [collapse]="isCollapsed5">
+                        <div class="m-0" id="ScrollId" style="width: 100%;">
+
+                          <form #addDeviceGroupForm="ngForm">
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label class="form-label" for="groupName">Group Name</label>
+                                <input matInput id="groupName" name="groupName" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceGroup.groupName" required>
+                              </div>
+
+                              <div class="form-group col">
+                                <label class="form-label" for="parentGroupSeq">Parent Group Name</label>
+                                <select id="parentGroupSeq" name="parentGroupSeq" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceGroup.parentGroupSeq" placeholder="Parent Group Name">
+                                  <option value="null" [disabled]="true" translate>
+                                    Choose...
+                                  </option>
+                                  <option *ngFor="let group of groupSeqList" [value]="group.groupSeq">
+                                    {{ group['groupName'] }}
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="form-group col">
+                                <label class="form-label" for="dropdown">Group Type</label>
+                                <select name="dropdown" id="dropdown" placeholder="Group Type"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.groupType"
+                                  required>
+                                  <option *ngFor="let groupType of groupTypeList" [value]="groupType.id">
+                                    {{groupType.typeName}}</option>
+                                </select>
+                              </div>
+                              <div class="form-group col">
+                                <button class="btn btn-sm btn-success" style="margin-bottom: -60px; margin-right:2px"
+                                color="primary" (click)="editDeviceGroup()">Edit</button>
+                              </div>
+
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col">
+                                <label class="form-label" for="description">Description</label>
+                                <input matInput id="description" name="description" class="form-control form-control-sm"
+                                  [(ngModel)]="selectedDeviceGroup.description">
+                              </div>
+                              <div class="form-group col">
+                                <label class="form-label" for="latitude">Latitude</label>
+                                <input matInput id="latitude" name="latitude" type="number"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.latitude"
+                                  required>
+                              </div>
+                              <div class="form-group col">
+                                <label class="form-label" for="longitude">Longitude</label>
+                                <input matInput id="longitude" name="longitude" type="number"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.longitude"
+                                  required>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+
+                        <div class="text-center mb-3">
+                          <button class="btn btn-sm btn-secondary mr-2" (click)="cancelDeviceGroup()"><em
+                              class="fa fa-times mr-1"></em>Cancel</button>
+                          <button class="btn btn-sm btn-success mr-1" *ngIf="!updateGroup" (click)="saveDeviceGroups()"
+                            [disabled]="addDeviceGroupForm.invalid"><em class="fa fa-save mr-1"></em>Save</button>
+
+                          <button class="btn btn-sm btn-success mr-1" *ngIf="updateGroup" (click)="updateDeviceGroups()"
+                            [disabled]="addDeviceGroupForm.invalid"><em class="fa fa-save mr-1"></em>Save</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Attributes -->
+
+<!-- ADD Device Types Popup-->
+<div class="modal fade" bsModal #adddeviceTypeModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-static-name" class="modal-title pull-left pt-1 mb-0">Add Asset Type</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="adddeviceTypeModal1(addDeviceTypeForm)">
+          <span aria-hidden="true" style="color:#FFF">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-1">
+          <form #addDeviceTypeForm="ngForm">
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="vendorAdd">Vendor</label>
+                <select id="vendorAdd" name="vendorAdd" [(ngModel)]="newDeviceType.vendors.vendorSeq"
+                  class="form-control form-control-sm" required>
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let vendor of vendorList" value={{vendor.vendorSeq}}>{{vendor.vendorName}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="deviceTypeAdd">Asset Type Name</label>
+                <input matInput type="text" id="deviceTypeAdd" name="deviceTypeAdd" #assetName1="ngModel"
+                  class="form-control form-control-sm" required [pattern]="pattern"
+                  [(ngModel)]="newDeviceType.assetTypeName" required>
+              </div>
+
+              <div class="form-group col-lg-3 col-md-3 col-sm-3 col-3 browsebtn " style="margin-top: 30px">
+                <mat-checkbox class="mr-2 virtual form-label" name="virtual" id="virtual" [checked]="newDeviceType.isVirtual=='Y'"
+                  (change)="toggleIsVirtualAdd()">
+                  Is Virtual
+                </mat-checkbox>
+
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="deviceTypeVendor"> Asset Type Version</label>
+                <input type="number" matInput id="deviceTypeVendor" name="deviceTypeVendor"
+                  class="form-control form-control-sm" [(ngModel)]="newDeviceType.assetTypeVer">
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="symbolAdd">Symbol</label>
+                <input matInput type="text" id="symbolAdd" name="symbolAdd" [(ngModel)]="newDeviceTypeSymbolFileName"
+                  class="form-control form-control-sm" disabled>
+              </div>
+              <div class="form-group col-lg-3 col-md-3 col-sm-3 col-3 pt-4 mt-1 browsebtn">
+                <label for="importSymbolData" class="btn btn-sm btn-secondary text-center"><em
+                    class="fa fa-folder-open mt-2"></em> Browse</label>
+                <input type="file" #importSymbolData id="importSymbolData" name="importSymbolData" style="display: none"
+                  (change)="selectFile($event)" accept=".svg">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="deviceTypeDescription">Description</label>
+                <textarea matInput id="deviceTypeDescription" name="deviceTypeDescription" rows="5" cols="100"
+                  class="form-control form-control-sm" [(ngModel)]="newDeviceType.description"></textarea>
+              </div>
+            </div>
+          </form>
+          <div class="row justify-content-center mt-3 m-0">
+            <div class="text-center">
+              <button mat-raised-button color="warn" (click)="closeAddDeviceTypeModal(addDeviceTypeForm)"><em
+                  class="fa fa-times mr-1"></em>Cancel</button>
+              <button mat-raised-button color="primary" (click)="saveDeviceType()"
+                [disabled]="addDeviceTypeForm.invalid"><em class="fa fa-save mr-1"></em>Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD Device Types Attributes Popup-->
+<div class="modal fade" bsModal #addDeviceTypeAttributesModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-static-name" class="modal-title pull-left mb-0">Add Flex Attribute for Asset Type:
+          {{selectedDevice.assetTypeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="closeAddDeviceTypeAttributesModal(addDeviceTypeAttributesForm)">
+          <span aria-hidden="true" style="color:#FFF">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-0">
+          <form #addDeviceTypeAttributesForm="ngForm">
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="logicalAttributeAdd">Logical Attribute Name</label>
+                <select id="logicalAttributeAdd" name="logicalAttributeAdd" (selectionChange)="setOrder(true)"
+                  class="form-control form-control-sm" [(ngModel)]="newDeviceFlexAttribute.logicalAttrName" required>
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let data of logicalAttrNameList" [value]="data.codeDisplayTxt">
+                    {{data.codeDisplayTxt}}</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="physicalAttributeAdd">Physical Attribute Name</label>
+                <input matInput type="text" id="physicalAttributeAdd" name="physicalAttributeAdd"
+                  class="form-control form-control-sm" #physicalAttributeName1="ngModel" [pattern]="pattern"
+                  [(ngModel)]="newDeviceFlexAttribute.physicalAttrName" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="dataTypeAdd">Data Type</label>
+                <select id="dataTypeAdd" name="dataTypeAdd" [(ngModel)]="newDeviceFlexAttribute.dataType"
+                  class="form-control form-control-sm" required>
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let data of dataTypeList" value={{data.codeDisplayTxt}}>{{data.codeDisplayTxt}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="timestampFormatAdd">Timestamp Format</label>
+                <select id="timestampFormatAdd" name="timestampFormatAdd" class="form-control form-control-sm"
+                  [(ngModel)]="newDeviceFlexAttribute.timestampType">
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let timestamp of timeStampList" value={{timestamp.codeDisplayTxt}}>
+                    {{timestamp.codeDisplayTxt}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="orderAdd">Order</label>
+                <input matInput type="number" id="orderAdd" name="orderAdd" class="form-control form-control-sm"
+                  [(ngModel)]="newDeviceFlexAttribute.orderSeq">
+              </div>
+            </div>
+          </form>
+          <div class="text-center">
+            <button mat-raised-button color="warn"
+              (click)="closeAddDeviceTypeAttributesModal(addDeviceTypeAttributesForm)"><em
+                class="fa fa-times mr-1"></em>Cancel</button>
+            <button mat-raised-button color="primary" [disabled]="addDeviceTypeAttributesForm.invalid"
+              (click)="saveDeviceTypeAttributes()"><em class="fa fa-save mr-1"></em>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Device Types Attributes Popup-->
+<div class="modal fade" bsModal #updateDeviceTypeAttributesModal="bs-modal" [config]="{backdrop: 'static'}"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-static-name1" class="modal-title pull-left mb-0">Edit Flex Attribute for Asset Type:
+          {{selectedDevice.assetTypeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="cancleFlexAttribute();closeUpdateDeviceTypeAttributesModal()">
+          <span aria-hidden="true" style="color:#FFF">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-0">
+          <form #updateDeviceTypeAttributesForm="ngForm">
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="logicalAttributeEdit">Logical Attribute Name</label>
+                <select id="logicalAttributeEdit" name="logicalAttributeEdit" (selectionChange)="setOrder(false)"
+                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceAttributes.logicalAttrName" required>
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let data of logicalAttrNameList" value={{data.codeDisplayTxt}}>
+                    {{data.codeDisplayTxt}}</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="physicalAttributeEdit">Physical Attribute Name</label>
+                <input matInput type="text" id="physicalAttributeEdit" name="physicalAttributeEdit"
+                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceAttributes.physicalAttrName" required>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="dataTypeEdit">Data Type</label>
+                <select id="dataTypeEdit" name="dataTypeEdit" [(ngModel)]="selectedDeviceAttributes.dataType"
+                  class="form-control form-control-sm" required>
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let data of dataTypeList" value={{data.codeDisplayTxt}}> {{data.codeDisplayTxt}}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="timestampFormatEdit">Timestamp Format</label>
+                <select id="timestampFormatEdit" name="timestampFormatEdit" class="form-control form-control-sm"
+                  [(ngModel)]="selectedDeviceAttributes.timestampType">
+                  <option value=null [disabled]=true>Choose...</option>
+                  <option *ngFor="let timestamp of timeStampList" value={{timestamp.codeDisplayTxt}}>
+                    {{timestamp.codeDisplayTxt}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="orderEdit">Order</label>
+                <input matInput type="number" id="orderEdit" name="orderEdit" class="form-control form-control-sm"
+                  [(ngModel)]="selectedDeviceAttributes.orderSeq" disabled>
+              </div>
+            </div>
+          </form>
+          <div class="text-center">
+            <button mat-raised-button color="warn" class="mr-1"
+              (click)="cancleFlexAttribute();closeUpdateDeviceTypeAttributesModal()"><em
+                class="fa fa-times mr-1"></em>Cancel</button>
+            <button mat-raised-button color="primary" [disabled]="updateDeviceTypeAttributesForm.invalid"
+              (click)="updateDeviceTypeAttributes()"><em class="fa fa-save mr-1"></em>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete deviceTypesAttributes -->
+<div class="modal fade" bsModal #deleteDeviceTypeAttributesModal="bs-modal" [config]="{backdrop: 'static'}"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Attribute</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="deleteDeviceTypeAttributesModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white">Are you sure to delete asset type attribute ?</label>
+        <div class="text-center my-3">
+          <button type="button" mat-raised-button color="primary" class="mr-1"
+            (click)="deleteDeviceTypeAttributes()">Yes</button>
+          <button type="button" mat-raised-button color="warn"
+            (click)="deleteDeviceTypeAttributesModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Import To CSV Device Types -->
+<div class="modal fade" bsModal #importDeviceTypeModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-sizes-name2" class="modal-title pull-left mb-0">Import from CSV</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="importDeviceTypeModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white">All existing records will be overwritten, do you really want to proceed?</label>
+        <div class="text-center my-3">
+          <label for="importDeviceTypeCSV" class="btn btn-success mr-4 mb-0"
+            (click)="importDeviceTypeModal.hide()">Yes</label>
+          <input type="file" #importDeviceTypeCSV id="importDeviceTypeCSV" name="importDeviceTypeCSV"
+            style="display:none" (change)="importDeviceTypeCSVFile($event)">
+          <button type="button" class="btn btn-secondary" (click)="importDeviceTypeModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Import To CSV Device Types Attribute-->
+<div class="modal fade" bsModal #importDeviceTypeAttrModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-sizes-name2" class="modal-title pull-left mb-0">Import from CSV</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="importDeviceTypeAttrModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white">All existing records will be overwritten, do you really want to proceed?</label>
+        <div class="text-center my-3">
+          <label for="importDeviceTypeAttrCSV" class="btn btn-success mr-4 mb-0"
+            (click)="importDeviceTypeAttrModal.hide()">Yes</label>
+          <input type="file" #importDeviceTypeAttrCSV id="importDeviceTypeAttrCSV" name="importDeviceTypeAttrCSV"
+            style="display:none" (change)="importDeviceTypeAttrCSVFile($event)">
+          <button type="button" class="btn btn-secondary" (click)="importDeviceTypeAttrModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Validation Errors -->
+<div class="modal fade" bsModal #importErrorModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog"
+  aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="importErrorModalTitle" class="modal-title pull-left mb-0">Import Failed</h6>
+      </div>
+      <div class="modal-body text-center">
+        <ul class="list-group">
+          <li class="list-group-item list-custom" *ngFor="let error of validationErrors"><em class="fa fa-times"></em>
+            {{error}}</li>
+        </ul>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4" (click)="importErrorModal.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Measurements -->
+
+<!-- ADD Measurements  -->
+<div class="modal fade" bsModal #showAddMeasurementsAttributesModal="bs-modal" [config]="{backdrop: 'static'}"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md" id="modalAdd">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white">
+        <h6 id="dialog-static-name" class="modal-title pull-left mb-0">Add Measurement for Asset Type:
+          {{selectedDevice.assetTypeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="showAddMeasurementsAttributesModal1(addMeasurementForm)">
+          <span aria-hidden="true" style="color:#FFF">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-1">
+          <form #addMeasurementForm="ngForm">
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="measurementNameAdd">Measurement Name</label>
+                <div class="form-group p-0">
+                  <input type="text" matInput id="name" name="name" #name1="ngModel"
+                    class="form-control form-control-sm" [(ngModel)]="newDeviceMeasurement.assetMeasurementName"
+                    [pattern]="patternA" required>
+
+                  <div
+                    *ngIf="name1.invalid && (name1.dirty || name1.touched) && newDeviceMeasurement.assetMeasurementName!=null && newDeviceMeasurement.assetMeasurementName!=''">
+                    <small class="text-danger text-red">Measurement Name cannot contain special characters &
+                      spaces.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="displayMeasurementNameAdd">Display Measurement Name</label>
+                <div class="form-group p-0">
+                  <input type="text" matInput id="displayName1" name="displayName1" #displayName1="ngModel"
+                    class="form-control form-control-sm" [(ngModel)]="newDeviceMeasurement.displayMeasurementName"
+                    required>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="deviceTagAdd">Asset Tag Name</label>
+            
+                  <input matInput type="text" id="deviceTagAdd" name="deviceTagAdd"  class="form-control form-control-sm"
+                    [(ngModel)]="newDeviceMeasurement.assetTagName" required>
+               
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="measurementTypeAdd">Measurement Type</label>
+                <select id="measurementTypeAdd" name="measurementTypeAdd" class="form-control form-control-sm"
+                  [(ngModel)]="newDeviceMeasurement.measurementType"
+                  (selectionChange)="measurementValueSelected($event)" required>
+                  <option value=null disabled>Choose...</option>
+                  <option *ngFor="let deviceMeasurement1 of MeasurementTypeList"
+                    value={{deviceMeasurement1.codeDisplayTxt}}>{{deviceMeasurement1.codeDisplayTxt}}</option>
+
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="measurementuomAdd">UOM</label>
+                <select id="measurementuomAdd" name="measurementuomAdd" [(ngModel)]="newDeviceMeasurement.uom"
+                  class="form-control form-control-sm">
+                  <option value=null disabled>Choose...</option>
+                  <option *ngFor="let deviceMeasurement of deviceMeasurementList"
+                    value={{deviceMeasurement.codeDisplayTxt}}>{{deviceMeasurement.codeDisplayTxt}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-white">
+                <mat-checkbox id="ConsumptionGenerateAdd" name="ConsumptionGenerateAdd" class="form-label"
+                  (change)="updateCheckbox(newDeviceMeasurement)"
+                  [checked]="newDeviceMeasurement.generateConsumptionData=='Y'">
+                  Generate Consumption Data
+                </mat-checkbox>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="ConsumptionAdd">Consumption Measurement Name</label>
+                <select id="ConsumptionAdd" name="ConsumptionAdd" class="form-control form-control-sm"
+                  [(ngModel)]="newDeviceMeasurement.consumptionMeasurementName"
+                  [disabled]="newDeviceMeasurement.generateConsumptionData!='Y'" required>
+                  <option value="">Choose...</option>
+                  <option *ngFor="let measurement of measurementDataList" value={{measurement.assetMeasurementName}}>
+                    {{measurement.assetMeasurementName}}</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="ConsumptionOffsetAdd">Consumption Offset</label>
+                <input type="number" matInput id="ConsumptionOffsetAdd" name="ConsumptionOffsetAdd"
+                  class="form-control form-control-sm" [(ngModel)]="newDeviceMeasurement.consumptionOffset"
+                  [disabled]="newDeviceMeasurement.generateConsumptionData!='Y'" required>
+              </div>
+            </div>
+          </form>
+          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-3 px-0">
+            <mat-checkbox id="updateEnumerationCheckbox" name="updateEnumerationCheckbox" class="form-label"
+              (change)="updateEnumerationCheckbox($event)" [checked]="isEnumeration">
+              Enumeration
+            </mat-checkbox>
+          </div>
+          <div [formGroup]="form" class="table-array" style="height: 200px; overflow:auto" *ngIf="isEnumeration">
+            <table class="table table-bordered">
+              <thead>
+                <th class="text-white">Value<span class="text-danger">*</span></th>
+                <th class="text-white">Enumeration<span class="text-danger">*</span></th>
+                <th>
+                  <button class="btn btn-sm btn-primary" (click)="addNewAddressGroup()"
+                    [disabled]="form.status=='INVALID'">Add</button>
+                </th>
+              </thead>
+              <tbody *ngFor="let addressGroup of form.get('schedulePeriod')['controls'];let i = index"
+                [formGroup]="addressGroup">
+                <td class="align-middle text-center">
+                  <div class="form-group col">
+                    <input matInput type="number" formControlName="value" [pattern]="measPattern"
+                      class="form-control form-control-sm" [required]="isEnumeration == true ? true : false">
+                  </div>
+                </td>
+                <td class="align-middle text-center">
+                  <div class="form-group col">
+                    <input matInput class="col-lg-12 col-md-12" type="text" formControlName="interpreteMap"
+                      class="form-control form-control-sm" [required]="isEnumeration == true ? true : false">
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-primary" (click)="deleteAddressGroup(i)">Delete</button>
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center">
+            <button mat-raised-button color="warn" class="mr-1"
+              (click)="showAddMeasurementsAttributesModal1(addMeasurementForm)"><em
+                class="fa fa-times mr-1"></em>Cancel</button>
+            <button class="mr-1" mat-raised-button color="accent" (click)="resetAdd(addMeasurementForm)"><em
+                class="fa fa-refresh mr-1"></em>Reset</button>
+            <button mat-raised-button color="primary" (click)="saveMeasurement()"
+              [disabled]="((addMeasurementForm.valid == true) && (form.valid == true))? false : true"><em
+                class="fa fa-save mr-1"></em>Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Edit Measurements  -->
+<div class="modal fade" bsModal #editMeasurementsModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-md" id="modalAdd">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white">
+        <h6 id="dialog-static-name" class="modal-title pull-left mb-0">Edit Measurement for Asset Type:
+          {{selectedDevice.assetTypeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="resetEdit();editMeasurementsModal.hide()">
+          <span aria-hidden="true" style="color:#FFF">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-1">
+          <form #editMeasurementForm="ngForm">
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="editMeasurementName">Measurement Name</label>
+                <div class="form-group p-0">
+                  <input matInput type="text" id="editMeasurementName" name="editMeasurementName" #name="ngModel"
+                    class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.assetMeasurementName"
+                    [pattern]="patternA" required>
+                  <div *ngIf="name.invalid && (name.dirty || name.touched)">
+                    <small class="text-danger text-red">Measurement Name cannot contain special characters &
+                      spaces.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col">
+                <label for="editdisplayMeasurementName">Display Measurement Name</label>
+                <div class="form-group p-0">
+                  <input matInput type="text" id="editdisplayMeasurementName" name="editdisplayMeasurementName"
+                    class="form-control form-control-sm" #displayName="ngModel"
+                    [(ngModel)]="selectedDeviceMeasurement.displayMeasurementName" required>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col">
+                <label class="form-label" for="editDeviceTagEdit">Asset Tag Name</label>
+                <div class="form-group p-0">
+                <input type="text" matInput id="editDeviceTagEdit" name="editDeviceTagEdit"
+                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.assetTagName" required>
+                </div>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="editMeasurementType">Measurement Type</label>
+                <select id="editMeasurementType" name="editMeasurementType" class="form-control form-control-sm"
+                  [(ngModel)]="selectedDeviceMeasurement.measurementType"
+                  (selectionChange)="measurementValueSelected($event)" required>
+                  <option value=null disabled>Choose...</option>
+                  <option *ngFor="let deviceMeasurement1 of MeasurementTypeList"
+                    value={{deviceMeasurement1.codeDisplayTxt}}>{{deviceMeasurement1.codeDisplayTxt}}</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="editMeasurementuom">UOM</label>
+                <select id="editMeasurementuom" name="editMeasurementuom" class="form-control form-control-sm"
+                  [(ngModel)]="selectedDeviceMeasurement.uom">
+                  <option value=null disabled>Choose...</option>
+                  <option *ngFor="let deviceMeasurement of deviceMeasurementList"
+                    value={{deviceMeasurement.codeDisplayTxt}}>{{deviceMeasurement.codeDisplayTxt}}</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-3 text-white">
+                <mat-checkbox id="ConsumptionGenerateEdit" name="ConsumptionGenerateEdit" class="form-label"
+                  (change)="updateCheckbox(selectedDeviceMeasurement)"
+                  [checked]="selectedDeviceMeasurement.generateConsumptionData=='Y'">
+                  Generate Consumption Data
+                </mat-checkbox>
+
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="ConsumptionEdit">Consumption Measurement Name</label>
+                <select id="ConsumptionEdit" name="ConsumptionEdit" class="form-control form-control-sm"
+                  [(ngModel)]="selectedDeviceMeasurement.consumptionMeasurementName"
+                  [disabled]="selectedDeviceMeasurement.generateConsumptionData!='Y'" required>
+                  <option value="">Choose...</option>
+                  <option *ngFor="let measurement of filteredMeasurementDataList"
+                    value={{measurement.assetMeasurementName}}>{{measurement.assetMeasurementName}}</option>
+                </select>
+              </div>
+              <div class="form-group col">
+                <label class="form-label" for="ConsumptionOffsetEdit">Consumption Offset</label>
+                <input type="number" matInput id="ConsumptionOffsetEdit" name="ConsumptionOffsetEdit"
+                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.consumptionOffset"
+                  [disabled]="selectedDeviceMeasurement.generateConsumptionData!='Y'" required>
+              </div>
+            </div>
+          </form>
+          <div class="form-group col-lg-12 col-md-12 col-sm-12 col-12 mb-3 px-0">
+            <mat-checkbox id="updateEnumerationCheckbox" name="updateEnumerationCheckbox" class="form-label"
+              (change)="updateEnumerationCheckbox($event)" [checked]="isEnumeration">
+              Enumeration
+            </mat-checkbox>
+          </div>
+          <div [formGroup]="form" class="table-array" style="height: 200px; overflow:auto" *ngIf="isEnumeration">
+            <table class="table table-bordered text-white">
+              <thead>
+                <th class="text-white">Value<span class="text-danger">*</span></th>
+                <th class="text-white">Enumeration<span class="text-danger">*</span></th>
+                <th>
+                  <button class="btn btn-sm btn-primary" (click)="addNewAddressGroup()"
+                    [disabled]="form.status=='INVALID'">Add</button>
+                </th>
+              </thead>
+              <tbody *ngFor="let addressGroup of form.get('schedulePeriod')['controls'];let i = index"
+                [formGroup]="addressGroup">
+                <td class="align-middle text-center">
+                  <div class="form-group col">
+                    <input matInput type="number" formControlName="value" [pattern]="measPattern"
+                      class="form-control form-control-sm" [required]="isEnumeration == true ? true : false">
+                  </div>
+                </td>
+                <td class="align-middle text-center">
+                  <div class="form-group col">
+                    <input matInput class="col-lg-12 col-md-12" type="text" formControlName="interpreteMap"
+                      class="form-control form-control-sm" [required]="isEnumeration == true ? true : false">
+                  </div>
+                </td>
+                <td class="align-middle">
+                  <button class="btn btn-sm btn-primary" (click)="deleteAddressGroup(i)">Delete</button>
+                </td>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center">
+            <button class="mr-1" mat-raised-button color="warn" (click)="resetEdit();editMeasurementsModal.hide()"><em
+                class="fa fa-times mr-1"></em>Cancel</button>
+            <button class="mr-1" type="button" mat-raised-button color="accent" (click)="resetEdit()"><em
+                class="fa fa-refresh mr-1"></em>Reset</button>
+            <button mat-raised-button color="primary" (click)="updateMeasurement()"
+              [disabled]="((editMeasurementForm.valid == true) && (form.valid == true))? false : true"><em
+                class="fa fa-save mr-1"></em>Update</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Measurements  -->
+<div class="modal fade" bsModal #deleteMeasurementModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Measurement</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteMeasurementModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white">Are you sure to delete asset type measurement ?</label>
+        <div class="text-center my-3">
+          <button class="mr-1" type="button" mat-raised-button color="primary" (click)="deleteMesurement()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteMeasurementModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  Import To CSV Device Measurements  -->
+<div class="modal fade" bsModal #importMeasurementsModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple text-white pt-1 pb-1">
+        <h6 id="dialog-sizes-name2" class="modal-title pull-left mb-0">Import from CSV</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="importMeasurementsModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white">All existing records will be overwritten, do you really want to proceed?</label>
+        <div class="text-center my-3">
+          <label for="importMeasurementsAttrCSV" class="btn btn-success mr-4 mb-0"
+            (click)="importMeasurementsModal.hide()">Yes</label>
+          <input type="file" #importMeasurementsAttrCSV id="importMeasurementsAttrCSV" name="importMeasurementsAttrCSV"
+            style="display:none" (change)="importMeasurementsAttrCSVFile($event)">
+          <button type="button" class="btn btn-secondary" (click)="importMeasurementsModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Delete Vendor  -->
+<div class="modal fade" bsModal #deleteDeviceVendorModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="dialog-nested-name2" class="modal-title pull-left mb-0  ">Delete Vendor</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceVendorModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="form-label">Are you sure to delete asset Vendor?</label>
+        <div class="text-center my-3">
+          <button class="mr-1" type="button" mat-raised-button color="primary"
+            (click)="deleteDeviceVendor()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteDeviceVendorModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Validation Errors Delete Vendor -->
+<div class="modal fade" bsModal #deleteDeviceVendorErrorModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0 "> {{cannotDeletetext}}:
+          {{device}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceVendorErrorModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label><em class="fa fa-times mr-2"></em>{{validationErrors2}}</label>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4" (click)="deleteDeviceVendorErrorModal.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MeasurementMapped  Errors Delete Vendor -->
+<div class="modal fade" bsModal #MeasurementMappedValidation="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content modal-2x">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0">Cannot Delete</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="MeasurementMappedValidation.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body errorList">
+        <label style="overflow-wrap:anywhere;"><em class="fa fa-times mr-2"></em>{{validationerrormsg}}</label>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4" (click)="MeasurementMappedValidation.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Delete deviceType -->
+<div class="modal fade" bsModal #deleteDeviceTypeModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Asset Type</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceTypeModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="form-label">Are you sure to delete asset type?</label>
+        <div class="text-center my-3">
+          <button type="button" class="mr-1" mat-raised-button color="primary" (click)="deleteDeviceType()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteDeviceTypeModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Validation Errors Delete Asset Type -->
+<div class="modal fade" bsModal #deleteDeviceTypeErrorModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0">Cannot Delete Asset Type:
+          {{selectedDevice.assetTypeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceTypeErrorModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="text-white"><em class="fa fa-times mr-2"></em>{{assetTypeErrormsg}}</label>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4" (click)="deleteDeviceTypeErrorModal.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Edit deviceType -->
+<div class="modal fade" bsModal #editDeviceTypeModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-lg col-sm-12 col-xs-12 col-lg-12 col-md-12">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Group Type</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="closeDeviceGroupTypeModal()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid p-0">
+          <div class="card">
+            <div class="card-body p-0" [collapse]="isCollapsed">
+              <div class="row justify-content-between mx-0">
+                <div class="ml-3 m-2" style="padding-top: 2px;">
+                  <strong style=" font-size:16px;letter-spacing: 1px;color: #8c2121;">Filters:
+                  </strong>
+                  <strong *ngIf="deviceGroupTypeTableFilter==null || deviceGroupTypeTableFilter.length==0"
+                    style="color:#536c79;">No Filter Selected</strong>
+                  <span class="filter-tabs" *ngFor="let filter of deviceGroupTypeTableFilter">
+                    {{filter}} <a (click)="clearFilterDeviceGroupTypeTable(filter)"
+                      class="pl-2 cursor-pointer">&times;</a>
+                  </span>
+                </div>
+
+                <input type="text" class="ml-2" placeholder="Add Group Type" id="typeName" #typeName
+                  [(ngModel)]="selectedDeviceGroupType.typeName" *ngIf="isShown" />
+                <button mat-raised-button color="primary" [disabled]="!selectedDeviceGroupType.typeName"
+                  (click)="saveGroupType()" id="addGroupTypeAdd" #addGroupTypeAdd *ngIf="isShown">
+                  <em class="fa fa-save mr-1"></em>Save</button>
+
+                <div class="row justify-content-between mx-0" style="margin-left: auto !important;">
+                  <div class="d-flex" style="flex-wrap: wrap;">
+                    <em class="fa fa-plus-circle mtt mr-2 text-white" title="Add Group Type" (click)="AddNewGroupType()"></em>
+                    <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Group Type" *ngIf="groupTypeList.length!=0"
+                      (click)="deleteDeviceGroupTypeModal.show()"> </em>
+                  </div>
+                </div>
+
+                <ag-grid-angular id="DeviceGroupTypeGrid" name="DeviceGroupTypeGrid" #DeviceGroupTypeGrid
+                  style="width: 100%; height: calc(50vh - 195px); min-height: 174px;"
+                  class="ag-theme-balham ag-grid-angular" (gridReady)="deviceGroupTypeGridReady()"
+                  (filterChanged)="filterModifiedDeviceGroupTypeTable()"
+                  [rowClassRules]="rowClassRuleDeviceGroupTypeTable" [gridOptions]="deviceGroupTypegridOptions"
+                  [rowData]="groupTypeList" [columnDefs]="deviceGroupTypecolumnDefs" (rowClicked)="rowClicked($event)"
+                  (cellContextMenu)="cellRightClickDeviceGroupType($event)"
+                  (rowClicked)="changeSelectedGroupType($event)" (sortChanged)="DeviceGroupTypeTableSortChange($event)">
+                </ag-grid-angular>
+                <context-menu #deviceTypeContextMenu>
+                  <ng-template contextMenuItem (execute)="enableEditDeviceGroupTypeTable()">Edit</ng-template>
+                </context-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Delete Group  -->
+<div class="modal fade" bsModal #deleteDeviceGroupModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Asset Group</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceGroupModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label class="form-label">Are you sure to delete asset group?</label>
+        <div class="text-center my-3">
+          <button class="mr-1" type="button" mat-raised-button color="primary" (click)="deleteGroup()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteDeviceGroupModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Validation Errors Delete Group -->
+<div class="modal fade" bsModal #deleteDeviceGroupErrorModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0">Cannot Delete Asset Group:
+          {{selectedDeviceGroup.groupName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceGroupErrorModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label><em class="fa fa-times mr-2"></em>{{validationErrors2}}</label>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4" (click)="deleteDeviceGroupErrorModal.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Delete Asset Group Type -->
+<div class="modal fade" bsModal #deleteDeviceGroupTypeModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Group Type</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceGroupTypeModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label>Are you sure to delete group type?</label>
+        <div class="text-center my-3">
+          <button class="mr-1" type="button" mat-raised-button color="primary" (click)="deleteGroupType()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteDeviceGroupTypeModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- Validation Errors Delete Group Type-->
+<div class="modal fade" bsModal #deleteDeviceGroupTypeErrorModal="bs-modal" [config]="{backdrop: 'static'}"
+  tabindex="-1" role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0">
+          Cannot Delete Group Type:
+          {{selectedDeviceGroupType.typeName}}</h6>
+        <button type="button" class="close pull-right" aria-label="Close"
+          (click)="deleteDeviceGroupTypeErrorModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label><em class="fa fa-times mr-2"></em>{{validationErrors3}}</label>
+        <div class="text-center my-3">
+          <button type="button" class="btn btn-success mr-4"
+            (click)="deleteDeviceGroupTypeErrorModal.hide()">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" bsModal #deleteDeviceGroupModal="bs-modal" [config]="{backdrop: 'static'}" tabindex="-1"
+  role="dialog" aria-labelledby="dialog-static-name">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header bg-purple">
+        <h6 class="modal-title pull-left mb-0">Delete Asset Group</h6>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="deleteDeviceGroupModal.hide()">
+          <span class="text-white" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <label>Are you sure to delete asset group?</label>
+        <div class="text-center my-3">
+          <button type="button" class="mr-1" mat-raised-button color="primary" (click)="deleteGroup()">Yes</button>
+          <button type="button" mat-raised-button color="warn" (click)="deleteDeviceGroupModal.hide()">No</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

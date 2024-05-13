@@ -34,8 +34,8 @@ import { TablefilterserviceService } from '../services/tableFilterService/tablef
 
 @Component({
   selector: 'app-devicemanagement',
-  templateUrl: './devicemanagement.component.html',
-  styleUrls: ['./devicemanagement.component.scss']
+  templateUrl: './layout/devicemanagement.component.html',
+  styleUrls: ['./layout/devicemanagement.component.scss']
 })
 export class DevicemanagementComponent implements OnInit, OnDestroy {
 
@@ -744,6 +744,13 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
       this.translate.use('en')
     else if (sessionStorage.getItem('hems-loggedInUserLanguage') === 'French')
       this.translate.use('fr')
+
+      window.addEventListener('DbChange', (value => {
+        console.log(value);
+        if (value) {
+          this.ngOnInit();
+        }
+      }));
   }
 
   gridOptions: GridOptions = {
@@ -1124,14 +1131,14 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    setTimeout(() => {
-      if (window.innerHeight < document.body.clientHeight) {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height =
-          "calc(" + document.body.clientHeight + "px - 187px";
-      } else {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
-      }
-    }, 2000);
+    // setTimeout(() => {
+    //   if (window.innerHeight < document.body.clientHeight) {
+    //     (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height =
+    //       "calc(" + document.body.clientHeight + "px - 187px";
+    //   } else {
+    //     (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
+    //   }
+    // }, 2000);
     this.searchInput.first.nativeElement.focus();
 
     if (this.measurementInputGrid) {
@@ -1980,13 +1987,13 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
   sizeColumnsDeviceNotesView(event) {
     this.changeTab = 4;
     setTimeout(() => {
-      (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
-      if (window.innerHeight < document.body.clientHeight) {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height =
-          "calc(" + document.body.clientHeight + "px - 187px";
-      } else {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
-      }
+      // (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
+      // if (window.innerHeight < document.body.clientHeight) {
+      //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height =
+      //     "calc(" + document.body.clientHeight + "px - 187px";
+      // } else {
+      //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 190px)";
+      // }
 
       if (this.deviceNotesViewEl.nativeElement.offsetWidth) {
         this.deviceNotesView.api.sizeColumnsToFit();
@@ -2810,9 +2817,9 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     this.getPictureByDeviceId(assetId);
     this.getNoteByDeviceId(assetId);
     this.getDropDownNames(this.selectedDevice);
-    setTimeout(() => {
-      (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
-    }, 150);
+    // setTimeout(() => {
+    //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
+    // }, 150);
     this.selectedTabs.selectedIndex = 0;
   }
 
@@ -4168,13 +4175,13 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     if (!this.isFullScreen) {
       document.getElementById("selectedDeviceContainer").style.display = "None";
       elem.style.height = "calc(100vh - 296px)";
-      (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 285px)";
-      document.getElementById("mainDiv").classList.remove("mb-2");
+    //  (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 285px)";
+      //document.getElementById("mainDiv").classList.remove("mb-2");
     } else {
       document.getElementById("selectedDeviceContainer").style.display = "Block";
       elem.style.height = "calc(100vh - 449px)";
-      (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)";
-      document.getElementById("mainDiv").classList.add("mb-2");
+     // (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)";
+      //document.getElementById("mainDiv").classList.add("mb-2");
     }
   }
 
@@ -4690,6 +4697,9 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     this.getassetFreuencySubscription.unsubscribe();
     this.memDeviceSubscription.unsubscribe();
     clearTimeout(this.memdeviceTimeOut);
+    window.removeEventListener("DbChange",(value => {
+      console.log(value);
+    }));
   }
 }
 

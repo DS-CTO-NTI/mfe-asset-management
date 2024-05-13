@@ -12,7 +12,15 @@ export const appRoutes: Route[] = [
 		data: {
 			name: "Asset Configuration"
 		}
-	}
+	},
+	{
+		path: 'assettype-vendors-and-groups',
+		loadChildren: () => import('./asset-vendors/asset-vendors.module').then((m) => m.RemoteAssetVendorsModule),
+		data: {
+		  // id: 4
+		  name:"Asset Types,Vendors & Groups"
+		},
+	  },
 ];
 
 @NgModule({

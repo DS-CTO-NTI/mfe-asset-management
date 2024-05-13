@@ -9,7 +9,8 @@ const webpackConfig = withModuleFederationPlugin({
 	},
 	exposes: {
 		"./RemoteMfeModule": "./src/app/remote-mfe/remote-mfe.module.ts",
-    "./RemoteDevicemanagementModule": "./src/app/devicemanagement/devicemanagement.module.ts"
+    "./RemoteDevicemanagementModule": "./src/app/devicemanagement/devicemanagement.module.ts",
+	"./RemoteAssetVendorsModule": "./src/app/asset-vendors/asset-vendors.module.ts",
 	}
 });
 

@@ -46,7 +46,7 @@ export class UrlMappings {
   public static runImmediateReportByTypeUrl =
     "reportManagement/runImmediateReport";
   public static getDevicesByDeviceTypeUrl =
-    "deviceManagement/getDevicesByDeviceType";
+    "devices-management/getDevicesByDeviceType";
   public static getByReportIdUrl =
     "/common/report/reportManagement/getByReportId";
   public static viewLatestReportUrl = "reportManagement/viewLatestReport";
@@ -264,7 +264,7 @@ export class UrlMappings {
     return "/hemsService/dashboard" + uri;
   }
   public static getAllAssetMeasurementExtended =
-    "/common/assetService/deviceTypes/getAllAssetMeasurementExtended";
+    "/common/asset-service/deviceTypes/getAllAssetMeasurementExtended";
   //Alarm Viewer
 
   public static AcknowledgeAlarmUrl =
@@ -294,155 +294,155 @@ export class UrlMappings {
 
   //Asset Group
   public static getAllDeviceTypeGroup =
-    "/common/assetService/assetGroupType/getAllAssetTypeGroup";
+    "/common/asset-service/devices-management/device-group-types";
   public static saveDeviceGroupTypes =
-    "/common/assetService/assetGroupType/saveDeviceGroupTypes";
+    "/common/asset-service/asset-group-type/saveDeviceGroupTypes";
 
   //Asset Group Tab
   public static getAllDeviceGroup =
-    "/common/assetService/assetGroup/getAllAssetGroup";
+    "/common/asset-service/asset-groups";
   public static saveDeviceGroup =
-    "/common/assetService/assetGroup/saveAssetGroup";
+    "/common/asset-service/asset-groups";
   public static updateDeviceGroup =
-    "/common/assetService/assetGroup/updateAssetGroup";
+    "/common/asset-service/asset-groups";
   public static saveGroupType =
-    "/common/assetService/assetGroupType/saveAssetGroupType";
+    "/common/asset-service/asset-group-type";
 
   public static updateAssetTypeGroupById(id) {
     return (
-      "/common/assetService/devicemanagement/updateAssetTypeGroupById/" + id
+      "/common/asset-service/devices-management/updateAssetTypeGroupById/" + id
     );
   }
 
   public static deleteDeviceGroupType(id) {
-    return "/common/assetService/assetGroupType/deleteAssetGroupTypeById/" + id;
+    return "/common/asset-service/asset-group-type/deleteAssetGroupTypeById/" + id;
   }
 
   public static deleteDeviceGroup(id) {
-    return "/common/assetService/assetGroup/deleteAssetGroup/" + id;
+    return "/common/asset-service/asset-group/asset-group/" + id;
   }
 
   //asset service
   public static getAllInterfacesUrl =
-    "/common/assetService/interfacemapping/getAllInterfaces";
+    "/common/asset-service/interfacemapping/getAllInterfaces";
   public static createAssetUrl =
-    "/common/assetService/devicemanagement/createDevice";
+    "/common/asset-service/devices-management/device";
   public static updateAssetUrl =
-    "/common/assetService/devicemanagement/updateDevice";
+    "/common/asset-service/devices-management/device";
   public static getByAssetClass =
-    "/common/assetService/devicemanagement/getDevicesByClass?assetClass=";
+    "/common/asset-service/devices-management/devices-byclass?assetClass=";
   public static getAllDeviceTypesUrl =
-    "/common/assetService/devicemanagement/getAllDeviceTypes";
+    "/common/asset-service/devices-management/device-types";
   public static getAllDeviceGroupsUrl =
-    "/common/assetService/devicemanagement/getAllDeviceGroups";
+    "/common/asset-service/devices-management/device-groups";
   public static getAllVendorsUrl =
-    "/common/assetService/devicemanagement/getAllVendors";
+    "/common/asset-service/devices-management/vendors";
   public static getAllDevicesUrl =
-    "/common/assetService/devicemanagement/getAllDevices";
+    "/common/asset-service/devices-management/devices";
   public static getAllDevicesTreeUrl =
-    "/common/assetService/devicemanagement/getDevicesByHierarchy?assetClass=";
+    "/common/asset-service/devices-management/devices-by-hierarchy?assetClass=";
   public static getAllDeviceTypesDescUrl =
-    "/common/assetService/deviceTypes/getAllDeviceTypes";
+    "/common/asset-service/device-types";
   public static getDevicesAndMeasurementsByHierarchy =
-    "/common/assetService/devicemanagement/getDevicesAndMeasurementsByHierarchy?assetClass=";
+    "/common/asset-service/devices-management/devices-and-measurements-by-hierarchy?assetClass=";
 
   public static getAllSelectInputMeasurementUrl =
-    "/common/assetService/devicemanagement/getMeasurementByIsVirtual";
+    "/common/asset-service/devices-management/measurement-byisvirtual";
   public static createUpdateDeviceUrl =
-    "/common/assetService/devicemanagement/createUpdateDevice";
+    "/common/asset-service/devices-management/createUpdateDevice";
   public static getMemsDeviceStatusUrl =
-    "/common/assetService/devicemanagement/getDeviceStatus";
+    "/common/asset-service/devices-management/getDeviceStatus";
   public static getPictureByDeviceIDUrl =
-    "/common/assetService/devicemanagement/getPictureByDeviceId";
+    "/common/asset-service/devices-management/getPictureByDeviceId";
   public static getNoteByDeviceIdUrl =
-    "/common/assetService/devicemanagement/getNoteByDeviceId";
+    "/common/asset-service/devices-management/noteby-deviceid";
   public static getCalRulesByDeviceIdurl =
-    "/common/assetService/devicemanagement/getCalRulesByDeviceId";
+    "/common/asset-service/devices-management/calrules-bydeviceid";
   public static getMemsDeviceStatusGroupUrl =
-    "/common/assetService/devicemanagement/getDeviceStatusGroups";
+    "/common/asset-service/devices-management/devices-status-groups";
   public static importDeviceConfigurationCSVUrl =
-    "/common/assetService/devices/importDeviceData";
+    "/common/asset-service/devices/importDeviceData";
   public static saveDeviceTypesUrl =
-    "/common/assetService/deviceTypes/saveDeviceTypes";
+    "/common/asset-service/device-types";
   public static updateDeviceTypesUrl =
-    "/common/assetService/deviceTypes/updateDeviceTypes";
+    "/common/asset-service/device-types";
   public static saveDeviceAttributesUrl =
-    "/common/assetService/deviceTypes/saveDeviceAttributes";
+    "/common/asset-service/device-types/attributes-List";
   public static updateDeviceAttributesUrl =
-    "/common/assetService/deviceTypes/updateDeviceAttributes";
+    "/common/asset-service/device-types/attributes-List";
   public static deleteDeviceAttributesUrl =
-    "/common/assetService/deviceTypes/deleteflexAttributesList";
+    "/common/asset-service/device-types/attributes-List";
   public static importDeviceTypeCSVUrl =
-    "/common/assetService/deviceTypes/importDeviceTypeData";
+    "/common/asset-service/device-types/importDeviceTypeData";
   public static importDeviceTypeAttrCSVUrl =
-    "/common/assetService/deviceTypes/importFlexAttributeData";
+    "/common/asset-service/device-types/flex-attributedata";
   public static importDeviceTypeMeasurementCSVUrl =
-    "/common/assetService/deviceTypes/importDeviceTypeMeasurementData";
+    "/common/asset-service/device-types/device-type-measurementdata";
   public static saveDeviceMeasurmentsUrl =
-    "/common/assetService/deviceTypes/saveMeasurements";
+    "/common/asset-service/device-types/measurements";
   public static updateDeviceMeasurementUrl =
-    "/common/assetService/deviceTypes/updateMeasurement";
+    "/common/asset-service/device-types/measurements";
   public static deleteMeasurementByIdUrl =
-    "/common/assetService/deviceTypes/deleteMeasurementList";
+    "/common/asset-service/device-types/measurement-list";
   public static saveDeviceVendorsUrl =
-    "/common/assetService/deviceTypes/saveVendor";
+    "/common/asset-service/device-types/vendors";
 
   public static getAllMeasurementsByDeviceTypeUrl(req) {
     return (
-      "/common/assetService/deviceTypes/getMeasurementsByDeviceType?assetTypeSeq=" +
+      "/common/asset-service/device-types/measurements-by-devicetype?assetTypeSeq=" +
       req
     );
   }
 
   public static getMemsDeviceStatusCodeUrl(status) {
     return (
-      "/common/assetService/devicemanagement/getDeviceStatusCode?codeGroup=" +
+      "/common/asset-service/devices-management/getDeviceStatusCode?codeGroup=" +
       status
     );
   }
 
   public static getDeviceTypeByVendorUrl(vendorSeq): string {
     return (
-      "/common/assetService/devicemanagement/getDeviceTypes?vendorSeq=" +
+      "/common/asset-service/devices-management/getDeviceTypes?vendorSeq=" +
       vendorSeq
     );
   }
 
   public static getAttributesByDeviceSeqUrl(seq): string {
-    return "/common/assetService/devicemanagement/getAttributes?seq=" + seq;
+    return "/common/asset-service/devices-management/getAttributes?seq=" + seq;
   }
 
   public static deleteDeviceUrl(id): string {
-    return "/common/assetService/devicemanagement/deleteDevice?id=" + id;
+    return "/common/asset-service/devices-management/deleteDevice?id=" + id;
   }
 
   public static getByDeviceTypesUrl(req) {
     return (
-      "/common/assetService/deviceTypes/getByDeviceTypes?assetTypeSeq=" + req
+      "/common/asset-service/devices-management/attributes?seq=" + req
     );
   }
 
   public static deleteDeviceMeasurementUrl(req) {
-    return "/common/assetService/deviceTypes/deleteMeasurement?id=" + req;
+    return "/common/asset-service/device-types/deleteMeasurement?id=" + req;
   }
 
   public static getAlldevicevendorsByIdUrl(req) {
-    return "/common/assetService/deviceTypes/getVendor?vendorSeq=" + req;
+    return "/common/asset-service/device-types/vendors?vendorSeq=" + req;
   }
 
   public static deleteDeviceVendorUrl(req) {
-    return "/common/assetService/deviceTypes/deleteVendor?vendorSeq=" + req;
+    return "/common/asset-service/device-types/vendors?vendorSeq=" + req;
   }
 
   public static deleteDeviceTypeUrl(req) {
     return (
-      "/common/assetService/deviceTypes/deleteAssetType?assetTypeSeq=" + req
+      "/common/asset-service/device-types/asset-type?assetTypeSeq=" + req
     );
   }
 
   public static getMeasurementsByDevices(id) {
     return (
-      "/common/assetService/deviceTypes/getMeasurementsByDeviceType?assetTypeSeq=" +
+      "/common/asset-service/devices-management/measurements-by-devicetype?assetTypeSeq=" +
       id
     );
   }
@@ -490,7 +490,7 @@ export class UrlMappings {
   }
 
   //user service
-  public static getByCodeTypeUrl = "/common/userService/codes/getByCodeType";
+  public static getByCodeTypeUrl = "/common/user-service/codes/by-code-type";
   public static allCodeType = "/common/userService/codes/getAll";
 
   //newDashboard
@@ -527,7 +527,7 @@ export class UrlMappings {
   public static SaveAllWriteRegisterUrl =
     "/common/modbusService/modbusSlaveWrite/saveAllModbusSlaveWrite";
   public static getAllDeviceWithTypeUrl =
-    "/common/assetService/devicemanagement/getAllDevicesWithType";
+    "/common/asset-service/devices-management/getAllDevicesWithType";
   public static SaveAllDevicesUrl =
     "/common/modbusService/modbusSlaveAssets/saveAllModbusSlaveAssets";
   public static deleteModbusSlaveAssetsIn =
@@ -655,7 +655,7 @@ export class UrlMappings {
   //Trend Analysis
   public static getMeasurementListByDeviceInMeasurementDataUrl(req) {
     return (
-      "/common/assetService/devicemanagement/getMeasurementByDeviceId?assetId=" +
+      "/common/asset-service/devices-management/getMeasurementByDeviceId?assetId=" +
       req
     );
   }
