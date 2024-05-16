@@ -1,0 +1,15 @@
+<div class="custom-dropdown">
+    <form [formGroup]="myForm">
+        <ng-multiselect-dropdown #input class="dropup" [ngClass]="rowId>=10 ? 'options-placement-top' : 'options-placement-bottom'" 
+        [placeholder]="placeholder" 
+        [(ngModel)]="selectedItems" 
+        [settings]="dropdownSettings" 
+        [data]="options" 
+        formControlName="addedPermission" 
+        (onSelect)="onItemSelect($event)" 
+        (onSelectAll)="onSelectAll($event)" 
+        (onDeSelect)="onItemDeSelect($event)"
+        (onDeSelectAll)="onDeSelectAll($event)">
+        </ng-multiselect-dropdown>
+    </form>
+</div>

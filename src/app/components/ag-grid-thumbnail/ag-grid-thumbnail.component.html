@@ -1,0 +1,7 @@
+<div class="row col-12 h-100" >
+    <img class="m-auto" alt=" " *ngIf="picture!=null" style="width: auto; height: 1rem" type="image/svg+xml" [src]="showThumbnail(picture)">
+  </div>
+  
+  <div class="row col-12 h-100" >
+    <img class="m-auto" alt=" " *ngIf="picture==null" style="width: auto; height: 1rem" type="image/svg+xml" [src]="showThumbnail(picture)">
+  </div>
