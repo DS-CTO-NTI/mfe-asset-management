@@ -368,7 +368,7 @@
                                 <select name="dropdown" id="dropdown" placeholder="Group Type"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.groupType"
                                   required>
-                                  <option *ngFor="let groupType of groupTypeList" [value]="groupType.id">
+                                  <option *ngFor="let groupType of groupTypeList" [value]="groupType">
                                     {{groupType.typeName}}</option>
                                 </select>
                               </div>

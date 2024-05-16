@@ -403,13 +403,13 @@ export class UrlMappings {
 
   public static getDeviceTypeByVendorUrl(vendorSeq): string {
     return (
-      "/common/asset-service/devices-management/getDeviceTypes?vendorSeq=" +
+      "/common/asset-service/devices-management/device-typesbyvendor?vendorSeq=" +
       vendorSeq
     );
   }
 
   public static getAttributesByDeviceSeqUrl(seq): string {
-    return "/common/asset-service/devices-management/getAttributes?seq=" + seq;
+    return "/common/asset-service/devices-management/attributes?seq=" + seq;
   }
 
   public static deleteDeviceUrl(id): string {

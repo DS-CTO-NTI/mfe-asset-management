@@ -1700,7 +1700,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
         });
       }
 
-      if (resposene.data.length == 0) {
+      if (resposene?.data?.length == 0) {
         this.selectedDeviceGroup = new DeviceGroup();
       }
 
@@ -2631,7 +2631,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
       updateUser: sessionStorage.getItem("hems-authenticatedUserFirstName"),
       updateTimestamp: new Date(),
       parentGroupSeq: this.selectedDeviceGroup.parentGroupSeq,
-      groupType: this.selectedDeviceGroup.groupType,
+      groupType: { id : this.selectedDeviceGroup.groupType?.id , typeName :this.selectedDeviceGroup.groupType?.typeName},
       parentGroupSeqName: this.selectedDeviceGroup.parentGroupSeqName
 
     }

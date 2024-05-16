@@ -3613,7 +3613,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
   checkDeviceTypeEdit() {
     let isVirtual = false;
     if (this.deviceTypeListEdit != null) {
-      this.deviceTypeListEdit.forEach((deviceType) => {
+      this.deviceTypeListEdit?.forEach((deviceType) => {
         if (this.selectedDevice.assetTypeSeq == deviceType.assetTypeSeq) {
           if (deviceType.isVirtual == "Y") {
             isVirtual = true;
@@ -4126,7 +4126,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
           (response) => {
             let deviceTypeListEdit = response.data;
             this.deviceTypeListEdit = JSON.parse(JSON.stringify(deviceTypeListEdit));
-            this.deviceTypeListEdit.forEach((deviceType) => {
+            this.deviceTypeListEdit?.forEach((deviceType) => {
               if (this.selectedDeviceShow.assetTypeSeq == deviceType.assetTypeSeq) {
                 if (deviceType.isVirtual == "Y") {
                   if (this.isreset == false) {
