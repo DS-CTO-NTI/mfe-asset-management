@@ -326,9 +326,9 @@ export class UrlMappings {
   public static getAllInterfacesUrl =
     "/common/asset-service/interfacemapping/getAllInterfaces";
   public static createAssetUrl =
-    "/common/asset-service/devices-management/device";
+    "/common/asset-service/devices-management";
   public static updateAssetUrl =
-    "/common/asset-service/devices-management/device";
+    "/common/asset-service/devices-management";
   public static getByAssetClass =
     "/common/asset-service/devices-management/devices-byclass?assetClass=";
   public static getAllDeviceTypesUrl =
