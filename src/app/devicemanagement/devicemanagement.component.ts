@@ -3135,14 +3135,14 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
         device['attribute' + i] = null;
       }
     }
-    this.attributesList.forEach(data => {
+    this.attributesList?.forEach(data => {
       device[data.lname.toLowerCase()] = data.value;
     })
 
-    device.assetNotes.forEach(note => {
+    device.assetNotes?.forEach(note => {
       note.id = null;
     })
-    device.assetPicture.forEach(picture => {
+    device.assetPicture?.forEach(picture => {
       picture.pictureId = null;
     })
     device.updateDate = new Date();
