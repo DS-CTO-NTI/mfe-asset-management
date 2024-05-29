@@ -21,9 +21,9 @@
                 <div class="card-body bg-gray p-1">
                   <div class="row m-0">
                     <div class="col-12 px-1">
-                      <div class="d-flex flex-row m-0 mt-1">
+                      <div class="flex-row m-0 mt-1">
                         <div class="form-group col">
-                          <select class="form-control form-control-sm" id="devicetype" name="devicetype"
+                          <select class="form-control" id="devicetype" name="devicetype"
                             [(ngModel)]="selectedDevices" (change)="changeDevicesTypes(selectedDevices)">
                             <option [value]="0">{{all}}</option>
                             <option [value]="allDevices.assetTypeSeq" *ngFor="let allDevices of deviceTypeAllList">
@@ -32,7 +32,7 @@
                           </select>
                         </div>
                         <div class="form-group col">
-                          <input matInput class="form-control form-control-sm" id="search" name="search" type="text"
+                          <input matInput class="form-control" id="search" name="search" type="text"
                             autocomplete="off" placeholder='Search Asset' #searchInput
                             (keyup)="searchDeviceTree(searchInput.value)" />
                         </div>
@@ -111,7 +111,7 @@
                                 </select>
                               </div>
                             </div>
-                            <div class="form-group text-white">
+                            <!-- <div class="form-group text-white">
 
                               <mat-checkbox class="example-margin" [checked]="isAutoRefresh"
                                 (change)="toggleAutoRefresh()">{{autoRefresh}}</mat-checkbox>
@@ -126,8 +126,8 @@
                                   {{ f.codeDisplayTxt }}
                                 </option>
 
-                              </select>
-                            </div>
+                              </select> 
+                            </div>-->
                           </div>
                           <div id="mapDiv1" class="col-12 px-0 " [ngClass]="!isFullScreen?'mapfullscreen':'map'"
                             style="background-color: white;">
@@ -184,6 +184,7 @@
                         <mat-tab-group #selectedTabs id="selectedTabs" [selectedIndex]="selectedTabIndex"
                           (selectedTabChange)="onViewTabChanged($event);">
                           <mat-tab label={{assetInformation}} (selectTab)="setHeightDeviceInfo($event)">
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="form-row">
                               <div class="form-group col">
                                 <label for="ven_seq" class="form-label">{{vendor}}</label>
@@ -203,14 +204,14 @@
                                   </mat-option>
                                 </mat-select>
                               </div>
-                              <!-- <div class="form-group col">
+                               <div class="form-group col">
                                 <label for="devid" class="form-label">{{assetId}}</label>
                                 <input matInput type="text" name="moid" id="devid" [readonly]="isEdit"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetId"
                                   [readonly]="false" disabled required />
-                              </div> -->
+                              </div> 
                               <div class="form-group col">
-                                <!-- <label for="p_devidShow" class="form-label">{{assetClass}}</label> -->
+                                 <label for="p_devidShow" class="form-label">{{assetClass}}</label> 
                                 <mat-select id="p_devidShow" name="p_devidShow" class="form-control form-control-sm"
                                   (selectionChange)='onAssetClassSelected(selectedDeviceShow.assetClass)'
                                   [(ngModel)]="selectedDeviceShow.assetClass" required disabled>
@@ -274,9 +275,11 @@
                                 </mat-slide-toggle>
                               </div>
                             </div>
+                            </div>
                           </mat-tab>
 
                           <mat-tab label={{assetDetails}} (selectTab)="setHeightDeviceDetails($event)">
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="form-row">
                               <div class="form-group col">
                                 <label for="dev_ip_address" class="form-label">{{assetIpAddress}}</label>
@@ -415,10 +418,12 @@
                                   disabled />
                               </div>
                             </div>
+                            </div>
                           </mat-tab>
 
                           <mat-tab label="Measurements" *ngIf="checkDeviceTypeEdit() == true"
                             (selectTab)="sizeColumnsMeasurementShow($event)">
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="row p-0">
                               <div class="col-sm-12 col-md-12 col-lg-12 col-xl-3 px-3">
                                 <p class="my-2 text-white" style="font-size: 15px">{{outputMeasurements}}</p>
@@ -609,10 +614,12 @@
                                 </form>
                               </div>
                             </div>
+                            </div>
                           </mat-tab>
 
                           <mat-tab label="Measurements" *ngIf="checkDeviceTypeEdit() == false"
                             (selectTab)="sizeColumnsMeasurementNewShow($event)">
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="form-row" style="width: 100%;">
                               <div class="form-group col">
                                 <label for="sysinterface" class="form-label">{{systemInterface1}}</label>
@@ -671,6 +678,7 @@
                                 [columnDefs]="deviceMeasurementNewSelectedColumnDefs"></ag-grid-angular>
 
                             </div>
+                            </div>
                           </mat-tab>
 
                           <mat-tab label="Attribute">
@@ -699,8 +707,9 @@
                           </mat-tab>
 
                           <mat-tab label={{picture}}>
-                            <div class="col-md-12 ml-0 text-center"
-                              style="padding: 125px 1px; height: 323px; width: 100vw;"
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
+                            <div class="col-md-12 ml-0 text-center container-fluid"
+                              style="padding: 125px 1px; height: 323px; width: 100vw; border-top: 1px solid #e2dede;"
                               *ngIf="selectedDeviceShow.assetPicture?.length == 0" disabled>
                               <div class="form-group col-12 mb-0 text-white">
                                 <h6>{{noPictureSelected}}</h6>
@@ -723,9 +732,11 @@
                                 </div>
                               </div>
                             </div>
+                            </div>
                           </mat-tab>
 
                           <mat-tab label={{notes}}>
+                            <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="row mt-3" style="margin-left: 5px;">
                               <div class="row">
                                 <div class="ml-4 mb-2">
@@ -752,6 +763,7 @@
                                 [gridOptions]="gridOptionsdeviceNotesView" [rowData]="selectedDevice.assetNotes"
                                 [columnDefs]="columnDefsdeviceNotesView">
                               </ag-grid-angular>
+                            </div>
                             </div>
                           </mat-tab>
                         </mat-tab-group>
@@ -2301,7 +2313,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label>{{assetConfigurationMessage}}</label>
+        <label class="text-white">{{assetConfigurationMessage}}</label>
         <div class="text-center my-3">
           <label for="importDeviceConfigurationCSV" class="btn btn-success me-4 mb-0"
             (click)="importDeviceConfigurationModal.hide()">{{yes}}</label>

@@ -2685,15 +2685,15 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
         this.getAggridSortState('measurementInputShowTable');
         this.setStateTableState('measurementInputShowTable');
         this.getCalRulesByDeviceId(this.selectedDeviceShow.assetId);
-        setTimeout(() => {
-          (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
-        }, 150);
+        // setTimeout(() => {
+        //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
+        // }, 150);
       } else if (!this.checkDeviceTypeEdit()) {
         this.deviceMeasurementNewSelectedGrid.api.sizeColumnsToFit();
         this.setFilterSetting('deviceMeasurementNewSelectedTable');
-        setTimeout(() => {
-          (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
-        }, 150);
+        // setTimeout(() => {
+        //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
+        // }, 150);
       }
     } else if (event.tab.textLabel == 'Notes') {
       this.deviceNotesView.api.sizeColumnsToFit();
@@ -2703,14 +2703,14 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
         e.stopPropagation();
         e.preventDefault();
       });
-      setTimeout(() => {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
-      }, 150);
+      // setTimeout(() => {
+      //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
+      // }, 150);
     }
     else if (event.tab.textLabel == 'Asset Information' || event.tab.textLabel == 'Asset Details' || event.tab.textLabel == 'Picture') {
-      setTimeout(() => {
-        (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
-      }, 150);
+      // setTimeout(() => {
+      //   (document.getElementsByClassName("devList").item(0) as HTMLElement).style.height = "calc(100vh - 13px)"
+      // }, 150);
     }
 
   }
@@ -3135,14 +3135,14 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
         device['attribute' + i] = null;
       }
     }
-    this.attributesList.forEach(data => {
+    this.attributesList?.forEach(data => {
       device[data.lname.toLowerCase()] = data.value;
     })
 
-    device.assetNotes.forEach(note => {
+    device.assetNotes?.forEach(note => {
       note.id = null;
     })
-    device.assetPicture.forEach(picture => {
+    device.assetPicture?.forEach(picture => {
       picture.pictureId = null;
     })
     device.updateDate = new Date();
