@@ -86,39 +86,7 @@ export class UrlMappings {
   public static getViewReportByrunIdUrl = "reportView/readBlobFile";
   public static getAllPastReportUrl = "reportManagement/viewPastReport";
 
-  // User Management
-  public static getAllOrganizationsUrl =
-    "/common/userService/Users/getAllOrganizations";
-  public static getAllUsersUrl = "/common/userService/Users/getAllUsers";
-  public static updateUserUrl = "/common/userService/Users/updateUser";
-  public static lockUnlockUserUrl = "/common/userService/Users/enableUser";
-  public static activateDeactivateUserUrl =
-    "/common/userService/Users/activateUser";
-  public static assignRoleUrl = "/common/userService/Users/assignRole";
-  public static terminateRoleUrl = "/common/userService/Users/terminateRole";
-  public static setPasswordUrl = "/common/userService/Users/setUserPassword";
-  public static getPasswordRulesUrl =
-    "/common/userService/Users/getAllPasswordRules";
-  public static getAllUserRolesUrl(userId) {
-    return "/common/userService/Users/getRolesForUser/" + userId;
-  }
-  public static saveUserLanguageUrl = "/common/userService/Users/saveLanguage";
-  public static getMemsVersionUrl = "/MemsVersion/getAllMemsVersion";
-  public static getScadaStat = "/hemsService/poi/getSCADAStatus";
-  public static getAllLdapConfigurationsUrl =
-    "/ldapConfiguration/getAllLdapConfigurations";
-  public static getRolePermissionsUrl(roleId) {
-    return "/common/userService/Users/rolePermissionsByRole/" + roleId;
-  }
-  public static createUserUrl = "/common/userService/Users/createUser";
-  public static saveUpdateLdapConfigurationUrl =
-    "/ldapConfiguration/saveUpdateLdapConfiguration";
-  public static saveRoleUrl = "/common/userService/Users/SetRoleAndPermissions";
-  public static updateRoleUrl =
-    "/common/userService/Users/UpdateRolePermissions";
-  public static updateRoleObjectPermissions =
-    "/common/userService/Users/updateRoleObjectPermissions";
-  public static deleteUser = "/common/userService/Users/deleteUser/";
+  
 
   // ViewPPCLogs
 
@@ -134,7 +102,7 @@ export class UrlMappings {
   // POI SetPoints
 
   public static getSetPoints = "/hemsService/poi/getSetPoints";
-  public static codeType = "/common/userService/codes/CodeType";
+  public static codeType = "/common/user-service/codes/code-types";
   public static setSetPoints = "/hemsService/poi/executeSetpoint";
   public static roleVerifyForSetpoint = "/hemsService/poi/modeChange";
   public static getErrorQuality = "/hemsService/poi/getErrorCodeAndQuality";
@@ -227,8 +195,7 @@ export class UrlMappings {
   public static saveDraftConfigFile = "/hemsService/fileData/saveconfigfile/";
   public static saveJson = "/hemsService/fileData/savejsonfile";
 
-  //Image on Login Screen
-  public static getLogo = "/common/userService/userLogin/getclientconfig/1";
+
 
   //Stateful management API URLs
 
@@ -353,7 +320,7 @@ export class UrlMappings {
   public static getMemsDeviceStatusUrl =
     "/common/asset-service/devices-management/getDeviceStatus";
   public static getPictureByDeviceIDUrl =
-    "/common/asset-service/devices-management/getPictureByDeviceId";
+    "/common/asset-service/devices-management/pictureby-deviceid";
   public static getNoteByDeviceIdUrl =
     "/common/asset-service/devices-management/noteby-deviceid";
   public static getCalRulesByDeviceIdurl =
@@ -491,7 +458,7 @@ export class UrlMappings {
 
   //user service
   public static getByCodeTypeUrl = "/common/user-service/codes/by-code-type";
-  public static allCodeType = "/common/userService/codes/getAll";
+  public static allCodeType = "/common/user-service/codes";
 
   //newDashboard
   public static newDashboard = "/hemsService/dashboard/dashboardData";
