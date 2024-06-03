@@ -137,7 +137,7 @@ export class DeviceManagementService {
   }
 
   public updateAsset(device): Observable<any> {
-    return this.http.post(environment.apiUrl + UrlMappings.updateAssetUrl, device, { headers: this.headers });
+    return this.http.put(environment.apiUrl + UrlMappings.updateAssetUrl, device, { headers: this.headers });
   }
 
   public getDevicesAndMeasurementsByHierarchy(req): Observable<any> {
