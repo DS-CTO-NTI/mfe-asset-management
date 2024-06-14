@@ -59,7 +59,7 @@
                           <form #addDeviceVendorForm="ngForm">
                             <div class="form-row col">
                               <div class="form-group col">
-                                <label class="form-label" for="vendorName">Vendor Name</label>
+                                <label class="form-label" for="vendorName">Vendor Name<span class="error-text">*</span></label>
                                 <input matInput id="vendorName" name="vendorName" #vendorName1="ngModel"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceVendor.vendorName"
                                   required>
@@ -346,7 +346,7 @@
                           <form #addDeviceGroupForm="ngForm">
                             <div class="form-row">
                               <div class="form-group col">
-                                <label class="form-label" for="groupName">Group Name</label>
+                                <label class="form-label" for="groupName">Group Name<span class="error-text">*</span></label>
                                 <input matInput id="groupName" name="groupName" class="form-control form-control-sm"
                                   [(ngModel)]="selectedDeviceGroup.groupName" required>
                               </div>
@@ -364,11 +364,14 @@
                                 </select>
                               </div>
                               <div class="form-group col">
-                                <label class="form-label" for="dropdown">Group Type</label>
-                                <select name="dropdown" id="dropdown" placeholder="Group Type"
-                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.groupType"
+                                <label class="form-label" for="groupTypeName">Group Type<span class="error-text">*</span></label>
+                                <select name="groupTypeName" id="groupTypeName" placeholder="Group Type"
+                                  class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.groupTypeName"
                                   required>
-                                  <option *ngFor="let groupType of groupTypeList" [value]="groupType">
+                                  <option value="null" [disabled]="true" translate>
+                                    Choose...
+                                  </option>
+                                  <option *ngFor="let groupType of groupTypeList" [ngValue]="groupType.typeName">
                                     {{groupType.typeName}}</option>
                                 </select>
                               </div>
@@ -385,13 +388,13 @@
                                   [(ngModel)]="selectedDeviceGroup.description">
                               </div>
                               <div class="form-group col">
-                                <label class="form-label" for="latitude">Latitude</label>
+                                <label class="form-label" for="latitude">Latitude<span class="error-text">*</span></label>
                                 <input matInput id="latitude" name="latitude" type="number"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.latitude"
                                   required>
                               </div>
                               <div class="form-group col">
-                                <label class="form-label" for="longitude">Longitude</label>
+                                <label class="form-label" for="longitude">Longitude<span class="error-text">*</span></label>
                                 <input matInput id="longitude" name="longitude" type="number"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.longitude"
                                   required>
@@ -441,7 +444,7 @@
           <form #addDeviceTypeForm="ngForm">
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="vendorAdd">Vendor</label>
+                <label class="form-label" for="vendorAdd">Vendor<span class="error-text">*</span></label>
                 <select id="vendorAdd" name="vendorAdd" [(ngModel)]="newDeviceType.vendors.vendorSeq"
                   class="form-control form-control-sm" required>
                   <option value=null [disabled]=true>Choose...</option>
@@ -450,7 +453,7 @@
                 </select>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="deviceTypeAdd">Asset Type Name</label>
+                <label class="form-label" for="deviceTypeAdd">Asset Type Name<span class="error-text">*</span></label>
                 <input matInput type="text" id="deviceTypeAdd" name="deviceTypeAdd" #assetName1="ngModel"
                   class="form-control form-control-sm" required [pattern]="pattern"
                   [(ngModel)]="newDeviceType.assetTypeName" required>
@@ -522,7 +525,7 @@
           <form #addDeviceTypeAttributesForm="ngForm">
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="logicalAttributeAdd">Logical Attribute Name</label>
+                <label class="form-label" for="logicalAttributeAdd">Logical Attribute Name<span class="error-text">*</span></label>
                 <select id="logicalAttributeAdd" name="logicalAttributeAdd" (selectionChange)="setOrder(true)"
                   class="form-control form-control-sm" [(ngModel)]="newDeviceFlexAttribute.logicalAttrName" required>
                   <option value=null [disabled]=true>Choose...</option>
@@ -531,7 +534,7 @@
                 </select>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="physicalAttributeAdd">Physical Attribute Name</label>
+                <label class="form-label" for="physicalAttributeAdd">Physical Attribute Name<span class="error-text">*</span></label>
                 <input matInput type="text" id="physicalAttributeAdd" name="physicalAttributeAdd"
                   class="form-control form-control-sm" #physicalAttributeName1="ngModel" [pattern]="pattern"
                   [(ngModel)]="newDeviceFlexAttribute.physicalAttrName" required>
@@ -539,7 +542,7 @@
             </div>
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="dataTypeAdd">Data Type</label>
+                <label class="form-label" for="dataTypeAdd">Data Type<span class="error-text">*</span></label>
                 <select id="dataTypeAdd" name="dataTypeAdd" [(ngModel)]="newDeviceFlexAttribute.dataType"
                   class="form-control form-control-sm" required>
                   <option value=null [disabled]=true>Choose...</option>
@@ -596,7 +599,7 @@
           <form #updateDeviceTypeAttributesForm="ngForm">
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="logicalAttributeEdit">Logical Attribute Name</label>
+                <label class="form-label" for="logicalAttributeEdit">Logical Attribute Name<span class="error-text">*</span></label>
                 <select id="logicalAttributeEdit" name="logicalAttributeEdit" (selectionChange)="setOrder(false)"
                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceAttributes.logicalAttrName" required>
                   <option value=null [disabled]=true>Choose...</option>
@@ -605,7 +608,7 @@
                 </select>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="physicalAttributeEdit">Physical Attribute Name</label>
+                <label class="form-label" for="physicalAttributeEdit">Physical Attribute Name<span class="error-text">*</span></label>
                 <input matInput type="text" id="physicalAttributeEdit" name="physicalAttributeEdit"
                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceAttributes.physicalAttrName" required>
               </div>
@@ -767,7 +770,7 @@
           <form #addMeasurementForm="ngForm">
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="measurementNameAdd">Measurement Name</label>
+                <label class="form-label" for="measurementNameAdd">Measurement Name<span class="error-text">*</span></label>
                 <div class="form-group p-0">
                   <input type="text" matInput id="name" name="name" #name1="ngModel"
                     class="form-control form-control-sm" [(ngModel)]="newDeviceMeasurement.assetMeasurementName"
@@ -791,14 +794,14 @@
             </div>
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="deviceTagAdd">Asset Tag Name</label>
+                <label class="form-label" for="deviceTagAdd">Asset Tag Name<span class="error-text">*</span></label>
             
                   <input matInput type="text" id="deviceTagAdd" name="deviceTagAdd"  class="form-control form-control-sm"
                     [(ngModel)]="newDeviceMeasurement.assetTagName" required>
                
               </div>
               <div class="form-group col">
-                <label class="form-label" for="measurementTypeAdd">Measurement Type</label>
+                <label class="form-label" for="measurementTypeAdd">Measurement Type<span class="error-text">*</span></label>
                 <select id="measurementTypeAdd" name="measurementTypeAdd" class="form-control form-control-sm"
                   [(ngModel)]="newDeviceMeasurement.measurementType"
                   (selectionChange)="measurementValueSelected($event)" required>
@@ -827,7 +830,7 @@
                 </mat-checkbox>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="ConsumptionAdd">Consumption Measurement Name</label>
+                <label class="form-label" for="ConsumptionAdd">Consumption Measurement Name<span class="error-text">*</span></label>
                 <select id="ConsumptionAdd" name="ConsumptionAdd" class="form-control form-control-sm"
                   [(ngModel)]="newDeviceMeasurement.consumptionMeasurementName"
                   [disabled]="newDeviceMeasurement.generateConsumptionData!='Y'" required>
@@ -837,7 +840,7 @@
                 </select>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="ConsumptionOffsetAdd">Consumption Offset</label>
+                <label class="form-label" for="ConsumptionOffsetAdd">Consumption Offset<span class="error-text">*</span></label>
                 <input type="number" matInput id="ConsumptionOffsetAdd" name="ConsumptionOffsetAdd"
                   class="form-control form-control-sm" [(ngModel)]="newDeviceMeasurement.consumptionOffset"
                   [disabled]="newDeviceMeasurement.generateConsumptionData!='Y'" required>
@@ -914,7 +917,7 @@
           <form #editMeasurementForm="ngForm">
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="editMeasurementName">Measurement Name</label>
+                <label class="form-label" for="editMeasurementName">Measurement Name<span class="error-text">*</span></label>
                 <div class="form-group p-0">
                   <input matInput type="text" id="editMeasurementName" name="editMeasurementName" #name="ngModel"
                     class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.assetMeasurementName"
@@ -926,7 +929,7 @@
                 </div>
               </div>
               <div class="form-group col">
-                <label for="editdisplayMeasurementName">Display Measurement Name</label>
+                <label class="form-label" for="editdisplayMeasurementName">Display Measurement Name<span class="error-text">*</span></label>
                 <div class="form-group p-0">
                   <input matInput type="text" id="editdisplayMeasurementName" name="editdisplayMeasurementName"
                     class="form-control form-control-sm" #displayName="ngModel"
@@ -936,14 +939,14 @@
             </div>
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="editDeviceTagEdit">Asset Tag Name</label>
+                <label class="form-label" for="editDeviceTagEdit">Asset Tag Name<span class="error-text">*</span></label>
                 <div class="form-group p-0">
                 <input type="text" matInput id="editDeviceTagEdit" name="editDeviceTagEdit"
                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.assetTagName" required>
                 </div>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="editMeasurementType">Measurement Type</label>
+                <label class="form-label" for="editMeasurementType">Measurement Type<span class="error-text">*</span></label>
                 <select id="editMeasurementType" name="editMeasurementType" class="form-control form-control-sm"
                   [(ngModel)]="selectedDeviceMeasurement.measurementType"
                   (selectionChange)="measurementValueSelected($event)" required>
@@ -972,7 +975,7 @@
 
               </div>
               <div class="form-group col">
-                <label class="form-label" for="ConsumptionEdit">Consumption Measurement Name</label>
+                <label class="form-label" for="ConsumptionEdit">Consumption Measurement Name<span class="error-text">*</span></label>
                 <select id="ConsumptionEdit" name="ConsumptionEdit" class="form-control form-control-sm"
                   [(ngModel)]="selectedDeviceMeasurement.consumptionMeasurementName"
                   [disabled]="selectedDeviceMeasurement.generateConsumptionData!='Y'" required>
@@ -982,7 +985,7 @@
                 </select>
               </div>
               <div class="form-group col">
-                <label class="form-label" for="ConsumptionOffsetEdit">Consumption Offset</label>
+                <label class="form-label" for="ConsumptionOffsetEdit">Consumption Offset<span class="error-text">*</span></label>
                 <input type="number" matInput id="ConsumptionOffsetEdit" name="ConsumptionOffsetEdit"
                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceMeasurement.consumptionOffset"
                   [disabled]="selectedDeviceMeasurement.generateConsumptionData!='Y'" required>
