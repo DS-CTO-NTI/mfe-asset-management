@@ -2619,10 +2619,8 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
   }
 
   updateDeviceGroups() {
-    console.log(this.selectedDeviceGroup.groupTypeName);
     let groupType = this.groupTypeList.find(groupType => groupType.typeName == this.selectedDeviceGroup.groupTypeName);
     this.selectedDeviceGroup.groupType = groupType;
-    console.log(groupType);
  
     let body;
     body = {
@@ -2718,7 +2716,6 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
   getAllAssetGroupType() {
     this.devicetypemanagementService.getAllDeviceTypeGroup().subscribe(resposene => {
       this.groupTypeList = JSON.parse(JSON.stringify(resposene.data));
-      console.log(this.groupTypeList);
       setTimeout(() => {
         if (this.DeviceGroupTypeGrid.api.getRowNode('0') != null) {
           this.DeviceGroupTypeGrid.api.getRowNode("0").setSelected(true);
