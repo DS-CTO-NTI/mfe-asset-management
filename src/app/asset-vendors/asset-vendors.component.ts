@@ -676,6 +676,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.selectedDeviceGroup.groupType = new DeviceGroupType();
     this.language = localStorage.getItem("hems-language");
     window.scrollTo(0, 0);
     window.onbeforeunload = function () {
@@ -1693,7 +1694,8 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           if (this.DeviceGroupGrid.api.getRowNode("0") != null) {
             this.DeviceGroupGrid.api.getRowNode("0").setSelected(true);
-            this.selectedDeviceGroup = this.DeviceGroupGrid.api.getRowNode("0").data;
+            this.selectedDeviceGroup = JSON.parse(JSON.stringify(this.DeviceGroupGrid.api.getRowNode("0").data));
+            this.selectedDeviceGroup.groupTypeName = this.selectedDeviceGroup.groupType.typeName;
             this.setFilterSetting('DeviceGroupTable');
             this.getGroupSeqList();
           }
@@ -2488,6 +2490,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     // this.selectedDeviceGroup = event.data
 
     this.selectedDeviceGroup = JSON.parse(JSON.stringify(event.data))
+    this.selectedDeviceGroup.groupTypeName = this.selectedDeviceGroup.groupType.typeName;
     if (this.selectedDeviceGroup.groupName == null) {
       this.getAllAssetGroup()
     }
@@ -2616,7 +2619,11 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
   }
 
   updateDeviceGroups() {
-
+    console.log(this.selectedDeviceGroup.groupTypeName);
+    let groupType = this.groupTypeList.find(groupType => groupType.typeName == this.selectedDeviceGroup.groupTypeName);
+    this.selectedDeviceGroup.groupType = groupType;
+    console.log(groupType);
+ 
     let body;
     body = {
 
@@ -2631,7 +2638,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
       updateUser: sessionStorage.getItem("hems-authenticatedUserFirstName"),
       updateTimestamp: new Date(),
       parentGroupSeq: this.selectedDeviceGroup.parentGroupSeq,
-      groupType: { id : this.selectedDeviceGroup.groupType?.id , typeName :this.selectedDeviceGroup.groupType?.typeName},
+      groupType: this.selectedDeviceGroup.groupType,
       parentGroupSeqName: this.selectedDeviceGroup.parentGroupSeqName
 
     }
@@ -2710,7 +2717,8 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
   }
   getAllAssetGroupType() {
     this.devicetypemanagementService.getAllDeviceTypeGroup().subscribe(resposene => {
-      this.groupTypeList = resposene.data;
+      this.groupTypeList = JSON.parse(JSON.stringify(resposene.data));
+      console.log(this.groupTypeList);
       setTimeout(() => {
         if (this.DeviceGroupTypeGrid.api.getRowNode('0') != null) {
           this.DeviceGroupTypeGrid.api.getRowNode("0").setSelected(true);
@@ -2878,7 +2886,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
   }
 
   resetEditDeviceGroupTypeTable() {
-    this.deviceGroupTyperowData = JSON.parse(JSON.stringify(this.groupTypeList));
+    this.deviceGroupTyperowData =this.groupTypeList;
     this.DeviceGroupTypeGrid.api.redrawRows();
   }
 
@@ -3003,8 +3011,9 @@ export class DeviceGroup {
   updateUser: string;
   updateTimestamp: Date;
   parentGroupSeq: number;
-  groupType = new DeviceGroupType();
+  groupType =  new DeviceGroupType();
   parentGroupSeqName: string;
+  groupTypeName: string;
 }
 
 export class DeviceGroupType {
