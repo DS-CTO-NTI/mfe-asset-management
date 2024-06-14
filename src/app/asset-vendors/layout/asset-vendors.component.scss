@@ -880,6 +880,11 @@ input[type="time" i]::-webkit-calendar-picker-indicator {
   top: 4px;
 }
 
+
+.error-text {
+  color: #db1e3c;
+}
+
 ::ng-deep .mat-slide-toggle-label {
   font-size: 13px;
 }
