@@ -2608,6 +2608,8 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
 
   saveDeviceGroups() {
     this.selectedDeviceGroup.createUser = sessionStorage.getItem("hems-authenticatedUserFirstName");
+    let groupType = this.groupTypeList.find(groupType => groupType.typeName == this.selectedDeviceGroup.groupTypeName);
+    this.selectedDeviceGroup.groupType = groupType;
     this.selectedDeviceGroup.createTimestamp = new Date()
     this.devicetypemanagementService.saveDeviceGroup(this.selectedDeviceGroup).subscribe((response) => {
       this.toastrService.success("Asset Group Created Successfully.")
