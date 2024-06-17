@@ -880,6 +880,22 @@ input[type="time" i]::-webkit-calendar-picker-indicator {
   top: 4px;
 }
 
+.add-group-type-txt
+  {
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-right: 10px;
+}
+
+.text-area-default{
+  height: calc(50vh - 365px); 
+  min-height: 84px; 
+  width: 49%;
+}
+
+.vendor-txt{
+  width: 49%;
+}
 
 .error-text {
   color: #db1e3c;

@@ -49,16 +49,16 @@
 
                 <div class="row">
                   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 px-2 pt-2" style="height: calc(48vh - 40px)">
-                    <div class="card">
+                    <div class="card mx-auto">
                       <div class="card-header bg-purple text-white">
                         <h6 class="ml-auto mb-0" style="text-align: center;">Asset Vendor -
                           {{selectedDeviceVendor.vendorName}}</h6>
                       </div>
-                      <div class="card-body pb-0 px-0 flexible" [collapse]="isCollapsed5">
-                        <div class="m-0" id="ScrollId" style="width: 100%;">
+                      <div class="card-body pb-0 px-0 flexible " [collapse]="isCollapsed5">
+                        <div class="m-0" id="ScrollId" style="width: 100%;margin: auto;">
                           <form #addDeviceVendorForm="ngForm">
                             <div class="form-row col">
-                              <div class="form-group col">
+                              <div class="form-group vendor-txt">
                                 <label class="form-label" for="vendorName">Vendor Name<span class="error-text">*</span></label>
                                 <input matInput id="vendorName" name="vendorName" #vendorName1="ngModel"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceVendor.vendorName"
@@ -69,22 +69,25 @@
                                 </div>
 
                               </div>
+                            </div>
+                            <div class="form-row col">
                               <div class="form-group col">
                                 <label class="form-label" for="description">Description</label>
-                                <input matInput id="description" name="description" class="form-control form-control-sm"
-                                  [(ngModel)]="selectedDeviceVendor.description">
+                                <textarea matInput id="description" name="description" cols="100" rows="5" class="form-control form-control-sm text-area-default" 
+                                  [(ngModel)]="selectedDeviceVendor.description"></textarea>
                               </div>
+                            </div>
+                            <div class="form-group col">
+                              <label class="mb-2 form-label" for="Address">Address</label>
+                              <textarea matInput
+                                class="form-control form-control-sm text-area-default" cols="100" rows="5" name="equation"
+                                [(ngModel)]="selectedDeviceVendor.vendorAddress" id="equation"></textarea>
+  
                             </div>
 
                           </form>
 
-                          <div class="form-group col">
-                            <label class="mb-2 form-label" for="Address">Address</label>
-                            <textarea matInput style="height: calc(50vh - 365px); min-height: 84px; width: 49%;"
-                              class="form-control form-control-sm" cols="100" rows="5" name="equation"
-                              [(ngModel)]="selectedDeviceVendor.vendorAddress" id="equation"></textarea>
 
-                          </div>
 
                         </div>
                         <div class="text-center mb-3">
@@ -341,17 +344,17 @@
                         <h6 class="ml-auto mb-0">Asset Group - {{selectedDeviceGroup.groupName}}</h6>
                       </div>
                       <div class="card-body flexible" [collapse]="isCollapsed5">
-                        <div class="m-0" id="ScrollId" style="width: 100%;">
+                        <div class="m-0; ju" id="ScrollId" style="width: 100%;">
 
                           <form #addDeviceGroupForm="ngForm">
-                            <div class="form-row">
-                              <div class="form-group col">
+                            <div class="form-row m-10">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="groupName">Group Name<span class="error-text">*</span></label>
                                 <input matInput id="groupName" name="groupName" class="form-control form-control-sm"
                                   [(ngModel)]="selectedDeviceGroup.groupName" required>
                               </div>
 
-                              <div class="form-group col">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="parentGroupSeq">Parent Group Name</label>
                                 <select id="parentGroupSeq" name="parentGroupSeq" class="form-control form-control-sm"
                                   [(ngModel)]="selectedDeviceGroup.parentGroupSeq" placeholder="Parent Group Name">
@@ -363,7 +366,7 @@
                                   </option>
                                 </select>
                               </div>
-                              <div class="form-group col">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="groupTypeName">Group Type<span class="error-text">*</span></label>
                                 <select name="groupTypeName" id="groupTypeName" placeholder="Group Type"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.groupTypeName"
@@ -375,25 +378,25 @@
                                     {{groupType.typeName}}</option>
                                 </select>
                               </div>
-                              <div class="form-group col">
+                              <div class="form-group">
                                 <button class="btn btn-sm btn-success" style="margin-bottom: -60px; margin-right:2px"
-                                color="primary" (click)="editDeviceGroup()">Edit</button>
+                                color="primary" (click)="editDeviceGroup()">Action</button>
                               </div>
 
                             </div>
-                            <div class="form-row">
-                              <div class="form-group col">
+                            <div class="form-row m-10">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="description">Description</label>
                                 <input matInput id="description" name="description" class="form-control form-control-sm"
                                   [(ngModel)]="selectedDeviceGroup.description">
                               </div>
-                              <div class="form-group col">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="latitude">Latitude<span class="error-text">*</span></label>
                                 <input matInput id="latitude" name="latitude" type="number"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.latitude"
                                   required>
                               </div>
-                              <div class="form-group col">
+                              <div class="form-group col-lg-3 col-md-3 col-sm-3">
                                 <label class="form-label" for="longitude">Longitude<span class="error-text">*</span></label>
                                 <input matInput id="longitude" name="longitude" type="number"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceGroup.longitude"
@@ -739,7 +742,7 @@
       </div>
       <div class="modal-body text-center">
         <ul class="list-group">
-          <li class="list-group-item list-custom" *ngFor="let error of validationErrors"><em class="fa fa-times"></em>
+          <li class="list-group-item list-custom text-white" *ngFor="let error of validationErrors"><em class="fa fa-times"></em>
             {{error}}</li>
         </ul>
         <div class="text-center my-3">
@@ -1130,7 +1133,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label><em class="fa fa-times mr-2"></em>{{validationErrors2}}</label>
+        <label class="text-white"><em class="fa fa-times mr-2"></em>{{validationErrors2}}</label>
         <div class="text-center my-3">
           <button type="button" class="btn btn-success mr-4" (click)="deleteDeviceVendorErrorModal.hide()">Ok</button>
         </div>
@@ -1236,13 +1239,13 @@
                   </span>
                 </div>
 
-                <input type="text" class="ml-2" placeholder="Add Group Type" id="typeName" #typeName
+                <input type="text" class="ml-2 add-group-type-txt" placeholder="Add Group Type" id="typeName" #typeName
                   [(ngModel)]="selectedDeviceGroupType.typeName" *ngIf="isShown" />
-                <button mat-raised-button color="primary" [disabled]="!selectedDeviceGroupType.typeName"
+                <button mat-raised-button color="primary" [disabled]="!selectedDeviceGroupType.typeName" class = "add-group-type-txt"
                   (click)="saveGroupType()" id="addGroupTypeAdd" #addGroupTypeAdd *ngIf="isShown">
                   <em class="fa fa-save mr-1"></em>Save</button>
 
-                <div class="row justify-content-between mx-0" style="margin-left: auto !important;">
+                <div class="row justify-content-between mx-0" style="margin-left: auto !important; margin-top: 5px;">
                   <div class="d-flex" style="flex-wrap: wrap;">
                     <em class="fa fa-plus-circle mtt mr-2 text-white" title="Add Group Type" (click)="AddNewGroupType()"></em>
                     <em class="fa fa-trash-o mtt mr-3 text-white" title="Delete Group Type" *ngIf="groupTypeList.length!=0"
@@ -1310,7 +1313,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label><em class="fa fa-times mr-2"></em>{{validationErrors2}}</label>
+        <label class="form-label text-white"><em class="fa fa-times mr-2 text-white"></em>{{validationErrors2}}</label>
         <div class="text-center my-3">
           <button type="button" class="btn btn-success mr-4" (click)="deleteDeviceGroupErrorModal.hide()">Ok</button>
         </div>
@@ -1336,7 +1339,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label>Are you sure to delete group type?</label>
+        <label class="text-white">Are you sure to delete group type?</label>
         <div class="text-center my-3">
           <button class="mr-1" type="button" mat-raised-button color="primary" (click)="deleteGroupType()">Yes</button>
           <button type="button" mat-raised-button color="warn" (click)="deleteDeviceGroupTypeModal.hide()">No</button>
@@ -1363,7 +1366,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label><em class="fa fa-times mr-2"></em>{{validationErrors3}}</label>
+        <label class="text-white"><em class="fa fa-times mr-2"></em>{{validationErrors3}}</label>
         <div class="text-center my-3">
           <button type="button" class="btn btn-success mr-4"
             (click)="deleteDeviceGroupTypeErrorModal.hide()">Ok</button>
@@ -1384,7 +1387,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <label>Are you sure to delete asset group?</label>
+        <label class="text-white">Are you sure to delete asset group?</label>
         <div class="text-center my-3">
           <button type="button" class="mr-1" mat-raised-button color="primary" (click)="deleteGroup()">Yes</button>
           <button type="button" mat-raised-button color="warn" (click)="deleteDeviceGroupModal.hide()">No</button>
