@@ -71,17 +71,17 @@
 
                       <h6 class="mb-0 ">{{assetMap}}
                         <span class="pull-right">
-                          <em class="fa fa-download mr-3 cursor-pointer" *ngIf="isFullScreen" style="font-size: 24px;"
+                          <em class="fa fa-download mtt mr-3 text-white" *ngIf="isFullScreen" 
                             title={{downloadTemplate1}} (click)="downloadTemplate()" aria-hidden="true"></em>
                           <em class="fa fa-cloud-download cursor-pointer mr-3" *ngIf="isFullScreen"
-                            style="font-size: 24px;" title={{downloadAsset}} (click)="getAllDeviceConfiguration()"
+                             title={{downloadAsset}} (click)="getAllDeviceConfiguration()"
                             aria-hidden="true"></em>
-                          <em class="fa fa-upload mr-3 cursor-pointer" *ngIf="isFullScreen" style="font-size: 24px;"
+                          <em class="fa fa-upload mr-3 cursor-pointer" *ngIf="isFullScreen" 
                             title={{uploadAsset}} (click)="importDeviceConfigurationModal.show()"></em>
-                          <em class="fa fa-plus-circle mr-3 cursor-pointer" style="font-size: 24px;"
+                          <em class="fa fa-plus-circle mr-3 cursor-pointer" 
                             title={{createAsset}} *ngIf="isFullScreen"
                             (click)="openModal(false);resetCreateAsset(form);"></em>
-                          <img class="cursor-pointer img-h " [ngClass]="{'transform-img': !isFullScreen}"
+                          <img class="cursor-pointer img-h" [ngClass]="{'transform-img': !isFullScreen}"
                             src="./assets/images/expand-arrows2 white.svg" alt="asset" (click)="expandDeviceMap()"
                             style="margin-bottom:3px" [title]="!isFullScreen?'Collapse Map':'Expand Map'">
                         </span>
@@ -172,7 +172,7 @@
                     </div>
                     <div class="col-1 float-right">
                       <em class="fa fa-pencil-square-o float-right cursor-pointer mr-2" title={{editAsset}}
-                        style="font-size: 24px;" (click)="openEditModal()"
+                        (click)="openEditModal()"
                         *ngIf="deviceListData!=null && deviceListData.length>0"></em>
                     </div>
                   </div>
@@ -187,9 +187,9 @@
                             <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                             <div class="form-row">
                               <div class="form-group col">
-                                <label for="ven_seq" class="form-label">{{vendor}}</label>
+                                <label for="ven_seq" class="form-label">{{vendor}}<span class="error-text">*</span></label>
                                 <mat-select id="ven_seq" name="ven_seq" [(ngModel)]="selectedDeviceShow.vendorSeq"
-                                  class="form-control form-control-sm" disabled>
+                                  class="form-control form-control-sm" disabled required>
                                   <mat-option [value]="vendor1.vendorSeq" *ngFor="let vendor1 of vendorsList">{{
                                     vendor1.vendorName }}</mat-option>
                                 </mat-select>
@@ -205,13 +205,13 @@
                                 </mat-select>
                               </div>
                                <div class="form-group col">
-                                <label for="devid" class="form-label">{{assetId}}</label>
+                                <label for="devid" class="form-label">{{assetId}}<span class="error-text">*</span></label>
                                 <input matInput type="text" name="moid" id="devid" [readonly]="isEdit"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.assetId"
                                   [readonly]="false" disabled required />
                               </div> 
                               <div class="form-group col">
-                                 <label for="p_devidShow" class="form-label">{{assetClass}}</label> 
+                                 <label for="p_devidShow" class="form-label">{{assetClass}}<span class="error-text">*</span></label> 
                                 <mat-select id="p_devidShow" name="p_devidShow" class="form-control form-control-sm"
                                   (selectionChange)='onAssetClassSelected(selectedDeviceShow.assetClass)'
                                   [(ngModel)]="selectedDeviceShow.assetClass" required disabled>
@@ -237,13 +237,13 @@
                               </div>
 
                               <div class="form-group col">
-                                <label for="latitude" class="form-label">{{latitude}}</label>
+                                <label for="latitude" class="form-label">{{latitude}}<span class="error-text">*</span></label>
                                 <input matInput type="number" name="latitude" id="latitude" [readonly]="isEdit"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.latitude"
                                   disabled required />
                               </div>
                               <div class="form-group col">
-                                <label for="longitude" class="form-label">{{longitude}}</label>
+                                <label for="longitude" class="form-label">{{longitude}}<span class="error-text">*</span></label>
                                 <input matInput type="number" name="longitude" id="longitude" [readonly]="isEdit"
                                   class="form-control form-control-sm" [(ngModel)]="selectedDeviceShow.longitude"
                                   disabled required />
@@ -357,7 +357,7 @@
                               </div>
 
                               <div class="form-group col">
-                                <label for="grp_seq" class="form-label">{{group}}</label>
+                                <label for="grp_seq" class="form-label">{{group}}<span class="error-text">*</span></label>
                                 <mat-select id="grp_seq" name="grp_seq" [(ngModel)]="selectedDeviceShow.groupSeq"
                                   class="form-control form-control-sm" disabled required>
                                   <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
@@ -369,7 +369,7 @@
                             </div>
                             <div class="form-row">
                               <div class="form-group col">
-                                <label for="installationDate" class="form-label">{{installationDate}}</label>
+                                <label for="installationDate" class="form-label">{{installationDate}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
                                   <input matInput type="datetime-local" name="installationDate"
@@ -384,7 +384,7 @@
                                 </div>
                               </div>
                               <div class="form-group col">
-                                <label for="registrationTs" class="form-label">{{registrationTime}}</label>
+                                <label for="registrationTs" class="form-label">{{registrationTime}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
                                   <input matInput type="datetime-local" name="startdate"
@@ -398,7 +398,7 @@
                                 </div>
                               </div>
                               <div class="form-group col">
-                                <label for="provisioningTs" class="form-label">{{provisioningTime}}</label>
+                                <label for="provisioningTs" class="form-label">{{provisioningTime}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
                                   <input matInput type="datetime-local" name="provisioningTs"
@@ -467,7 +467,7 @@
 
                                       <div class="form-group col">
                                         <label for="measurementName1"
-                                          class="form-label">{{outputMeasurementName}}</label>
+                                          class="form-label">{{outputMeasurementName}}<span class="error-text">*</span></label>
                                         <input type="text" matInput name="measurementName1" id="measurementName1"
                                           class="form-control form-control-sm"
                                           [(ngModel)]="measurementShow.assetMeasurementName" required disabled />
@@ -475,7 +475,7 @@
 
 
                                       <div class="form-group col">
-                                        <label class="form-label">{{UOM1}}</label>
+                                        <label class="form-label">{{UOM1}}<span class="error-text">*</span></label>
                                         <select id="uom" name="uom" [(ngModel)]="measurementShow.uom" required
                                           class="form-control form-control-sm" disabled>
                                           <option value="null" [disabled]="true">{{choose}}</option>
@@ -801,7 +801,7 @@
                 <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                   <div class="form-row">
                     <div class="form-group col">
-                      <label class="form-label" for="ven_seqCreate">Vendor</label>
+                      <label class="form-label" for="ven_seqCreate">Vendor<span class="error-text">*</span></label>
                       <select id="ven_seqCreate" name="ven_seqCreate" class="form-control form-control-sm"
                         (change)="getDeviceTypesByVendor(newDevice.vendorSeq)" [(ngModel)]="newDevice.vendorSeq"
                         required>
@@ -812,7 +812,7 @@
                       </select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="inputStateCreate">{{assetType}}</label>
+                      <label class="form-label" for="inputStateCreate">{{assetType}}<span class="error-text">*</span></label>
                       <select id="inputStateCreate" name="inputStateCreate" class="form-control form-control-sm"
                         (change)="showCreateAttributes(newDevice.assetTypeSeq)" [(ngModel)]="newDevice.assetTypeSeq"
                         required>
@@ -823,12 +823,12 @@
                       </select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="devidCreate">{{assetId}}</label>
+                      <label class="form-label" for="devidCreate">{{assetId}}<span class="error-text">*</span></label>
                       <input matInput type="text" name="moid" id="devidCreate" [(ngModel)]="newDevice.assetId"
                         class="form-control form-control-sm" required />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="p_devid">{{assetClass}}</label>
+                      <label class="form-label" for="p_devid">{{assetClass}}<span class="error-text">*</span></label>
                       <select id="p_devidCreate1" name="p_devidCreate1"
                         (change)='onAssetClassSelected(newDevice.assetClass)' class="form-control form-control-sm"
                         [(ngModel)]="newDevice.assetClass" [disabled]="AssetClassDisabled" required>
@@ -851,12 +851,12 @@
                       </select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="latitudeCreate">{{latitude}}</label>
+                      <label class="form-label" for="latitudeCreate">{{latitude}}<span class="error-text">*</span></label>
                       <input matInput type="number" name="latitudeCreate" id="latitudeCreate"
                         class="form-control form-control-sm" [(ngModel)]="newDevice.latitude" required />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="longitudeCreate">{{longitude}}</label>
+                      <label class="form-label" for="longitudeCreate">{{longitude}}<span class="error-text">*</span></label>
                       <input matInput type="number" name="longitudeCreate" id="longitudeCreate"
                         class="form-control form-control-sm" [(ngModel)]="newDevice.longitude" required />
                     </div>
@@ -902,7 +902,7 @@
                       </div>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="dev_nameCreateDetails">{{assetName}}</label>
+                      <label class="form-label" for="dev_nameCreateDetails">{{assetName}}<span class="error-text">*</span></label>
                       <input matInput type="text" name="dev_nameCreateDetails" id="dev_nameCreateDetails"
                         class="form-control form-control-sm" [(ngModel)]="newDevice.assetName" required />
                     </div>
@@ -957,7 +957,7 @@
                         class="form-control form-control-sm" [(ngModel)]="newDevice.geoY" />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="grp_seqCreateDetails">{{group}}</label>
+                      <label class="form-label" for="grp_seqCreateDetails">{{group}}<span class="error-text">*</span></label>
                       <select id="grp_seqCreateDetails" name="grp_seqCreateDetails" [(ngModel)]="newDevice.groupSeq"
                         class="form-control form-control-sm" required>
                         <option value="null" [disabled]="true">{{choose}}</option>
@@ -1058,7 +1058,7 @@
                           <div class="form-row">
 
                             <div class="form-group col">
-                              <label for="measurementNameCreate" class="form-label">{{outputMeasurementName}}</label>
+                              <label for="measurementNameCreate" class="form-label">{{outputMeasurementName}}<span class="error-text">*</span></label>
                               <input matInput type="text" name="measurementNameCreate" id="measurementNameCreate"
                                 class="form-control form-control-sm" [(ngModel)]="measurement.assetMeasurementName"
                                 required />
@@ -1066,7 +1066,7 @@
 
 
                             <div class="form-group col">
-                              <label class="form-label">{{UOM1}}</label>
+                              <label class="form-label">{{UOM1}}<span class="error-text">*</span></label>
                               <select id="uomCreate" name="uomCreate" class="form-control form-control-sm"
                                 [(ngModel)]="measurement.uom" required>
                                 <option value="null" [disabled]="true">{{choose}}</option>
@@ -1409,7 +1409,7 @@
                 <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
                   <div class="form-row">
                     <div class="form-group col">
-                      <label class="form-label" for="ven_seqEdit">Vendor</label>
+                      <label class="form-label" for="ven_seqEdit">Vendor<span class="error-text">*</span></label>
                       <select id="ven_seqEdit" name="ven_seqEdit" class="form-control form-control-sm"
                         (change)="getDeviceTypesByVendor(selectedDevice.vendorSeq)"
                         [(ngModel)]="selectedDevice.vendorSeq" required disabled>
@@ -1420,7 +1420,7 @@
                       </select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="inputStateEdit">{{assetType}}</label>
+                      <label class="form-label" for="inputStateEdit">{{assetType}}<span class="error-text">*</span></label>
                       <select id="inputStateEdit" name="inputStateEdit" (change)="getAttributes()"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.assetTypeSeq" required
                         disabled>
@@ -1431,13 +1431,13 @@
                       </select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="devidEdit">{{assetId}}</label>
+                      <label class="form-label" for="devidEdit">{{assetId}}<span class="error-text">*</span></label>
                       <input matInput type="text" name="moid" id="devidEdit" disabled [readonly]="isEdit"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.assetId" [readonly]="true"
                         required />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="p_devid">{{assetClass}}</label>
+                      <label class="form-label" for="p_devid">{{assetClass}}<span class="error-text">*</span></label>
                       <select id="p_devidEdit1" name="p_devidEdit1"
                         (change)='onAssetClassSelected(selectedDevice.assetClass)' class="form-control form-control-sm"
                         [(ngModel)]="selectedDevice.assetClass" required disabled>
@@ -1462,12 +1462,12 @@
                       </mat-select>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="latitudeEdit">{{latitude}}</label>
+                      <label class="form-label" for="latitudeEdit">{{latitude}}<span class="error-text">*</span></label>
                       <input matInput type="number" name="latitudeEdit" id="latitudeEdit" [readonly]="isEdit"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.latitude" required />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="longitudeEdit">{{longitude}}</label>
+                      <label class="form-label" for="longitudeEdit">{{longitude}}<span class="error-text">*</span></label>
                       <input type="number" matInput name="longitudeEdit" id="longitudeEdit" [readonly]="isEdit"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.longitude" required />
                     </div>
@@ -1514,7 +1514,7 @@
                       </div>
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="dev_nameEdit">{{assetName}}</label>
+                      <label class="form-label" for="dev_nameEdit">{{assetName}}<span class="error-text">*</span></label>
                       <input matInput type="text" name="dev_nameEdit" id="dev_nameEdit"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.assetName" [readonly]="isEdit"
                         disabled required />
@@ -1572,7 +1572,7 @@
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.geoY" />
                     </div>
                     <div class="form-group col">
-                      <label class="form-label" for="grp_seqEdit">{{group}}</label>
+                      <label class="form-label" for="grp_seqEdit">{{group}}<span class="error-text">*</span></label>
                       <mat-select id="grp_seqEdit" name="grp_seqEdit" [disabled]="isEdit"
                         class="form-control form-control-sm" [(ngModel)]="selectedDevice.groupSeq" required>
                         <mat-option value="null" [disabled]="true">{{choose}}</mat-option>
@@ -1673,13 +1673,13 @@
                         <div style="border: 1px solid deepskyblue">
                           <div class="form-row">
                             <div class="form-group col">
-                              <label for="measurementName" class="form-label">{{outputMeasurementName}}</label>
+                              <label for="measurementName" class="form-label">{{outputMeasurementName}}<span class="error-text">*</span></label>
                               <input matInput type="text" name="measurementName" id="measurementName"
                                 class="form-control form-control-sm" [(ngModel)]="measurement.assetMeasurementName"
                                 required />
                             </div>
                             <div class="form-group col">
-                              <label for="uomEdit" class="form-label">{{UOM1}}</label>
+                              <label for="uomEdit" class="form-label">{{UOM1}}<span class="error-text">*</span></label>
                               <select id="uomEdit" name="uomEdit" [(ngModel)]="measurement.uom"
                                 class="form-control form-control-sm" required>
                                 <option value="null" [disabled]="true">{{choose}}</option>
@@ -2115,11 +2115,11 @@
             <form #deviceCloneForm="ngForm">
               <div class="form-row">
                 <mat-form-field class="example-full-width col-sm-4 col-md-4 col-lg-4">
-                  <mat-label for="deviceid">{{assetId}}</mat-label>
+                  <mat-label for="deviceid">{{assetId}}<span class="error-text">*</span></mat-label>
                   <input matInput type="text" id="deviceid" name="deviceid" [(ngModel)]="newDevice.assetId" required />
                 </mat-form-field>
                 <mat-form-field class="example-full-width col-sm-8 col-md-8 col-lg-8">
-                  <mat-label for="assetName">{{assetName}}</mat-label>
+                  <mat-label for="assetName">{{assetName}}<span class="error-text">*</span></mat-label>
                   <input matInput type="text" id="assetName" name="assetName" [(ngModel)]="newDevice.assetName"
                     required />
                 </mat-form-field>
@@ -2168,12 +2168,12 @@
         <form #uploadPictureForm="ngForm">
           <div class="form-row">
             <div class="form-group col">
-              <label class="form-label" for="pictureTitle">{{title1}}</label>
+              <label class="form-label" for="pictureTitle">{{title1}}<span class="error-text">*</span></label>
               <input matInput type="text" name="pictureTitle" id="pictureTitle" class="form-control form-control-sm"
                 [(ngModel)]="newMemsDevicePicture.pictureTitle" required />
             </div>
             <div class="form-group col">
-              <label class="form-label" for="file">{{selectPicture}}</label>
+              <label class="form-label" for="file">{{selectPicture}}<span class="error-text">*</span></label>
               <input matInput type="text" id="selectfile" name="selectFile" class="form-control form-control-sm"
                 [(ngModel)]="selectedFileName" required />
             </div>

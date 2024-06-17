@@ -609,6 +609,9 @@
 //     display: none !important;
 //   }
 
+.img-h {
+       height: 23px;
+    }
 .map {
     height: calc(100vh - 449px);
     min-height: 200px;
@@ -960,6 +963,10 @@ section {
 ::ng-deep #editTabs .mat-tab-list .mat-tab-labels .mat-tab-label-active {
     color:  purple;
 }
+
+.error-text {
+   color: #db1e3c;
+ }
 
 .agmmapheight {
        height: 100%;

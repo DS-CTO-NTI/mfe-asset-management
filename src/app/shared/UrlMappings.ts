@@ -199,18 +199,18 @@ export class UrlMappings {
 
   //Stateful management API URLs
 
-  public static saveState = "/common/userService/aggridstate/saveAggridState";
+  public static saveState = "/common/user-service/aggridstate/saveAggridState";
   public static updateState =
-    "/common/userService/aggridstate/updateAggridState";
-  public static getState = "/common/userService/aggridstate/getAggridState";
+    "/common/user-service/aggridstate/updateAggridState";
+  public static getState = "/common/user-service/aggridstate/getAggridState";
   public static deleteState =
-    "/common/userService/aggridstate/deleteAggridState";
+    "/common/user-service/aggridstate/deleteAggridState";
   public static getAllHmiRegistersByType =
     "/hems/hemsService/hmiRegisters/getAllHmiRegistersByRegisterType/";
 
   // Countries - Cities
   public static getAllCountriesCities =
-    "/common/userService/countries/getAllCountriesCites";
+    "/common/user-service/countries/getAllCountriesCites";
 
   // password encryption
   public static encryptedBase64Key = "MnBlZzdXRGVtWFJlTmR4eg==";
@@ -263,7 +263,7 @@ export class UrlMappings {
   public static getAllDeviceTypeGroup =
     "/common/asset-service/devices-management/device-group-types";
   public static saveDeviceGroupTypes =
-    "/common/asset-service/asset-group-type/saveDeviceGroupTypes";
+    "/common/asset-service/asset-groups/types";
 
   //Asset Group Tab
   public static getAllDeviceGroup =
@@ -273,20 +273,20 @@ export class UrlMappings {
   public static updateDeviceGroup =
     "/common/asset-service/asset-groups";
   public static saveGroupType =
-    "/common/asset-service/asset-group-type";
+    "/common/asset-service/asset-groups/types";
 
   public static updateAssetTypeGroupById(id) {
     return (
-      "/common/asset-service/devices-management/updateAssetTypeGroupById/" + id
+      "/common/asset-service/asset-groups/types/" + id
     );
   }
 
   public static deleteDeviceGroupType(id) {
-    return "/common/asset-service/asset-group-type/deleteAssetGroupTypeById/" + id;
+    return "/common/asset-service/asset-groups/types/" + id;
   }
 
   public static deleteDeviceGroup(id) {
-    return "/common/asset-service/asset-group/asset-group/" + id;
+    return "/common/asset-service/asset-groups/" + id;
   }
 
   //asset service
