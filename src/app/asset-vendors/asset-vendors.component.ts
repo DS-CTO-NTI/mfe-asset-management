@@ -602,6 +602,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     },
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   devicegridOptions: GridOptions = {
@@ -621,6 +622,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     },
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   frameworkComponents: {
@@ -637,7 +639,8 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
       resizable: true,
     },
     suppressCellSelection: true,
-    suppressDragLeaveHidesColumns: true
+    suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   }
 
   deviceTypeAttributesgridOptions: GridOptions = {
@@ -653,6 +656,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     },
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   measurementsAttributesgridOptions: GridOptions = {
@@ -668,6 +672,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     paginationAutoPageSize: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   refresh(): boolean {
