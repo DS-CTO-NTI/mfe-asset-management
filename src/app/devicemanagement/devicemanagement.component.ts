@@ -763,6 +763,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+    overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   deviceMeasurementNewGridOptions: GridOptions = {
@@ -775,6 +776,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   deviceMeasurementNewEditGridOptions: GridOptions = {
@@ -787,6 +789,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   deviceMeasurementNewSelectedGridOptions: GridOptions = {
@@ -799,6 +802,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   measurementNameGridOptions: GridOptions = {
@@ -811,6 +815,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   measurementInputGridOptions: GridOptions = {
@@ -823,6 +828,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: true,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   measurementNameShowGridOptions: GridOptions = {
@@ -835,6 +841,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: false,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   gridOptionsdeviceNotes: GridOptions = {
@@ -847,6 +854,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: false,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   gridOptionsdeviceNotesEdit: GridOptions = {
@@ -859,6 +867,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: false,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
 
   gridOptionsdeviceNotesView: GridOptions = {
@@ -871,6 +880,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
     animateRows: true,
     suppressCellSelection: false,
     suppressDragLeaveHidesColumns: true,
+     overlayNoRowsTemplate : '<div style="color:white;">No Rows To Show</div>'
   };
  //mat selection panel with scroll code
  @HostListener('window:scroll', [])

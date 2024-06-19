@@ -890,11 +890,16 @@ input[type="time" i]::-webkit-calendar-picker-indicator {
 .text-area-default{
   height: calc(50vh - 365px); 
   min-height: 84px; 
-  width: 49%;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .vendor-txt{
-  width: 49%;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+  min-width: 718px;
 }
 
 .error-text {
