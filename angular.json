@@ -35,6 +35,28 @@
 						"commonChunk": false
 					},
 					"configurations": {
+						"qa": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "5mb",
+									"maximumError": "7mb"
+								  },
+								  {
+									"type": "anyComponentStyle",
+									"maximumWarning": "13kb",
+									"maximumError": "20kb"
+								  }
+							],
+							"fileReplacements": [
+								{
+									"replace": "src/environments/environment.ts",
+									"with": "src/environments/environment.qa.ts"
+								}
+							],
+							"outputHashing": "all",
+							"extraWebpackConfig": "webpack.prod.config.js"
+						},
 						"production": {
 							"budgets": [
 								{
@@ -113,5 +135,8 @@
 				}
 			}
 		}
-	}
+  },
+  "cli": {
+    "analytics": "2f6ed7e9-c8a9-4f9b-8dac-d520a677b5f9"
+  }
 }

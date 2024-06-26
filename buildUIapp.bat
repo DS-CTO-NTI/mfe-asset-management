@@ -1,2 +1,2 @@
 
-ng build --base-href="/mfe-asset-management/"
+ng build --configuration=qa --base-href="/mfe-asset-management/"
