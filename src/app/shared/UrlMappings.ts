@@ -340,7 +340,7 @@ export class UrlMappings {
   public static deleteDeviceAttributesUrl =
     "/common/asset-service/device-types/attributes-List";
   public static importDeviceTypeCSVUrl =
-    "/common/asset-service/device-types/importDeviceTypeData";
+    "/common/asset-service/device-types/device-typedata";
   public static importDeviceTypeAttrCSVUrl =
     "/common/asset-service/device-types/flex-attributedata";
   public static importDeviceTypeMeasurementCSVUrl =

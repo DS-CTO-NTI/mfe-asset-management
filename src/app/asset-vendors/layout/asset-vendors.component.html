@@ -60,13 +60,8 @@
                             <div class="form-row col justify-content-center">
                               <div class="form-group">
                                 <label class="form-label" for="vendorName">Vendor Name<span class="error-text">*</span></label>
-                                <input matInput id="vendorName" name="vendorName" #vendorName1="ngModel"
-                                  class="form-control form-control-sm vendor-txt" [(ngModel)]="selectedDeviceVendor.vendorName"
-                                  required>
-                                <div *ngIf="vendorName1.invalid && (vendorName1.dirty || vendorName1.touched) && 
-                                    selectedDeviceVendor.vendorName!=null && selectedDeviceVendor.vendorName!=''">
-                                  <small class="text-danger text-red"> </small>
-                                </div>
+                                  <textarea matInput id="vendorName" name="vendorName" cols="100" rows="1" class="form-control form-control-sm text-area-vendor" 
+                                  [(ngModel)]="selectedDeviceVendor.vendorName" required></textarea>
 
                               </div>
                             </div>
