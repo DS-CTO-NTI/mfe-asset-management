@@ -380,7 +380,7 @@ export class UrlMappings {
   }
 
   public static deleteDeviceUrl(id): string {
-    return "/common/asset-service/devices-management/deleteDevice?id=" + id;
+    return "/common/asset-service/devices-management/assets/" + id;
   }
 
   public static getByDeviceTypesUrl(req) {
