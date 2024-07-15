@@ -21,7 +21,9 @@ export class AgGridThumbnailComponent implements ICellRendererAngularComp {
   }
 
   showThumbnail(base64SVG) {
-   return this.domSanitizer?.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + base64SVG);
+    if(base64SVG){
+        return this.domSanitizer?.bypassSecurityTrustResourceUrl('data:image/svg+xml;base64,' + base64SVG);
+    }
   }
 
   refresh(): boolean {

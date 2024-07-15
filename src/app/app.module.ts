@@ -8,13 +8,14 @@ import { RemoteMfeModule } from './remote-mfe/remote-mfe.module';
 import { HttpConfigInterceptor } from './interceptor/http-config-interceptor.interceptor';
 import { ToastrModule } from 'ngx-toastr';
 import { ButtonComponent } from './components/ag-grid-custom-components/button/button.component';
+import { ComponentModule } from './components/component.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ButtonComponent
+    AppComponent
   ],
   imports: [
+    ComponentModule,
     BrowserModule,
     AppRoutingModule,
     RemoteMfeModule,

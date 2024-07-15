@@ -26,7 +26,7 @@ import { BsDatepickerModule } from "ngx-bootstrap/datepicker";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
-import { ContextMenuModule } from "ngx-contextmenu";
+import { ContextMenuModule, ContextMenuService } from "ngx-contextmenu";
 import { NgxDuvalChartsModule } from "ngx-duval-charts";
 import { NgxLoadingModule } from "ngx-loading";
 import { NgxSpinnerModule } from "ngx-spinner";
@@ -35,6 +35,7 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AgGridFilterComponent } from "../components/ag-grid-filter-section/ag-grid-filter.component";
 import { MatDialogModule } from "@angular/material/dialog";
+import { ContextMenuFixService } from "../services/custom-menu/context-menu-fix.service";
 
 @NgModule({
 	declarations: [AgGridFilterComponent],
@@ -120,7 +121,10 @@ import { MatDialogModule } from "@angular/material/dialog";
 		ContextMenuModule
 	],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	providers: []
+	providers: [		{
+		provide: ContextMenuService,
+		useClass: ContextMenuFixService
+	}]
 	// providers: [
 	//   { provide: DateTimeAdapter, useClass: MomentDateTimeAdapter, deps: [OWL_DATE_TIME_LOCALE] },
 	//   { provide: OWL_DATE_TIME_FORMATS, useValue: MY_CUSTOM_FORMATS }
