@@ -60,13 +60,8 @@
                             <div class="form-row col justify-content-center">
                               <div class="form-group">
                                 <label class="form-label" for="vendorName">Vendor Name<span class="error-text">*</span></label>
-                                <input matInput id="vendorName" name="vendorName" #vendorName1="ngModel"
-                                  class="form-control form-control-sm vendor-txt" [(ngModel)]="selectedDeviceVendor.vendorName"
-                                  required>
-                                <div *ngIf="vendorName1.invalid && (vendorName1.dirty || vendorName1.touched) && 
-                                    selectedDeviceVendor.vendorName!=null && selectedDeviceVendor.vendorName!=''">
-                                  <small class="text-danger text-red"> </small>
-                                </div>
+                                  <textarea matInput id="vendorName" name="vendorName" cols="100" rows="1" class="form-control form-control-sm text-area-vendor" 
+                                  [(ngModel)]="selectedDeviceVendor.vendorName" required></textarea>
 
                               </div>
                             </div>
@@ -567,9 +562,9 @@
             </div>
             <div class="form-row">
               <div class="form-group col">
-                <label class="form-label" for="orderAdd">Order</label>
+                <label class="form-label" for="orderAdd">Order<span class="error-text">*</span></label>
                 <input matInput type="number" id="orderAdd" name="orderAdd" class="form-control form-control-sm"
-                  [(ngModel)]="newDeviceFlexAttribute.orderSeq">
+                  [(ngModel)]="newDeviceFlexAttribute.orderSeq" required>
               </div>
             </div>
           </form>
@@ -1153,11 +1148,11 @@
       <div class="modal-header bg-purple">
         <h6 id="deleteFacilityErrorModalTitle" class="modal-title pull-left mb-0">Cannot Delete</h6>
         <button type="button" class="close pull-right" aria-label="Close" (click)="MeasurementMappedValidation.hide()">
-          <span class="text-white" aria-hidden="true">&times;</span>
+          <span class=" " aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body errorList">
-        <label style="overflow-wrap:anywhere;"><em class="fa fa-times mr-2"></em>{{validationerrormsg}}</label>
+        <label class = "text-white" style="overflow-wrap:anywhere;"><em class="fa fa-times mr-2 text-white"></em>{{validationerrormsg}}</label>
         <div class="text-center my-3">
           <button type="button" class="btn btn-success mr-4" (click)="MeasurementMappedValidation.hide()">Ok</button>
         </div>

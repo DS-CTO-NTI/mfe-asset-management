@@ -895,6 +895,14 @@ input[type="time" i]::-webkit-calendar-picker-indicator {
   margin-bottom: auto;
 }
 
+.text-area-vendor{
+  height: calc(40vh - 365px); 
+  min-height: 25px; 
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .vendor-txt{
   width: 100%;
   margin-top: auto;
@@ -1049,6 +1057,15 @@ bs-sortable::ng-deep .sortable-item {
     gap: 10px;
  }
 
+}
+
+.list-group-item {
+    cursor: pointer;
+    padding: 1.1rem 1.25rem !important;
+    position: relative;
+    border: 0.5px solid #D7E4EF;
+    transition: all 0.5s;
+    background-color:  #202a45 !important;
 }
 
 // .alarm-view{
