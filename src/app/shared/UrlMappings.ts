@@ -328,7 +328,7 @@ export class UrlMappings {
   public static getMemsDeviceStatusGroupUrl =
     "/common/asset-service/devices-management/devices-status-groups";
   public static importDeviceConfigurationCSVUrl =
-    "/common/asset-service/devices/importDeviceData";
+    "/common/asset-service/devices/device-data";
   public static saveDeviceTypesUrl =
     "/common/asset-service/device-types";
   public static updateDeviceTypesUrl =
