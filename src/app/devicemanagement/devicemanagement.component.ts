@@ -1292,8 +1292,12 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
           if (this.init) {
             this.currentSection = "section1";
             setTimeout(() => {
-              const newSelectedDevice = this.deviceListData[0].assetId;
-              this.tree.treeModel.getNodeById(newSelectedDevice).setIsActive(true);
+              this.tree.treeModel.update();
+              this.tree.treeModel.expandAll();
+              let selectedNode = this.tree.treeModel.getFirstRoot();
+              if (selectedNode) {
+                this.tree.treeModel.getNodeById(selectedNode.id).setIsActive(true);
+              }
             }, 200);
             this.init = false;
           } else {
@@ -1329,7 +1333,12 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
 
       if (response.data != null && response.data.length > 0) {
         setTimeout(() => {
-          this.tree.treeModel.getFirstRoot().setIsActive(true);
+          this.tree.treeModel.update();
+          this.tree.treeModel.expandAll();
+          let selectedNode = this.tree.treeModel.getFirstRoot();
+          if (selectedNode) {
+            this.tree.treeModel.getNodeById(selectedNode.id).setIsActive(true);
+          }
         }, 400);
       }
       else {
@@ -1342,6 +1351,7 @@ export class DevicemanagementComponent implements OnInit, OnDestroy {
         this.deviceMeasurementNewEditRowData = [];
         this.attributesList = [];
         this.deviceHierarchyList = [];
+        this.deviceHierarchyListOriginal = [];
       }
     }, (error) => {
       this.loading = false;
