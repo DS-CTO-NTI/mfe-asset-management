@@ -1,6 +1,6 @@
 import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { InverterService } from 'src/app/services/inverters/inverter.service';
+import { InverterService } from 'src/app/services/inverter.service';
 
 @Component({
   selector: 'app-edit-cell',

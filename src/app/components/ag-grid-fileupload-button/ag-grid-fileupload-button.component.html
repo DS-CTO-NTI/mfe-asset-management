@@ -1,7 +1,7 @@
 <div class="col-12 row m-0 p-0 h-100" style="flex-wrap: nowrap;">
     <div class="row col-9 p-0 h-100">
-      <img class="m-auto" alt=" " *ngIf="picture" style="width: auto; height: 1rem" type="image/svg+xml" [src]="showThumbnail(picture)">
+      <img class="m-auto" alt=" " *ngIf="picture" style="width: auto; height: 2rem" type="image/svg+xml" [src]="showThumbnail(picture)">
     </div>
     <input type="file" [id]="'symbolFile' + params.rowIndex" [name]="'symbolFile' + params.rowIndex" style="display: none" (change)="selectFile($event)" accept=".svg">
-    <label [attr.for]="'symbolFile' + params.rowIndex" style="height: 2rem;" class="btn btn-sm btn-light ml-auto text-dark"><em class="fa fa-folder-open"></em></label>
+    <label [attr.for]="'symbolFile' + params.rowIndex" style="height: 2rem;margin-left: 20px;" class="btn btn-sm btn-light  text-dark"><em class="fa fa-folder-open"></em></label>
   </div>

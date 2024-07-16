@@ -203,7 +203,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
       cellRendererSelector: (params) => {
         if (this.editDeviceTypeTable) {
           console.log('if')
-          return { component: 'agGridFileUploadButton' };
+          return { component: 'agGridFileUploadButton'};
         } else {
           console.log('else')
           return { component: 'agGridThumbnail' };
@@ -570,12 +570,7 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
       schedulePeriod: fb.array([])
     });
 
-    // this.dbSubscription = this.dataRefreshService.isDBChanged.subscribe(value => {
-    //   if (value) {
-    //     this.onConstCall();
-    //   }
-    // });
-    
+   
     window.addEventListener('DbChange', (value => {
       console.log(value);
       if (value) {
@@ -1074,11 +1069,12 @@ export class AssetVendorsComponent implements OnInit, OnDestroy {
     this.newDeviceTypeSymbolFileName = this.newDeviceTypeSymbolFile.name;
     let fileReader = new FileReader();
     fileReader.onload = () => {
-      this.newDeviceType.imageSymbol = btoa(fileReader.result.toString());
+      const base64String = fileReader.result as string;
+      this.newDeviceType.imageSymbol = base64String.split(',')[1]; // Extract only the Base64 data without 'data:image/jpeg;base64,' prefix
       this.newDeviceTypeSymbolFile = null;
       this.importSymbolData.nativeElement.value = null;
     };
-    fileReader.readAsBinaryString(this.newDeviceTypeSymbolFile);
+    fileReader.readAsDataURL(this.newDeviceTypeSymbolFile); // Use readAsDataURL() instead of readAsBinaryString()
   }
 
   updateSymbolFile(params, event) {

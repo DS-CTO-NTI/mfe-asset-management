@@ -669,7 +669,7 @@
                               </div>
                               <ag-grid-angular id="deviceMeasurementNewSelectedGrid"
                                 name="deviceMeasurementNewSelectedGrid" #deviceMeasurementNewSelectedGrid
-                                class="ag-theme-balham ag-grid-angular"
+                                class="ag-theme-balham ag-grid-angular" style="width: 100%; height: calc(60vh - 95px); min-height: 100px"
                                 (filterChanged)="filterModifiedDeviceMeasurementNewSelectedTable()"
                                 (sortChanged)="deviceMeasurementNewSelectedSortChange($event)"
                                 [rowClassRules]="rowClassRuleDeviceMeasurementNewSelectedTable"
@@ -708,8 +708,8 @@
 
                           <mat-tab label={{picture}}>
                             <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
-                            <div class="col-md-12 ml-0 text-center container-fluid"
-                              style="padding: 125px 1px; height: 323px; width: 100vw; border-top: 1px solid #e2dede;"
+                            <div class="col-md-12 ml-0 text-center"
+                              style="padding: 125px 1px; height: 323px;  border-top: 1px solid #e2dede;"
                               *ngIf="selectedDeviceShow.assetPicture?.length == 0" disabled>
                               <div class="form-group col-12 mb-0 text-white">
                                 <h6>{{noPictureSelected}}</h6>
@@ -2025,7 +2025,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center">
+      <div class="modal-body text-center text-white">
         <p>Do you want to confirm?</p>
 
         <button type="button" class="btn btn-success mr-4" (click)="deleteDevice()" translate>
@@ -2114,15 +2114,16 @@
           <div class="col-12">
             <form #deviceCloneForm="ngForm">
               <div class="form-row">
-                <mat-form-field class="example-full-width col-sm-4 col-md-4 col-lg-4">
-                  <mat-label for="deviceid">{{assetId}}<span class="error-text">*</span></mat-label>
-                  <input matInput type="text" id="deviceid" name="deviceid" [(ngModel)]="newDevice.assetId" required />
-                </mat-form-field>
-                <mat-form-field class="example-full-width col-sm-8 col-md-8 col-lg-8">
-                  <mat-label for="assetName">{{assetName}}<span class="error-text">*</span></mat-label>
-                  <input matInput type="text" id="assetName" name="assetName" [(ngModel)]="newDevice.assetName"
+                <div class="form-group col">
+                  <label class="form-label"  for="deviceid">{{assetId}}<span class="error-text">*</span></label>
+                  <input matInput type="text" id="deviceid" name="deviceid" [(ngModel)]="newDevice.assetId" required  class="form-control form-control-sm"/>
+                </div>
+                <div class="form-group col">
+                  <label class="form-label"  for="assetName">{{assetName}}<span class="error-text">*</span></label>
+                  <input matInput type="text" id="assetName" name="assetName" [(ngModel)]="newDevice.assetName" class="form-control form-control-sm"
                     required />
-                </mat-form-field>
+                  </div>
+           
               </div>
             </form>
           </div>
