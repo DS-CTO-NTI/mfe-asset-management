@@ -609,6 +609,18 @@
 //     display: none !important;
 //   }
 
+.flexCalender {
+    flex: auto;
+}
+
+.btnCalender {
+    margin: 0;
+}
+
+.calendar-date-time { 
+  color:white;
+}
+
 .img-h {
        height: 23px;
     }
@@ -758,6 +770,12 @@ section {
  .templateLabel {
     color: #fff;
     font-size: 14px;
+ }
+
+ .ag-grid-dim{
+   width: 100%; 
+   height: calc(60vh - 95px); 
+   min-height: 100px
  }
  
  // AG-grid custom styles for dark theme
