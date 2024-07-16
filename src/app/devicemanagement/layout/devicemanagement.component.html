@@ -372,13 +372,13 @@
                                 <label for="installationDate" class="form-label">{{installationDate}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
-                                  <input matInput type="datetime-local" name="installationDate"
+                                  <input matInput type="dateTime" name="installationDate"
                                     placeholder="MM/DD/YYYY hh:mm:ss" id="installationDate"
-                                    class="form-control form-control-sm caldate mr-2 inputWidth"
+                                    class="form-control form-control-sm caldate mr-2 inputWidth" 
                                     [(ngModel)]="selectedDeviceShow.installationDate" [owlDateTime]="dp1"
                                     [max]="maxFromAndTo()" required disabled />
                                   <span [owlDateTimeTrigger]="dp1"><em
-                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                      class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                                   <owl-date-time [hour12Timer]="true" #dp1></owl-date-time>
 
                                 </div>
@@ -387,13 +387,13 @@
                                 <label for="registrationTs" class="form-label">{{registrationTime}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
-                                  <input matInput type="datetime-local" name="startdate"
+                                  <input matInput type="datetime" name="startdate"
                                     placeholder="MM/DD/YYYY hh:mm:ss" id="startdate"
                                     class="form-control form-control-sm caldate mr-2 inputWidth"
                                     [(ngModel)]="selectedDeviceShow.registrationTs" [owlDateTime]="dp2"
                                     [max]="maxFromAndTo()" required disabled />
                                   <span [owlDateTimeTrigger]="dp2"><em
-                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                      class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                                   <owl-date-time [hour12Timer]="true" #dp2></owl-date-time>
                                 </div>
                               </div>
@@ -401,13 +401,13 @@
                                 <label for="provisioningTs" class="form-label">{{provisioningTime}}<span class="error-text">*</span></label>
                                 <div class="d-flex justify-content-end">
 
-                                  <input matInput type="datetime-local" name="provisioningTs"
+                                  <input matInput type="datetime" name="provisioningTs"
                                     placeholder="MM/DD/YYYY hh:mm:ss" id="provisioningTs"
                                     class="form-control form-control-sm caldate mr-2 inputWidth"
                                     [(ngModel)]="selectedDeviceShow.registrationTs" [owlDateTime]="dp3"
                                     [max]="maxFromAndTo()" required disabled />
                                   <span [owlDateTimeTrigger]="dp3"><em
-                                      class="fa fa-calendar cursor-pointer"></em></span>
+                                      class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                                   <owl-date-time [hour12Timer]="true" #dp3></owl-date-time>
                                 </div>
                               </div>
@@ -669,7 +669,7 @@
                               </div>
                               <ag-grid-angular id="deviceMeasurementNewSelectedGrid"
                                 name="deviceMeasurementNewSelectedGrid" #deviceMeasurementNewSelectedGrid
-                                class="ag-theme-balham ag-grid-angular"
+                                class="ag-theme-balham ag-grid-angular ag-grid-dim" 
                                 (filterChanged)="filterModifiedDeviceMeasurementNewSelectedTable()"
                                 (sortChanged)="deviceMeasurementNewSelectedSortChange($event)"
                                 [rowClassRules]="rowClassRuleDeviceMeasurementNewSelectedTable"
@@ -708,8 +708,8 @@
 
                           <mat-tab label={{picture}}>
                             <div class="container-fluid" style="border-top: 1px solid #e2dede; width: 100%">
-                            <div class="col-md-12 ml-0 text-center container-fluid"
-                              style="padding: 125px 1px; height: 323px; width: 100vw; border-top: 1px solid #e2dede;"
+                            <div class="col-md-12 ml-0 text-center"
+                              style="padding: 125px 1px; height: 323px;  border-top: 1px solid #e2dede;"
                               *ngIf="selectedDeviceShow.assetPicture?.length == 0" disabled>
                               <div class="form-group col-12 mb-0 text-white">
                                 <h6>{{noPictureSelected}}</h6>
@@ -972,10 +972,10 @@
                       <label class="form-label" for="snmp_comm">{{installationDate}}</label>
                       <div class="d-flex justify-content-end">
 
-                        <input matInput type="datetime-local" name="installationDate" placeholder="MM/DD/YYYY hh:mm:ss"
+                        <input matInput type="datetime" name="installationDate" placeholder="MM/DD/YYYY hh:mm:ss"
                           class="caldate mr-2 inputWidth form-control form-control-sm" id="installationDate"
                           [(ngModel)]="newDevice.installationDate" [owlDateTime]="dp4" [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp4"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp4"><em class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                         <owl-date-time [hour12Timer]="true" #dp4></owl-date-time>
                       </div>
                     </div>
@@ -983,22 +983,22 @@
                       <label class="form-label" for="snmp_port">{{registrationTime}}</label>
                       <div class="d-flex justify-content-end">
 
-                        <input type="datetime-local" matInput name="registrationTsCreateDetails"
+                        <input type="datetime" matInput name="registrationTsCreateDetails"
                           placeholder="MM/DD/YYYY hh:mm:ss" class="caldate mr-2 inputWidth form-control form-control-sm"
                           id="registrationTsCreateDetails" [(ngModel)]="newDevice.registrationTs" [owlDateTime]="dp5"
                           [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp5"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp5"><em class="fa fa-calendar cursor-pointer calendar-date-time" ></em></span>
                         <owl-date-time [hour12Timer]="true" #dp5></owl-date-time>
                       </div>
                     </div>
                     <div class="form-group col">
                       <label class="form-label" for="snmp_version ">{{provisioningTime}}</label>
                       <div class="d-flex justify-content-end">
-                        <input matInput type="datetime-local" name="provisioningTsCreateDetails"
+                        <input matInput type="datetime" name="provisioningTsCreateDetails"
                           placeholder="MM/DD/YYYY hh:mm:ss" class="caldate mr-2 inputWidth form-control form-control-sm"
                           id="provisioningTsCreateDetails" [(ngModel)]="newDevice.provisioningTs" [owlDateTime]="dp6"
                           [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp6"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp6"><em class="fa fa-calendar cursor-pointer calendar-date-time" ></em></span>
                         <owl-date-time [hour12Timer]="true" #dp6></owl-date-time>
                       </div>
                     </div>
@@ -1261,8 +1261,8 @@
                       </div>
                     </div>
                     <ag-grid-angular id="deviceMeasurementNewGrid" name="deviceMeasurementNewGrid"
-                      #deviceMeasurementNewGrid style="width: 100%; height: calc(60vh - 95px); min-height: 100px"
-                      class="ag-theme-balham ag-grid-angular"
+                      #deviceMeasurementNewGrid 
+                      class="ag-theme-balham ag-grid-angular ag-grid-dim"
                       (filterChanged)="filterModifiedDeviceMeasurementNewTable()"
                       [rowClassRules]="rowClassRuleDeviceMeasurementNewTable"
                       [gridOptions]="deviceMeasurementNewGridOptions" [rowData]="deviceMeasurementNewRowData"
@@ -1586,33 +1586,33 @@
                     <div class="form-group col">
                       <label class="form-label" for="installationDateEdit">{{installationDate}}</label>
                       <div class="d-flex justify-content-end">
-                        <input matInput type="datetime-local" name="installationDateEdit"
+                        <input matInput type="dateTime" name="installationDateEdit"
                           placeholder="MM/DD/YYYY hh:mm:ss" class="caldate mr-2 inputWidth form-control form-control-sm"
                           id="installationDateEdit" [(ngModel)]="selectedDevice.installationDate" [owlDateTime]="dp7"
                           [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp7"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp7"><em class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                         <owl-date-time [hour12Timer]="true" #dp7></owl-date-time>
                       </div>
                     </div>
                     <div class="form-group col">
                       <label class="form-label" for="registrationTsEdit">{{registrationTime}}</label>
                       <div class="d-flex justify-content-end">
-                        <input matInput type="datetime-local" name="registrationTsEdit"
+                        <input matInput type="datetime" name="registrationTsEdit"
                           placeholder="MM/DD/YYYY hh:mm:ss" class="caldate mr-2 inputWidth form-control form-control-sm"
                           id="registrationTsEdit" [(ngModel)]="selectedDevice.registrationTs" [owlDateTime]="dp8"
                           [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp8"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp8"><em class="fa fa-calendar cursor-pointer calendar-date-time" ></em></span>
                         <owl-date-time [hour12Timer]="true" #dp8></owl-date-time>
                       </div>
                     </div>
                     <div class="form-group col">
                       <label class="form-label" for="provisioningTsEdit">{{provisioningTime}}</label>
                       <div class="d-flex justify-content-end">
-                        <input matInput type="datetime-local" name="provisioningTsEdit"
+                        <input matInput type="datetime" name="provisioningTsEdit"
                           placeholder="MM/DD/YYYY hh:mm:ss" class="caldate mr-2 inputWidth form-control form-control-sm"
                           id="provisioningTsEdit" [(ngModel)]="selectedDevice.provisioningTs" [owlDateTime]="dp9"
                           [max]="maxFromAndTo()" />
-                        <span [owlDateTimeTrigger]="dp9"><em class="fa fa-calendar cursor-pointer"></em></span>
+                        <span [owlDateTimeTrigger]="dp9"><em class="fa fa-calendar cursor-pointer calendar-date-time"></em></span>
                         <owl-date-time [hour12Timer]="true" #dp9></owl-date-time>
                       </div>
                     </div>
@@ -1880,8 +1880,8 @@
                       </div>
                     </div>
                     <ag-grid-angular id="deviceMeasurementNewEditGrid" name="deviceMeasurementNewEditGrid"
-                      #deviceMeasurementNewEditGrid style="width: 100%; height: calc(60vh - 95px); min-height: 100px"
-                      class="ag-theme-balham ag-grid-angular"
+                      #deviceMeasurementNewEditGrid 
+                      class="ag-theme-balham ag-grid-angular ag-grid-dim"
                       (filterChanged)="filterModifiedDeviceMeasurementNewEditTable()"
                       (sortChanged)="deviceMeasurementNewEditGridSortChanged($event)"
                       [rowClassRules]="rowClassRuleDeviceMeasurementNewEditTable"

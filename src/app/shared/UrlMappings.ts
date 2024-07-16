@@ -199,12 +199,12 @@ export class UrlMappings {
 
   //Stateful management API URLs
 
-  public static saveState = "/common/user-service/aggridstate/saveAggridState";
+  public static saveState = "/common/user-service/aggrid-state/aggrid-state";
   public static updateState =
-    "/common/user-service/aggridstate/updateAggridState";
-  public static getState = "/common/user-service/aggridstate/getAggridState";
+    "/common/user-service/aggrid-state";
+  public static getState = "/common/user-service/aggrid-state/aggrid-states";
   public static deleteState =
-    "/common/user-service/aggridstate/deleteAggridState";
+    "/common/user-service/aggrid-state/delete-aggridstate";
   public static getAllHmiRegistersByType =
     "/hems/hemsService/hmiRegisters/getAllHmiRegistersByRegisterType/";
 
@@ -328,7 +328,7 @@ export class UrlMappings {
   public static getMemsDeviceStatusGroupUrl =
     "/common/asset-service/devices-management/devices-status-groups";
   public static importDeviceConfigurationCSVUrl =
-    "/common/asset-service/devices/importDeviceData";
+    "/common/asset-service/devices/device-data";
   public static saveDeviceTypesUrl =
     "/common/asset-service/device-types";
   public static updateDeviceTypesUrl =
