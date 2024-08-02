@@ -40,14 +40,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="form-group mt-2 text-white ">
+                <div class="form-group mt-2 text-white" style="overflow-y: auto; height:780px">
                   <span *ngIf="deviceList == null || deviceList.length == 0">{{noAssetsConfigured}}</span>
-                  <tree-root #tree [nodes]="deviceHierarchyList" class="reverse"
+                  
+                  <tree-root #tree [nodes]="deviceHierarchyList" class="reverse" 
                     (activate)="showSelectedDevice($event.node.data.id, 'tree')" [options]="options">
                     <ng-template #treeNodeTemplate let-node let-index="index"><span
                         (contextmenu)="cellrightClick($event,node)" [contextMenu]="deviceTreeContextmenu">{{
                         node.data.displayField }}</span></ng-template>
                   </tree-root>
+             
                   <context-menu #deviceTreeContextmenu *ngIf="deviceList != null">
                     <ng-template contextMenuItem (execute)="openEditModal()">{{edit}}</ng-template>
                     <ng-template contextMenuItem (execute)="openModal(true);">{{createChildAsset}}</ng-template>
@@ -81,7 +83,7 @@
                           <em class="fa fa-plus-circle mr-3 cursor-pointer" 
                             title={{createAsset}} *ngIf="isFullScreen"
                             (click)="openModal(false);resetCreateAsset(form);"></em>
-                          <img class="cursor-pointer img-h" [ngClass]="{'transform-img': !isFullScreen}"
+                          <img class="cursor-pointer img-h ml-auto" [ngClass]="{'transform-img': !isFullScreen}"
                             src="./assets/images/expand-arrows2 white.svg" alt="asset" (click)="expandDeviceMap()"
                             style="margin-bottom:3px" [title]="!isFullScreen?'Collapse Map':'Expand Map'">
                         </span>
@@ -129,8 +131,8 @@
                               </select> 
                             </div>
                           </div>
-                          <div id="mapDiv1" class="col-12 px-0 " [ngClass]="!isFullScreen?'mapfullscreen':'map'"
-                            style="background-color: white;">
+                          <div id="mapDiv1" class="px-0 " [ngClass]="!isFullScreen?'mapfullscreen':'map'"
+                            style="background-color: white;width: 99%">
                             <agm-map #gm class="agmmapheight" [latitude]="lat" [longitude]="lng" [zoom]="zoom"
                               (mapReady)="mapReady($event)" [scrollwheel]="false">
                               <agm-marker [class.highlight]="selectedDevice.assetId == marker.deviceid"
