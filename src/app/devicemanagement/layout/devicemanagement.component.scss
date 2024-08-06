@@ -948,8 +948,12 @@ section {
           filter: invert(1);
        }
     }
-    .mat-tab-label-content{
-        color: white;
+     ::ng-deep #selectedTabs .mat-tab-label {
+      color: white !important;
+    }
+
+    :host ::ng-deep #selectedTabs .mat-tab-label-content {
+      color:white !important;
     }
  }
  
